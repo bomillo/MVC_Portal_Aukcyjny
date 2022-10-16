@@ -18,7 +18,7 @@ jobs:
         dotnet-version: 6.0.x
     - name: Build
       run: dotnet publish -p:PublishProfile=LinuxProfile
-    - name: Copy to server
+    - name: Copy WebApp to server
       uses: cross-the-world/ssh-scp-ssh-pipelines@v1.1.4
       with:
         host: bomil.ddns.net
@@ -26,13 +26,23 @@ jobs:
         pass: ${{ secrets.SSH_PASSWORD }}
         first_ssh: |  
           sudo systemctl stop mvc-webapp.service
-          sudo systemctl stop mvc-backgroundtasks.service
         scp: |
-          ./WebApp/bin/Debug/net6.0/linux-x64/publish/* => "/MVC/WebApp/"
-          ./BackgroundTasks/bin/Release/net6.0/publish/linux-x64/* => "/MVC/BackgroundTasks/"
+          /home/runner/work/PortalAukcyjny/PortalAukcyjny/WebApp/bin/Debug/net6.0/publish/* => "/MVC/WebApp/"
         last_ssh: |
           chmod 777 /MVC/WebApp/WebApp
-          chmod 777 /MVC/BackgroundTasks/BackgroundTasks
           sudo systemctl start mvc-webapp.service
+    - name: Copy BackgroundTasks to server
+      uses: cross-the-world/ssh-scp-ssh-pipelines@v1.1.4
+      with:
+        host: bomil.ddns.net
+        user: mvc
+        pass: ${{ secrets.SSH_PASSWORD }}
+        first_ssh: |  
+          sudo systemctl stop mvc-backgroundtasks.service
+        scp: |
+          /home/runner/work/PortalAukcyjny/PortalAukcyjny/BackgroundTasks/bin/Debug/net6.0/publish/* => "/MVC/BackgroundTasks/"
+        last_ssh: |
+          chmod 777 /MVC/BackgroundTasks/BackgroundTasks
           sudo systemctl start mvc-backgroundtasks.service
+    
     

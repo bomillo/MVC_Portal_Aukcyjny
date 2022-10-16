@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "BackgroundTasks": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true
+    },
+    "Profile 1": {
+      "commandName": "Executable"
+    }
+  }
+}
