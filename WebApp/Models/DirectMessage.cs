@@ -6,8 +6,8 @@ namespace WebApp.Models
     {
         [Key]
         public int MessageId { get; set; }
-        public int SenderId { get; set; }
-        public int RecieverId { get; set; }
+        public User Sender { get; set; }
+        public User Receiver { get; set; }
         public string Message { get; set; }
         public DateTime SentTime { get; set; }
     }

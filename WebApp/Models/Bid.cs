@@ -2,8 +2,8 @@
 {
     public class Bid {
         public int BidId { get; set; }
-        public int UserId { get; set; }
-        public int AuctionId { get; set; }
+        public User User { get; set; }
+        public Auction Auction { get; set; }
         public DateTime BidTime { get; set; }
         public double Price { get; set; }
     }

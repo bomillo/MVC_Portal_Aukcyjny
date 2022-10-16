@@ -40,9 +40,7 @@ namespace WebApp.Context
                 .Property(a => a.CreationTime)
                 .HasDefaultValue(DateTime.Now.ToUniversalTime());
 
-            modelBuilder.Entity<AuctionEditHistoryEntry>()
-                .Property(a => a.UserId)
-                .IsRequired();
+
             modelBuilder.Entity<AuctionEditHistoryEntry>()
                 .Property(a => a.ChangedTime)
                 .HasDefaultValue(DateTime.Now.ToUniversalTime());
@@ -54,9 +52,7 @@ namespace WebApp.Context
                 .Property(a => a.Type)
                 .IsRequired();
 
-            modelBuilder.Entity<AuctionQuestion>()
-                .Property(a => a.AuctionId)
-                .IsRequired();
+
             modelBuilder.Entity<AuctionQuestion>()
                 .Property(a => a.Question)
                 .HasMaxLength(1500)
@@ -65,12 +61,6 @@ namespace WebApp.Context
                 .Property(a => a.PublishedTime)
                 .HasDefaultValue(DateTime.Now.ToUniversalTime());
 
-            modelBuilder.Entity<Bid>()
-                .Property(a => a.UserId)
-                .IsRequired();
-            modelBuilder.Entity<Bid>()
-                .Property(a => a.AuctionId)
-                .IsRequired();
             modelBuilder.Entity<Bid>()
                 .Property(a => a.BidTime)
                 .HasDefaultValue(DateTime.Now.ToUniversalTime());
@@ -108,9 +98,6 @@ namespace WebApp.Context
                 .HasDefaultValue(DateTime.Now.ToUniversalTime());
 
             modelBuilder.Entity<DirectMessage>()
-                .Property(a => a.RecieverId)
-                .IsRequired();
-            modelBuilder.Entity<DirectMessage>()
                 .Property(a => a.Message)
                 .IsRequired();
             modelBuilder.Entity<DirectMessage>()
@@ -120,9 +107,6 @@ namespace WebApp.Context
             modelBuilder.Entity<ObservedAuction>()
                 .HasKey(o => new { o.UserId, o.AuctionId });
 
-            modelBuilder.Entity<Product>()
-                .Property(p => p.CategoryId)
-                .IsRequired();
             modelBuilder.Entity<Product>()
                 .Property(p => p.Name)
                 .IsRequired()

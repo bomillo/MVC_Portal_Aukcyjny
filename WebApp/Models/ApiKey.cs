@@ -4,7 +4,7 @@ namespace WebApp.Models
 {
     public class ApiKey {
         
-        public int UserId { get; set; }
+        public User User { get; set; }
         [Key]
         public string Key { get; set; }
     }
