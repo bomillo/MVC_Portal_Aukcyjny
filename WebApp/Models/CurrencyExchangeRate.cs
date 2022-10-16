@@ -1,9 +1,12 @@
-﻿namespace WebApp.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebApp.Models
 {
-    public class CurrencyExchangeRate { 
-        public int CurrencyId;
-        public string CurrencyCode;
-        public double ExchangeRate;
-        public DateTime LastUpdatedTime;
+    public class CurrencyExchangeRate {
+        [Key]
+        public int CurrencyId { get; set; }
+        public string CurrencyCode { get; set; }
+        public double ExchangeRate { get; set; }
+        public DateTime LastUpdatedTime { get; set; }
     }
 }

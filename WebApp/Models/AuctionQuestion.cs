@@ -1,11 +1,15 @@
-﻿namespace WebApp.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebApp.Models
 {
     public class AuctionQuestion {
-        public int UserId;
-        public int AuctionId;
-        public string Question;
-        public string? Answer;
-        public DateTime PublishedTime;
-        public DateTime AnsweredTime;
+        [Key]
+        public int QuestionId { get; set; }
+        public int UserId { get; set; }
+        public int AuctionId { get; set; }
+        public string Question { get; set; }
+        public string? Answer { get; set; }
+        public DateTime PublishedTime { get; set; }
+        public DateTime AnsweredTime { get; set; }
     }
 }

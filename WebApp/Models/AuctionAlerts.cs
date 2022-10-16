@@ -1,9 +1,13 @@
-﻿namespace WebApp.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebApp.Models
 {
     public class AuctionAlerts {
-        public int UserId;
-        public int? CategoryId;
-        public int? ProductId;
-        public double? MaxPrice;
+        [Key]
+        public int AlertId { get; set; }
+        public int UserId { get; set; }
+        public int? CategoryId { get; set; }
+        public int? ProductId { get; set; }
+        public double? MaxPrice { get; set; }
     }
 }

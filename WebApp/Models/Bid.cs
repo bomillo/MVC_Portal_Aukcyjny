@@ -1,10 +1,10 @@
 ﻿namespace WebApp.Models
 {
     public class Bid {
-        public int BidId;
-        public int UserId;
-        public int AuctionId;
-        public DateTime BidTime;
-        public double Price;
+        public int BidId { get; set; }
+        public int UserId { get; set; }
+        public int AuctionId { get; set; }
+        public DateTime BidTime { get; set; }
+        public double Price { get; set; }
     }
 }

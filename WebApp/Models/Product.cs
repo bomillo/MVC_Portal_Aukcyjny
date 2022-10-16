@@ -2,10 +2,11 @@
 {
     public class Product
     {
-        public int ProductId;
-        public int CategoryId;
-        public string Name;
-        public double VatRate;
-        public bool IsVatExclueded;
+        public int ProductId { get; set; }
+        public int CategoryId { get; set; }
+        public string Name { get; set; }
+        public double VatRate { get; set; }
+        public bool IsVatExclueded { get; set; }
+
     }
 }

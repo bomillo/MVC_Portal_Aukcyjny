@@ -1,16 +1,19 @@
-﻿namespace WebApp.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebApp.Models
 {
     public class User
     {
-        public int UserId;
-        public string Name;
-        public string Email;
-        public string PasswordHashed;
-        public UserType UserType;
-        public bool IsCompany;
-        public string CompanyId;
-        public ThemeType ThemeType;
-        public Language Language;
+        
+        public int UserId { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string PasswordHashed { get; set; }
+        public UserType UserType { get; set; }
+        public bool IsCompany { get; set; }
+        public Company Company { get; set; }
+        public ThemeType ThemeType { get; set; }
+        public Language Language { get; set; }
     }
 
 

@@ -1,20 +1,19 @@
-﻿namespace WebApp.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WebApp.Models
 {
     public class Auction
     {
-        private int auctionId;
-        private int productId;
-        private string title;
-        private bool isDraft;
-        private string description;
-        private string auctionName;
-        public int OwnerUserId;
-        public DateTime CreationTime;
-        public DateTime PublishedTime;
-        public DateTime EndTime;
-
-        public int AuctionId { get => auctionId; set => auctionId = value; }
-        public string Description { get => description; set => description = value; }
+        public int AuctionId { get; set; }
+        public string Description { get; set; }
+        public string Title { get; set; }
+        public bool IsDraft { get; set; }
+        public User Owner { get; set; }
+        public DateTime CreationTime { get; set; }
+        public DateTime PublishedTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public Product Product { get; set; }
     }
 
     public enum AuctionType { Draft, Real }
