@@ -26,6 +26,7 @@ jobs:
         pass: ${{ secrets.SSH_PASSWORD }}
         first_ssh: |  
           sudo systemctl stop mvc-webapp.service
+          sudo rm -fr ./WebApp/
         scp: |
           /home/runner/work/PortalAukcyjny/PortalAukcyjny/WebApp/bin/Debug/net6.0/publish/* => "/MVC/WebApp/"
         last_ssh: |
@@ -39,6 +40,7 @@ jobs:
         pass: ${{ secrets.SSH_PASSWORD }}
         first_ssh: |  
           sudo systemctl stop mvc-backgroundtasks.service
+          sudo rm -fr ./BackgroundTasks/
         scp: |
           /home/runner/work/PortalAukcyjny/PortalAukcyjny/BackgroundTasks/bin/Debug/net6.0/publish/* => "/MVC/BackgroundTasks/"
         last_ssh: |
