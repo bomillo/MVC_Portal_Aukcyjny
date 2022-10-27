@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
+using System.Runtime.CompilerServices;
 using WebApp.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("ConnectionStrings")));
+            options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")));
 
 builder.Services.AddControllersWithViews(); 
 var app = builder.Build();
