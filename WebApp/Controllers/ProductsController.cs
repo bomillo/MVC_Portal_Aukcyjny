@@ -114,8 +114,9 @@ namespace WebApp.Controllers
                     List<string> uploadedFiles = new List<string>();
                     foreach (IFormFile postedFile in postedFiles)
                     {
+                        /* Using relative path of Project - files saved in WebApp/wwwroot/Uploads*/
                         string fileName = Path.GetFileName(postedFile.FileName);
-                        string path = Path.Combine(this._environment.WebRootPath, "Uploads");
+                        string path = Path.Combine(".\\wwwroot", "Uploads");
                         string extension = Path.GetExtension(postedFile.FileName);
                         path += extension.Replace('.', '\\');
 
