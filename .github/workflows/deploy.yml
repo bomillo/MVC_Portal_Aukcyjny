@@ -27,6 +27,7 @@ jobs:
         first_ssh: |  
           sudo systemctl stop mvc-webapp.service
           sudo rm -fr ./WebApp/
+          sudo -u postgres psql postgres -c 'drop database "PortalAukcyjny2" with (force)'
         scp: |
           /home/runner/work/PortalAukcyjny/PortalAukcyjny/WebApp/bin/Debug/net6.0/publish/* => "/MVC/WebApp/"
         last_ssh: |
