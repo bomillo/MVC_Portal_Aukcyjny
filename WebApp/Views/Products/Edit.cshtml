@@ -40,6 +40,13 @@
                     <input class="form-check-input" asp-for="IsVatExclueded" /> @Html.DisplayNameFor(model => model.IsVatExclueded)
                 </label>
             </div>
+                <div class="form-group">
+                    @* TODO - edition of inserted files*@
+                    @foreach(WebApp.Models.ProductFile file in ViewBag.ProductFiles)
+                    {
+                        @file.Name;
+                    }
+                </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

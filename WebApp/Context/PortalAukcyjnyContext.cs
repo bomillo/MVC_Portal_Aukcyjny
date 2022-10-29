@@ -18,6 +18,7 @@ namespace WebApp.Context
         public DbSet<DirectMessage> DirectMessages { get; set; }
         public DbSet<ObservedAuction> ObservedAuctions { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductFile> ProductFiles { get; set; }
         public DbSet<User> Users { get; set; }
 
         public PortalAukcyjnyContext(DbContextOptions<PortalAukcyjnyContext> options) : base(options)
