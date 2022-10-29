@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 using WebApp.Context;
 
@@ -8,9 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")));
+            options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
 
-builder.Services.AddControllersWithViews(); 
+builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<DbSeeder>();
 var app = builder.Build();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions() { ForwardedHeaders= ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto});
@@ -29,7 +31,13 @@ using (var scope = app.Services.CreateScope())
 
     var context = services.GetRequiredService<PortalAukcyjnyContext>();
     context.Database.EnsureCreated();
+
+    var service = scope.ServiceProvider.GetService<DbSeeder>();
+    service.Seed();
 }
+
+
+
 
 app.UseStaticFiles();
 

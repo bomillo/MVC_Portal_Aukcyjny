@@ -9,7 +9,7 @@ namespace WebApp.Models
         public User User { get; set; }
         public int? CategoryId { get; set; }
         public Category? Category{ get; set; }
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
         public Product? Product { get; set; }
         public double? MaxPrice { get; set; }
     }
