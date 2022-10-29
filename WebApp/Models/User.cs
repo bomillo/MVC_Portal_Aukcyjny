@@ -1,18 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Models
 {
     public class User
     {
-        
+        [Key] 
         public int UserId { get; set; }
+        [MaxLength(100)]
         public string Name { get; set; }
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         public string PasswordHashed { get; set; }
         public UserType UserType { get; set; }
-        public bool IsCompany { get; set; }
+        public int CompanyId { get; set; }
         public Company Company { get; set; }
+        [DefaultValue(ThemeType.Dark)]
         public ThemeType ThemeType { get; set; }
+        [DefaultValue(Language.PL)]
         public Language Language { get; set; }
     }
 
