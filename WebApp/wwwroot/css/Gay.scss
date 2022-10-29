@@ -1,0 +1,56 @@
+﻿body {
+}
+.gay-mode {
+    .button-primary {
+        background-color: blue;
+        border-color: chocolate;
+        color: chocolate;
+
+
+        &:hover {
+            background-color: chocolate;
+            border-color: blue;
+            color: blue;
+        }
+    }
+
+
+
+    .button-secondary {
+        background-color: gold;
+        border-color: brown;
+        color: brown;
+
+        &:hover {
+            background-color: brown;
+            border-color: gold;
+            color: gold;
+        }
+    }
+
+
+
+    .text-primary {
+        color: orangered;
+    }
+
+    .text-secondary {
+        color: coral;
+    }
+
+    .text-error {
+        color: red;
+    }
+
+    .background-primary {
+        background-color: salmon;
+    }
+
+    .background-secondary {
+        background-color: darkviolet
+    }
+
+    .background-error {
+        background-color: deeppink;
+    }
+}

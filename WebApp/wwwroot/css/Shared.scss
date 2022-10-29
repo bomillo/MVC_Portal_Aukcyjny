@@ -1,0 +1,16 @@
+﻿body {
+}
+/*Wszystko inne...*/
+
+.button{
+    border: 1px solid;
+
+    &-rounded{
+        border-radius: 15%;
+    }
+
+    &-squared{
+        border-radius: 0%;
+    }
+
+}

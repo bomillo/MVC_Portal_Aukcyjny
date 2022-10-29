@@ -1,0 +1,55 @@
+﻿body {
+}
+
+.dark-mode {
+    .button-primary {
+        background-color: darkcyan;
+        border-color: white;
+        color: white;
+
+        &:hover {
+            background-color: white;
+            border-color: darkcyan;
+            color: darkcyan;
+        }
+    }
+
+
+
+    .button-secondary {
+        background-color: grey;
+        border-color: honeydew;
+        color: honeydew;
+
+        &:hover {
+            background-color: honeydew;
+            border-color: grey;
+            color: grey;
+        }
+    }
+
+
+
+    .text-primary {
+        color: white;
+    }
+
+    .text-secondary {
+        color: cyan
+    }
+
+    .text-error {
+        color: red;
+    }
+
+    .background-primary {
+        background-color: black;
+    }
+
+    .background-secondary {
+        background-color: lightslategrey;
+    }
+
+    .background-error {
+    }
+}
