@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("ConnectionStrings")));
+            options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")));
 
 builder.Services.AddControllersWithViews(); 
 var app = builder.Build();
