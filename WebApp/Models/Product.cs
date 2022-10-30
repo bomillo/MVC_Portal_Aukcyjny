@@ -11,7 +11,6 @@ namespace WebApp.Models
         [MaxLength(150)]
         public string Name { get; set; }
         public double VatRate { get; set; }
-        public bool IsVatExclueded { get; set; }
-
+        public bool IsVatExcluded { get; set; }
     }
 }

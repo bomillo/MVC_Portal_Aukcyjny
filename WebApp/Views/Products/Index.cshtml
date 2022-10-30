@@ -28,13 +28,17 @@
                 @Html.DisplayNameFor(model => model.VatRate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsVatExclueded)
+                @Html.DisplayNameFor(model => model.IsVatExcluded)
             </th>
+            <th> </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
+
+        string iconName = "ICON_" + item.ProductId + "_" + item.Name + ".jpg";
+
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.Name)
@@ -46,9 +50,11 @@
                 @Html.DisplayFor(modelItem => item.VatRate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsVatExclueded)
+                @Html.DisplayFor(modelItem => item.IsVatExcluded)
             </td>
             <td>
+                        <img src="~/Uploads/icon/@iconName" @*onerror="this.src='Uploads/icon/NoIcon.png'"*@>
+                    <td>
                 <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>

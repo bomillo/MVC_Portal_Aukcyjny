@@ -16,7 +16,7 @@
 <h4>Product</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form method="post" enctype="multipart/form-data" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -30,26 +30,49 @@
             </div>
             <div class="form-group">
                 <label asp-for="VatRate" class="control-label"></label>
-                <input asp-for="VatRate" class="form-control" />
+                    <input asp-for="VatRate" class="form-control" />
                 <span asp-validation-for="VatRate" class="text-danger"></span>
             </div>
+                
+            <br />
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsVatExclueded" /> @Html.DisplayNameFor(model => model.IsVatExclueded)
+                    <input class="form-check-input" asp-for="IsVatExcluded" /> @Html.DisplayNameFor(model => model.IsVatExcluded)
                 </label>
+            </div>    
+            <br />
+
+                @* Input for product icon*@
+            <div>
+                <span>Select Icon:</span>
+                    <input type="file" name="productIcon" />
+                <br />
             </div>
+                
+            <br />
+
+             @* Input for product image*@
+            <div>
+                <span>Select Image:</span>
+                    <input type="file" name="productImage"  />
+                <br />
+            </div>
+                
+            <br />
+
+            @* Input for additional files*@
+            <div>
+                <span>Select additional File:</span>
+                    <input type="file" name="postedFiles" multiple />
+                <br />
+            </div>
+                
+            <br />
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
 
-            @* Input for additional files*@
-            <div>
-                <span>Select File:</span>
-                    <input type="file" name="postedFiles" multiple />
-                    <input type="submit" value="Upload" />
-                <br />
-                <span style="color:green">@Html.Raw(ViewBag.Message)</span>
-            </div>
         </form>
     </div>
 </div>

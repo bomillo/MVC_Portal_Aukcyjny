@@ -36,10 +36,10 @@
             @Html.DisplayFor(model => model.VatRate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsVatExclueded)
+            @Html.DisplayNameFor(model => model.IsVatExcluded)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsVatExclueded)
+            @Html.DisplayFor(model => model.IsVatExcluded)
         </dd>
         <dt class = "col-sm-2">
             Additional files:
@@ -57,6 +57,12 @@
                    <br/>
                }
         </dd>
+        @{
+                string imageName = "IMG_" + Model.ProductId+ "_" + Model.Name + ".jpg";
+                <div>
+                    <img src="~/Uploads/image/@imageName" />
+                </div>
+        }
 
     </dl>
 </div>
