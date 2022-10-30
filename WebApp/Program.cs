@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 using System.Runtime.CompilerServices;
 using WebApp.Context;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")));
 
-builder.Services.AddControllersWithViews(); 
+builder.Services.AddControllersWithViews();
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.CheckConsentNeeded = context => true;
+    options.MinimumSameSitePolicy = SameSiteMode.Strict;
+});
 var app = builder.Build();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions() { ForwardedHeaders= ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto});
@@ -31,6 +37,8 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<PortalAukcyjnyContext>();
     context.Database.EnsureCreated();
 }
+
+app.UseCookiePolicy();
 
 app.UseStaticFiles();
 
