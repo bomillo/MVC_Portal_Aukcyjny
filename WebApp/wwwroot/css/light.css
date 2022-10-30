@@ -1,0 +1,32 @@
+﻿.light-mode .button--primary {
+  background-color: darkcyan;
+  border-color: white;
+  color: white; }
+  .light-mode .button--primary:hover {
+    background-color: white;
+    border-color: darkcyan;
+    color: darkcyan; }
+
+.light-mode .button--secondary {
+  background-color: grey;
+  border-color: honeydew;
+  color: honeydew; }
+  .light-mode .button--secondary:hover {
+    background-color: honeydew;
+    border-color: grey;
+    color: grey; }
+
+.light-mode .text--primary {
+  color: black; }
+
+.light-mode .text--secondary {
+  color: darkseagreen; }
+
+.light-mode .text--error {
+  color: red; }
+
+.light-mode .background--primary {
+  background-color: aliceblue; }
+
+.light-mode .background--secondary {
+  background-color: aquamarine; }

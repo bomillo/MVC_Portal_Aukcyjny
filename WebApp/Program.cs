@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 using System.Runtime.CompilerServices;
 using WebApp.Context;
+using WebApp.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ThemeMiddleware>();
 
 app.MapControllerRoute(
     name: "default",
