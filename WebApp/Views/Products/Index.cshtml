@@ -53,8 +53,9 @@
                 @Html.DisplayFor(modelItem => item.IsVatExcluded)
             </td>
             <td>
-                        <img src="~/Uploads/icon/@iconName" @*onerror="this.src='Uploads/icon/NoIcon.png'"*@>
-                    <td>
+                <img src="~/Uploads/icon/@iconName" onerror="this.src='Uploads/icon/NoIcon.jpg'"/>
+            </td>
+            <td>
                 <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
