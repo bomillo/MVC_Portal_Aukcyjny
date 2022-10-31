@@ -10,6 +10,34 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Create</title>
+    <meta name="viewport" content="width=device-width" />
+    
+    
+    <script type="text/javascript">
+        
+        
+        function GetDynamicTextbox(value) {
+
+            return '<div><input type="button" onclick="RemoveFile(this)" value="Remove File"/> <input type="file" name="postedFiles" id="postedFile"> <input type="text" name="fileDescription" class="form-control" placeholder="File description"/></div> <br />';
+        }
+
+
+        function AddNewFile() {
+
+            var div = document.createElement('DIV');
+
+            div.innerHTML = GetDynamicTextbox("");
+
+            document.getElementById("files").appendChild(div);
+        }
+
+        function RemoveFile(div) {
+
+            document.getElementById("files").removeChild(div.parentNode.parentNode);
+        }
+
+    </script>
+
 </head>
 <body>
 
@@ -65,11 +93,11 @@
                 
             <br />
 
-            @* Input for additional files*@
-            <div>
-                <span>Select additional File:</span>
-                    <input type="file" name="postedFiles" multiple />
-                <br />
+            @* Input for additional files using javascript to upload multiple files with their descriptions*@
+            <span>Select additional File:</span>    
+            <div id="files">
+                        <div><input type="button" onclick="AddNewFile()" value="Add File"/></div>
+                        <br />
             </div>
                 
             <br />

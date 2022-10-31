@@ -28,7 +28,7 @@ namespace WebApp.Controllers
               return View(await _context.ProductFiles.ToListAsync());
         }
 
-        /*// GET: ProductFiles/Details/5
+        // GET: ProductFiles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.ProductFiles == null)
@@ -66,7 +66,7 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(productFile);
-        }*/
+        }
 
         // GET: ProductFiles/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -89,8 +89,10 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductFileId,ProductId,Path,Name,Extension")] ProductFile productFile, IFormFile newFile)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductFileId,ProductId,Path,Name,Extension,Description")] ProductFile productFile, IFormFile newFile)
         {
+            ModelState["newFile"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+
             if (id != productFile.ProductFileId)
             {
                 return NotFound();
@@ -100,111 +102,122 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    if(productFile.Name.StartsWith("ICON") || productFile.Name.StartsWith("IMAGE"))
+                    if (newFile != null)
                     {
-                        Product product = await _context.Products.FindAsync(productFile.ProductId);
-                        string extension = Path.GetExtension(newFile.FileName);
-                        string fileType = productFile.Name.Split('_')[0];
-
-
-                        if (!ValidateExtension(extension))  // Validate image extension
+                        if (productFile.Name.StartsWith("ICON") || productFile.Name.StartsWith("IMAGE"))
                         {
-                            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
-                            /* Language change!!!*/
-                            ViewData["ErrorMessage"] = "Nieobsługiwany format wejściowy, obsługiwane formaty " + fileType + ": .png, .jpg, .gif, .jpeg";
-                            
-                            return View(productFile);
-                        }
-                        
-
-                        string path = ".\\wwwroot\\Uploads\\" + fileType.ToLower();
-                        string fileName = product.ProductId + "_" + product.Name + extension;
+                            Product product = await _context.Products.FindAsync(productFile.ProductId);
+                            string extension = Path.GetExtension(newFile.FileName);
+                            string fileType = productFile.Name.Split('_')[0];
 
 
-                        if (!Directory.Exists(path))    /* Create dir if do not exists*/
-                        {
-                            Directory.CreateDirectory(path);
-                        }
+                            if (!ValidateExtension(extension))  // Validate image extension
+                            {
+                                ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
+                                /* Language change!!!*/
+                                ViewData["ErrorMessage"] = "Nieobsługiwany format wejściowy, obsługiwane formaty " + fileType + ": .png, .jpg, .gif, .jpeg";
+
+                                return View(productFile);
+                            }
 
 
-                        /* Save original Image - it will be deleted after resizing an icon*/
-                        using (var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-                        {
-                            await newFile.CopyToAsync(stream);
-                        }
-
-                        string newInputPath = path + "\\" + fileName;
-                        string newFileName = fileType + "_" + fileName.Replace(extension, ".jpg");
-                        string newOutputPath = path + "\\" + newFileName;
+                            string path = ".\\wwwroot\\Uploads\\" + fileType.ToLower();
+                            string fileName = product.ProductId + "_" + product.Name + extension;
 
 
-                        /* Delete old file*/
-                        //System.IO.File.Delete(path + "\\" + productFile.Name);
+                            if (!Directory.Exists(path))    /* Create dir if do not exists*/
+                            {
+                                Directory.CreateDirectory(path);
+                            }
 
 
-                        /* Resize original IMAGE to new Width and save as FILETYPE_ProductId_ProductName.jpg*/
-                        if (productFile.Name.StartsWith("ICON"))
-                            Image_resize(newInputPath, newOutputPath, 128);
-                        else
-                            Image_resize(newInputPath, newOutputPath, 1600);
+                            /* Save original Image - it will be deleted after resizing an icon*/
+                            using (var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                            {
+                                await newFile.CopyToAsync(stream);
+                            }
 
-
-                        ProductFile file = new ProductFile(product.ProductId, newOutputPath, newFileName, ".jpg");
-                        
-
-                        /* Remove old file and add new one*/
-                        _context.ProductFiles.Remove(productFile);
-                        _context.ProductFiles.Add(file);
-                        await _context.SaveChangesAsync();
-
-
-                        /* Delete original (NOT RESIZED) ICON file*/
-                        System.IO.File.Delete(path + "\\" + fileName);
-
-
-                        ViewData["FileChanged"] = "File has been changed and renamed!";
-
-                    }
-                    else
-                    {
-                        /* Using relative path of Project - files saved in WebApp/wwwroot/Uploads*/
-                        string fileName = Path.GetFileName(newFile.FileName);
-                        string path = Path.Combine(".\\wwwroot", "Uploads");
-                        string extension = Path.GetExtension(newFile.FileName);
-                        path += extension.Replace('.', '\\');
-
-                        
-                        if (!Directory.Exists(path))    /* Create dir if do not exists*/
-                        {
-                            Directory.CreateDirectory(path);
-                        }
-
-
-                        using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-                        {
-                            /* Save file to directory based on it's extension*/
-                            ProductFile file = new ProductFile(productFile.ProductId, path + "\\" + fileName, fileName, extension);
-
-
-                            /* Save path, name and extension to database - remove the old one*/
-                            _context.ProductFiles.Remove(productFile);
-                            _context.ProductFiles.Add(file);
-                            await _context.SaveChangesAsync();
+                            string newInputPath = path + "\\" + fileName;
+                            string newFileName = fileType + "_" + fileName.Replace(extension, ".jpg");
+                            string newOutputPath = path + "\\" + newFileName;
 
 
                             /* Delete old file*/
                             //System.IO.File.Delete(path + "\\" + productFile.Name);
 
 
-                            /* Add new file to folder*/
-                            newFile.CopyTo(stream);
+                            /* Resize original IMAGE to new Width and save as FILETYPE_ProductId_ProductName.jpg*/
+                            if (productFile.Name.StartsWith("ICON"))
+                                Image_resize(newInputPath, newOutputPath, 128);
+                            else
+                                Image_resize(newInputPath, newOutputPath, 1600);
+
+
+                            ProductFile file = new ProductFile(product.ProductId, newOutputPath, newFileName, ".jpg", productFile.Description);
+
+
+                            /* Remove old file and add new one*/
+                            _context.ProductFiles.Remove(productFile);
+                            _context.ProductFiles.Add(file);
+                            await _context.SaveChangesAsync();
+
+
+                            /* Delete original (NOT RESIZED) ICON file*/
+                            System.IO.File.Delete(path + "\\" + fileName);
+
+
+                            TempData["FileChanged"] = "File has been changed and renamed!";
+
                         }
+                        else
+                        {
+                            /* Using relative path of Project - files saved in WebApp/wwwroot/Uploads*/
+                            string fileName = Path.GetFileName(newFile.FileName);
+                            string path = Path.Combine(".\\wwwroot", "Uploads");
+                            string extension = Path.GetExtension(newFile.FileName);
+                            path += extension.Replace('.', '\\');
 
-                        
-                        ViewData["FileChanged"] = "File has been changed!";
+
+                            if (!Directory.Exists(path))    /* Create dir if do not exists*/
+                            {
+                                Directory.CreateDirectory(path);
+                            }
 
 
+                            using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                            {
+                                /* Save file to directory based on it's extension*/
+                                ProductFile file = new ProductFile(productFile.ProductId, path + "\\" + fileName, fileName, extension, productFile.Description);
+
+                                /* Save path, name and extension to database - remove the old one*/
+                                _context.ProductFiles.Remove(productFile);
+                                _context.ProductFiles.Add(file);
+                                await _context.SaveChangesAsync();
+
+
+                                /* Delete old file*/
+                                //System.IO.File.Delete(path + "\\" + productFile.Name);
+
+
+                                /* Add new file to folder*/
+                                newFile.CopyTo(stream);
+                            }
+
+
+                            TempData["FileChanged"] = "File has been changed!";
+
+
+                        }
                     }
+                    else
+                    {
+                        TempData["FileChanged"] = "File data has been changed!";
+
+                        _context.Update(productFile);
+                        await _context.SaveChangesAsync();
+                    }
+                    
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {

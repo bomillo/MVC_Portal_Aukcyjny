@@ -54,7 +54,13 @@
                    @* Display link to action that downloads the file*@
                    @* Params: path to the file, file name*@
                    <td>@Html.ActionLink("Download", "Download", new { Path = item.Path.ToString(), FileName = item.Name.ToString() }) </td>
-                    <br />
+                   <br />
+                   if (item.Description != null)
+                   {
+                        @item.Description.ToString() 
+                        <br />
+                        <br />
+                   }
                }
         </dt>
         @{

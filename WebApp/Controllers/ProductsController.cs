@@ -81,8 +81,11 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,CategoryId,Name,VatRate,IsVatExclueded")] Product product, List<IFormFile> postedFiles, IFormFile productIcon, IFormFile productImage)
+        public async Task<IActionResult> Create([Bind("ProductId,CategoryId,Name,VatRate,IsVatExclueded")] Product product, IFormCollection postedFiles, IFormFile productIcon, IFormFile productImage)
         {
+
+            string[] descriptions = postedFiles["fileDescription"].ToString().Split(',');
+
             /* Delete Invalid model state*/
             ModelState["Category"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
             ModelState["productIcon"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
@@ -94,37 +97,14 @@ namespace WebApp.Controllers
                 _context.Add(product);
                 await _context.SaveChangesAsync();
 
-                /* Saving posted file in wwwroot/Uploads/ and folder based on file extension*/
-                if (postedFiles.Count > 0)
-                {
-                    foreach (IFormFile postedFile in postedFiles)
-                    {
-                        string fileName = Path.GetFileName(postedFile.FileName);    
-                        string path = Path.Combine(".\\wwwroot", "Uploads");    /* Using relative path of Project - files saved in WebApp/wwwroot/Uploads*/
-                        string extension = Path.GetExtension(postedFile.FileName);
-                        path += extension.Replace('.', '\\');
-
-                        if (!Directory.Exists(path))    /* Create dir if do not exists*/
-                        {
-                            Directory.CreateDirectory(path);
-                        }
-
-                        using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-                        {
-                            /* Save file to directory based on it's extension*/
-                            ProductFile file = new ProductFile(product.ProductId, path + "\\" + fileName, fileName, extension);
-
-                            /* Save path, name and extension to database*/
-                            _context.ProductFiles.Add(file);
-                            await _context.SaveChangesAsync();
-                            postedFile.CopyTo(stream);
-                        }
-                    }
-                }
-                
+                /* Used to skip icon and image file included in postedFiles*/
+                int filesToSkip = 0;
 
                 /* Saving product Icon*/
                 {
+                    if (productIcon == null && productImage != null)
+                        productIcon = productImage;
+
                     string path = ".\\wwwroot\\Uploads\\icon";
                     string extension;
                     string fileName;
@@ -132,13 +112,14 @@ namespace WebApp.Controllers
                     {
                         fileName = "NoIcon.jpg";
                         extension = ".jpg";
-                        ProductFile iconFile = new ProductFile(product.ProductId, path + "\\ICON_" + fileName, "ICON_" + fileName, extension);
+                        ProductFile iconFile = new ProductFile(product.ProductId, path + "\\ICON_" + fileName, "ICON_" + fileName, extension, "Product Icon");
 
                         _context.ProductFiles.Add(iconFile);
                         await _context.SaveChangesAsync();
                     }
                     else
                     {
+                        filesToSkip++;
                         extension = Path.GetExtension(productIcon.FileName);
                         fileName = product.ProductId + "_" + product.Name + extension;
 
@@ -167,7 +148,7 @@ namespace WebApp.Controllers
 
                         /* Resize original ICON to new Width and save as Icon_ProductId_ProductName.extension*/
                         Image_resize(path + "\\" + fileName, path + "\\ICON_" + fileName.Replace(extension, ".jpg"), 128);
-                        ProductFile file = new ProductFile(product.ProductId, path + "\\ICON_" + fileName.Replace(extension, ".jpg"), "ICON_" + fileName.Replace(extension, ".jpg"), ".jpg");
+                        ProductFile file = new ProductFile(product.ProductId, path + "\\ICON_" + fileName.Replace(extension, ".jpg"), "ICON_" + fileName.Replace(extension, ".jpg"), ".jpg", "Product Icon");
 
 
                         _context.ProductFiles.Add(file);
@@ -193,13 +174,14 @@ namespace WebApp.Controllers
                         fileName = "NoImage.jpg";
                         extension = ".jpg";
 
-                        ProductFile imageFile = new ProductFile(product.ProductId, path + "\\IMAGE_" + fileName, "IMAGE_" + fileName, extension);
+                        ProductFile imageFile = new ProductFile(product.ProductId, path + "\\IMAGE_" + fileName, "IMAGE_" + fileName, extension, "Product Image");
 
                         _context.ProductFiles.Add(imageFile);
                         await _context.SaveChangesAsync();
                     }
                     else
                     {
+                        filesToSkip++;
                         extension = Path.GetExtension(productIcon.FileName);
                         fileName = product.ProductId + "_" + product.Name + extension;
 
@@ -224,7 +206,7 @@ namespace WebApp.Controllers
 
                         /* Resize original ICON to new Width and save as Icon_ProductId_ProductName.extension*/
                         Image_resize(path + "\\" + fileName, path + "\\IMAGE_" + fileName.Replace(extension, ".jpg"), 1600);
-                        ProductFile file = new ProductFile(product.ProductId, path + "\\IMAGE_" + fileName.Replace(extension, ".jpg"), "IMAGE_" + fileName.Replace(extension, ".jpg"), ".jpg");
+                        ProductFile file = new ProductFile(product.ProductId, path + "\\IMAGE_" + fileName.Replace(extension, ".jpg"), "IMAGE_" + fileName.Replace(extension, ".jpg"), ".jpg", "Product Image");
 
                         _context.ProductFiles.Add(file);
                         await _context.SaveChangesAsync();
@@ -234,6 +216,42 @@ namespace WebApp.Controllers
                     }
 
 
+                }
+
+
+                /* Saving posted file in wwwroot/Uploads/ and folder based on file extension*/
+                if (postedFiles.Count > 0)
+                {
+                    int iterator = 0;
+                    foreach (IFormFile postedFile in postedFiles.Files)
+                    {
+                        if(filesToSkip > 0)
+                        {
+                            filesToSkip--;
+                            continue;
+                        }
+
+                        string fileName = Path.GetFileName(postedFile.FileName);
+                        string path = Path.Combine(".\\wwwroot", "Uploads");    /* Using relative path of Project - files saved in WebApp/wwwroot/Uploads*/
+                        string extension = Path.GetExtension(postedFile.FileName);
+                        path += extension.Replace('.', '\\');
+
+                        if (!Directory.Exists(path))    /* Create dir if do not exists*/
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+
+                        using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                        {
+                            /* Save file to directory based on it's extension*/
+                            ProductFile file = new ProductFile(product.ProductId, path + "\\" + fileName, fileName, extension, descriptions[iterator++]);
+
+                            /* Save path, name and extension to database*/
+                            _context.ProductFiles.Add(file);
+                            await _context.SaveChangesAsync();
+                            postedFile.CopyTo(stream);
+                        }
+                    }
                 }
 
 
