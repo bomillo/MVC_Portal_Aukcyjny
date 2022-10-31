@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 using System.Runtime.CompilerServices;
 using WebApp.Context;
+using WebApp.Middlewares;
 using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")));
+            options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
 
 builder.Services.AddControllersWithViews();
 builder.Services.Configure<CookiePolicyOptions>(options =>
@@ -36,6 +38,9 @@ using (var scope = app.Services.CreateScope())
 
     var context = services.GetRequiredService<PortalAukcyjnyContext>();
     context.Database.EnsureCreated();
+
+    var service = scope.ServiceProvider.GetService<DbSeeder>();
+    service.Seed();
 }
 
 app.UseCookiePolicy();
@@ -45,6 +50,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ThemeMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

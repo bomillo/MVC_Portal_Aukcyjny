@@ -1,0 +1,33 @@
+﻿.dark-mode {
+  background-color: #141414; }
+  .dark-mode .button--primary {
+    background-color: darkcyan;
+    border-color: white;
+    color: white; }
+    .dark-mode .button--primary:hover {
+      background-color: white;
+      border-color: darkcyan;
+      color: darkcyan;
+      transition-duration: 1000ms; }
+  .dark-mode .button--secondary {
+    background-color: grey;
+    border-color: honeydew;
+    color: honeydew; }
+    .dark-mode .button--secondary:hover {
+      background-color: honeydew;
+      border-color: grey;
+      color: grey; }
+  .dark-mode .text--primary {
+    color: white; }
+  .dark-mode .text--secondary {
+    color: #75e9e5; }
+    .dark-mode .text--secondary a {
+      color: #75e9e5; }
+      .dark-mode .text--secondary a:hover {
+        color: #00bcc0; }
+  .dark-mode .text--error {
+    color: red; }
+  .dark-mode .background--primary {
+    background-color: black; }
+  .dark-mode .background--secondary {
+    background-color: lightslategrey; }

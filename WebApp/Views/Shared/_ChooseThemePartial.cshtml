@@ -1,0 +1,23 @@
+﻿@using WebApp.Extensions
+@using WebApp.Models
+
+@{
+    ThemeType themeType;
+    if (Context.Items["cssFile"] != null)
+    {
+        var theme = Context.Items["cssFile"].ToString().ToLower();
+        theme = char.ToUpper(theme[0]) + theme.Substring(1);
+        themeType = (ThemeType)Enum.Parse(typeof(ThemeType), theme);
+    }
+    else
+    {
+        themeType = ThemeType.Dark;
+    }
+    var themeList = themeType.ToSelectList();
+}
+
+@using (Html.BeginForm("ValueChanged", "ChooseTheme", FormMethod.Post, new { id = "languageForm", name = "languageForm" }))
+{
+    @Html.DropDownList("Language", themeList, new {@class="select--language", onchange = @"form.submit()"})
+}
+
