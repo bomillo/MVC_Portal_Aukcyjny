@@ -7,7 +7,7 @@ namespace WebApp.Models
         public int BidId { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
-        public int Auctionid { get; set; }
+        public int AuctionId { get; set; }
         public Auction Auction { get; set; }
         public DateTime BidTime { get; set; }
         [Required]

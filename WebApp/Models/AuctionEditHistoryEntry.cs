@@ -13,7 +13,7 @@ namespace WebApp.Models
         [Required]
         public ChangeType Type { get; set; }
         public DateTime ChangedTime { get; set; }
-        [MaxLength(2000)]
+        [MaxLength(4000)]
         public string JsonChange { get; set; }
     }
 

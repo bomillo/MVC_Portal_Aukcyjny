@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WebApp.Models
 {
@@ -13,8 +14,9 @@ namespace WebApp.Models
         public string Email { get; set; }
         public string PasswordHashed { get; set; }
         public UserType UserType { get; set; }
-        public int CompanyId { get; set; }
-        public Company Company { get; set; }
+        [AllowNull]
+        public int? CompanyId { get; set; }
+        public Company? Company { get; set; }
         [DefaultValue(ThemeType.Dark)]
         public ThemeType ThemeType { get; set; }
         [DefaultValue(Language.PL)]
