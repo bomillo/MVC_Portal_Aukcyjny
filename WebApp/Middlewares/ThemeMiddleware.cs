@@ -24,8 +24,8 @@ namespace WebApp.Middlewares
             string theme = string.Empty;
             if (httpContext.User.Claims.Any())
             {
-                var user = _dbContext.Users.FirstOrDefault(
-                    x => x.UserId == int.Parse(httpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString()));
+                var userId = int.Parse(httpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString());
+                var user = _dbContext.Users.FirstOrDefault(x => x.UserId == userId);
                 if(user != null)
                 {
                     theme = user.ThemeType.ToString();
