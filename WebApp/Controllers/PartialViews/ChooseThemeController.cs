@@ -47,7 +47,7 @@ namespace WebApp.Controllers.PartialViews
                 Response.Cookies.Delete("THEME_COOKIE");
             }
 
-                HttpContext.Response.Cookies.Append("THEME_COOKIE", newTheme.ToString().ToLower(), new CookieOptions { Expires = DateTimeOffset.Now.AddYears(1) });
+                HttpContext.Response.Cookies.Append("THEME_COOKIE", newTheme.ToString().ToLower(), new CookieOptions { Expires = DateTimeOffset.Now.AddYears(1), IsEssential = true });
 
             return Redirect(HttpContext.Request.Headers.Referer.ToString());
         }

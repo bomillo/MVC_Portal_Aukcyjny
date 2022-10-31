@@ -15,9 +15,16 @@ builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<DbSeeder>();
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
     options.CheckConsentNeeded = context => true;
+    options.ConsentCookie = new CookieBuilder()
+    {
+        Name = "CONSENT_COOKIE",
+        Expiration = TimeSpan.FromDays(366),
+        SecurePolicy = CookieSecurePolicy.Always
+    };
     options.MinimumSameSitePolicy = SameSiteMode.Strict;
 });
 var app = builder.Build();

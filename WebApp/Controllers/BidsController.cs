@@ -67,7 +67,7 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Auctionid"] = new SelectList(_context.Auctions, "AuctionId", "Title", bid.Auctionid);
+            ViewData["Auctionid"] = new SelectList(_context.Auctions, "AuctionId", "Title", bid.AuctionId);
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", bid.UserId);
             return View(bid);
         }
@@ -85,7 +85,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["Auctionid"] = new SelectList(_context.Auctions, "AuctionId", "Title", bid.Auctionid);
+            ViewData["Auctionid"] = new SelectList(_context.Auctions, "AuctionId", "Title", bid.AuctionId);
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", bid.UserId);
             return View(bid);
         }
@@ -122,7 +122,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Auctionid"] = new SelectList(_context.Auctions, "AuctionId", "Title", bid.Auctionid);
+            ViewData["Auctionid"] = new SelectList(_context.Auctions, "AuctionId", "Title", bid.AuctionId);
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", bid.UserId);
             return View(bid);
         }
