@@ -1,0 +1,14 @@
+﻿
+<button class="btn btn-secondary" onclick="LogOut()">
+    Logout
+</button>
+
+<script>
+    function LogOut(id) {
+        $.post("@Url.Action("Logout","Authentication")",
+            function (data) {
+                location.reload();
+            }
+        );
+    }
+</script>
