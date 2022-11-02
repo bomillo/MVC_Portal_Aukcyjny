@@ -28,6 +28,6 @@
   .dark-mode .text--error {
     color: red; }
   .dark-mode .background--primary {
-    background-color: black; }
+    background-color: #1a1a1a; }
   .dark-mode .background--secondary {
     background-color: lightslategrey; }

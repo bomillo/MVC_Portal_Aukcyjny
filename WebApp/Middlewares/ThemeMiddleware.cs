@@ -38,7 +38,7 @@ namespace WebApp.Middlewares
             else
             {
                 theme = "dark";
-                httpContext.Response.Cookies.Append("THEME_COOKIE", theme, new CookieOptions { Expires = DateTimeOffset.Now.AddYears(1)});
+                httpContext.Response.Cookies.Append("THEME_COOKIE", theme, new CookieOptions { Expires = DateTimeOffset.Now.AddYears(1), IsEssential = true });
             }
             theme = theme.ToLower();
             httpContext.Items.Add("cssFile", theme);

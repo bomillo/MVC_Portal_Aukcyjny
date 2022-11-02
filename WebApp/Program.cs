@@ -7,6 +7,7 @@ using System.Security.Claims;
 using WebApp.Context;
 using WebApp.Services;
 using WebApp.Middlewares;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,19 @@ builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.CheckConsentNeeded = context => true;
+    options.ConsentCookie = new CookieBuilder()
+    {
+        Name = "CONSENT_COOKIE",
+        Expiration = TimeSpan.FromDays(366),
+        SecurePolicy = CookieSecurePolicy.Always
+    };
+    options.MinimumSameSitePolicy = SameSiteMode.Strict;
+});
+
 
 builder.Services.AddAuthorization(options =>
 {
@@ -36,6 +50,7 @@ builder.Services.AddAuthentication("CookieAuthentication")
 
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddTransient<DbSeeder>();
+
 var app = builder.Build();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions() { ForwardedHeaders= ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto});
@@ -61,8 +76,7 @@ using (var scope = app.Services.CreateScope())
     service.Seed();
 }
 
-
-
+app.UseCookiePolicy();
 
 app.UseStaticFiles();
 
