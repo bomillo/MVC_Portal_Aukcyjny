@@ -1,4 +1,10 @@
-﻿/*Wszystko inne...*/
+﻿footer {
+  display: flex;
+  padding: 10px 20px;
+  justify-content: space-between;
+  flex-direction: row; }
+
+/*Wszystko inne...*/
 .button {
   border: 5px solid;
   font-weight: 600;
@@ -47,3 +53,12 @@
     text-align: center;
     position: relative;
     margin-top: 30px; }
+
+.loginSection {
+  display: flex;
+  justify-items: center;
+  align-items: center; }
+
+.currentLogin {
+  margin-right: 10px; }
+

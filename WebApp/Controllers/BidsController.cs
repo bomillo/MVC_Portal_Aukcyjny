@@ -49,7 +49,7 @@ namespace WebApp.Controllers
         // GET: Bids/Create
         public IActionResult Create()
         {
-            ViewData["Auctionid"] = new SelectList(_context.Auctions, "AuctionId", "Title");
+            ViewData["AuctionId"] = new SelectList(_context.Auctions, "AuctionId", "Title");
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
             return View();
         }
@@ -59,7 +59,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BidId,UserId,Auctionid,BidTime,Price")] Bid bid)
+        public async Task<IActionResult> Create([Bind("BidId,UserId,AuctionId,BidTime,Price")] Bid bid)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +67,9 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Auctionid"] = new SelectList(_context.Auctions, "AuctionId", "Title", bid.AuctionId);
+
+            ViewData["AuctionId"] = new SelectList(_context.Auctions, "AuctionId", "Title", bid.AuctionId);
+
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", bid.UserId);
             return View(bid);
         }
@@ -85,7 +87,9 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["Auctionid"] = new SelectList(_context.Auctions, "AuctionId", "Title", bid.AuctionId);
+
+            ViewData["AuctionId"] = new SelectList(_context.Auctions, "AuctionId", "Title", bid.AuctionId);
+
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", bid.UserId);
             return View(bid);
         }
@@ -95,7 +99,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BidId,UserId,Auctionid,BidTime,Price")] Bid bid)
+        public async Task<IActionResult> Edit(int id, [Bind("BidId,UserId,AuctionId,BidTime,Price")] Bid bid)
         {
             if (id != bid.BidId)
             {
@@ -122,7 +126,9 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Auctionid"] = new SelectList(_context.Auctions, "AuctionId", "Title", bid.AuctionId);
+
+            ViewData["AuctionId"] = new SelectList(_context.Auctions, "AuctionId", "Title", bid.AuctionId);
+
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", bid.UserId);
             return View(bid);
         }

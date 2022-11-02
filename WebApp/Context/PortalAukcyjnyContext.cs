@@ -57,6 +57,7 @@ namespace WebApp.Context
 
             modelBuilder.Entity<ObservedAuction>()
                 .HasKey(o => new { o.UserId, o.AuctionId });
+
         }
     }
 }

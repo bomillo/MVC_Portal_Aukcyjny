@@ -1,0 +1,49 @@
+﻿
+<div class="modal-dialog ">
+    <div class="modal-content @(Context?.Items["theme"]?.ToString() ?? "dark-mode")">
+        <div class="modal-header">
+            <h4 class="modal-title text--primary">Login</h4>
+        </div>
+        <form id="loginForm" action="/Authentication/Login" method="post">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4 text-muted">
+                            <label for="mail">E-mail</label>
+                            <input type="text" id="loginFormMail" name="mail" value="FOOOO" />
+                            <label for="password">Password</label>
+                            <input type="password" id="loginFormPassword" name="password" value="Baaaar" />
+                            <input type="hidden" id="loginFormReturnUrl" name="url"/>
+                            <div id="loginFormMessage" class="text-danger" style="display:none;">Wrong mail or password!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">Login</button>
+                <button type="button" class="btn btn-default text--secondary" onclick="HideModal()">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $( "#loginForm" ).submit(function( event ) {
+        $("#loginFormMessage").hide();
+        event.preventDefault();
+        $("#loginFormReturnUrl").val(window.location.toString());
+        $.post("@Url.Action("ValidateCrenedtials","Authentication")",
+            {
+                mail: $("#loginFormMail").val(),
+                password: $("#loginFormPassword").val(),
+            },
+            function (data) {
+                debugger;
+                if (!data.valid) {
+                    $("#loginFormMessage").show();
+                } else {
+                     $( "#loginForm" ).unbind('submit').submit()
+                }
+            }
+        );
+    });
+</script>

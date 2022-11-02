@@ -39,12 +39,31 @@
         </main>
         <partial name="_CookieConsentPartial" />
     </div>
-
-    <footer class="border-top footer text--secondary">
-        <div class="container">
-            &copy; 2022 - PortalAukcyjny - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    
+	<footer class="border-top footer text-muted">
+		<div>
+			&copy; 2022 - PortalAukcyjny - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+		</div>
+		<div>
+			<ul class="navbar-nav flex-grow-1 loginSection">
+				@if (Context.User.Identity.IsAuthenticated)
+				{
+					<li class="currentLogin">
+						Logged in as @Context.User.Identity.Name
+					</li>
+					<li>
+						<partial name="/Views/Authentication/_LogoutButton.cshtml"/>
+					</li>
+				}
+				else
+				{
+					<li>
+						<partial name="/Views/Authentication/_LoginButton.cshtml"/>
+					</li>
+				}
+			</ul>
+		</div>
+	</footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
