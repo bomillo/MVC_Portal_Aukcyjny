@@ -48,11 +48,18 @@ using (var scope = app.Services.CreateScope())
 
 app.UseStaticFiles();   // for wwwroot
 
+#region retrieve and prepare path
+var length = Environment.ProcessPath.LastIndexOf('\\');
+var path = Environment.ProcessPath.Remove(length);
+path = Path.Combine(path, "Uploads");
+Directory.CreateDirectory(path);
+#endregion
+
+
 // for images
 app.UseFileServer(new FileServerOptions
 {
-    FileProvider = new PhysicalFileProvider(
-           Path.Combine(builder.Environment.ContentRootPath, "bin/Uploads")),
+    FileProvider = new PhysicalFileProvider(path),
     RequestPath = "/Uploads",
     EnableDirectoryBrowsing = true
 });
