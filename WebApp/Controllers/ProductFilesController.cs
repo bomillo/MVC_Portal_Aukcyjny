@@ -121,7 +121,7 @@ namespace WebApp.Controllers
                             }
 
 
-                            string path = ".\\wwwroot\\Uploads\\" + fileType.ToLower();
+                            string path = ".\\bin\\Uploads\\" + fileType.ToLower();
                             string fileName = product.ProductId + "_" + product.Name + extension;
 
 
@@ -171,9 +171,9 @@ namespace WebApp.Controllers
                         }
                         else
                         {
-                            /* Using relative path of Project - files saved in WebApp/wwwroot/Uploads*/
+                            /* Using relative path of Project - files saved in WebApp/bin/Uploads*/
                             string fileName = Path.GetFileName(newFile.FileName);
-                            string path = Path.Combine(".\\wwwroot", "Uploads");
+                            string path = Path.Combine(".\\bin", "Uploads");
                             string extension = Path.GetExtension(newFile.FileName);
                             path += extension.Replace('.', '\\');
 

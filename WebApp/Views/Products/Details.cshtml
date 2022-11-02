@@ -4,14 +4,6 @@
     ViewData["Title"] = "Product Details";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
 
 <div>
     <h4>Product</h4>
@@ -65,17 +57,15 @@
         </dt>
         @{
             string imageName = "IMAGE_" + Model.ProductId+ "_" + Model.Name + ".jpg";
+            
         }
-
-            <div>
-                <img src="~/Uploads/image/@imageName" />
-            </div>
-
     </dl>
-</div>
+
+            <img src="/Uploads/image/@imageName" onerror="this.src='/Uploads/image/NoImage.jpg'"/>
+        
+
+    </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
-</body>
-</html>

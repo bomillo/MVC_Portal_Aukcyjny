@@ -81,7 +81,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,CategoryId,Name,VatRate,IsVatExclueded")] Product product, IFormCollection postedFiles, IFormFile productIcon, IFormFile productImage)
+        public async Task<IActionResult> Create([Bind("ProductId,CategoryId,Name,VatRate,IsVatExcluded")] Product product, IFormCollection postedFiles, IFormFile productIcon, IFormFile productImage)
         {
 
             string[] descriptions = postedFiles["fileDescription"].ToString().Split(',');
@@ -94,18 +94,31 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-
                 /* Used to skip icon and image file included in postedFiles*/
                 int filesToSkip = 0;
+                if (productIcon != null)
+                    filesToSkip++;
+                if (productImage != null)
+                    filesToSkip++;
 
+                int filled = descriptions.Count();
+                int unfilled = postedFiles["fileDescription"].Where(s => s.Equals("")).Count();
+                if (filled - unfilled < postedFiles.Files.Count - filesToSkip)
+                {
+                    ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
+                    /* Language change!!!*/
+                    ViewData["ErrorMessage"] = "Każdy załączany plik dodatkowy musi posiadać opis!";
+                    return View(product);
+                }
+
+                _context.Add(product);
+                await _context.SaveChangesAsync();
                 /* Saving product Icon*/
                 {
                     if (productIcon == null && productImage != null)
                         productIcon = productImage;
 
-                    string path = ".\\wwwroot\\Uploads\\icon";
+                    string path = ".\\bin\\Uploads\\icon";
                     string extension;
                     string fileName;
                     if (productIcon == null)    // if no icon inserted, set default ICON_NoIcon.jpg
@@ -119,7 +132,6 @@ namespace WebApp.Controllers
                     }
                     else
                     {
-                        filesToSkip++;
                         extension = Path.GetExtension(productIcon.FileName);
                         fileName = product.ProductId + "_" + product.Name + extension;
 
@@ -129,6 +141,8 @@ namespace WebApp.Controllers
                             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
                             /* Language change!!!*/
                             ViewData["ErrorMessage"] = "Nieobsługiwany format wejściowy, obsługiwane formaty ikon: .png, .jpg, .gif, .jpeg";
+                            _context.Remove(product);
+                            await _context.SaveChangesAsync();
                             throw new Exception();
                         }
 
@@ -164,7 +178,7 @@ namespace WebApp.Controllers
 
                 /* Saving product Image*/
                 {
-                    string path = ".\\wwwroot\\Uploads\\image";
+                    string path = ".\\bin\\Uploads\\image";
                     string extension;
                     string fileName; 
 
@@ -181,7 +195,6 @@ namespace WebApp.Controllers
                     }
                     else
                     {
-                        filesToSkip++;
                         extension = Path.GetExtension(productIcon.FileName);
                         fileName = product.ProductId + "_" + product.Name + extension;
 
@@ -190,6 +203,10 @@ namespace WebApp.Controllers
                             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
                             /* Language change!!!*/
                             ViewData["ErrorMessage"] = "Nieobsługiwany format wejściowy, obsługiwane formaty obrazów: .png, .jpg, .gif, .jpeg";
+
+                            _context.Remove(product);
+                            await _context.SaveChangesAsync();
+
                             throw new Exception();
                         }
 
@@ -219,7 +236,7 @@ namespace WebApp.Controllers
                 }
 
 
-                /* Saving posted file in wwwroot/Uploads/ and folder based on file extension*/
+                /* Saving posted file in bin/Uploads/ and folder based on file extension*/
                 if (postedFiles.Count > 0)
                 {
                     int iterator = 0;
@@ -232,7 +249,7 @@ namespace WebApp.Controllers
                         }
 
                         string fileName = Path.GetFileName(postedFile.FileName);
-                        string path = Path.Combine(".\\wwwroot", "Uploads");    /* Using relative path of Project - files saved in WebApp/wwwroot/Uploads*/
+                        string path = Path.Combine(".\\bin", "Uploads");    /* Using relative path of Project - files saved in WebApp/bin/Uploads*/
                         string extension = Path.GetExtension(postedFile.FileName);
                         path += extension.Replace('.', '\\');
 
@@ -244,7 +261,7 @@ namespace WebApp.Controllers
                         using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
                         {
                             /* Save file to directory based on it's extension*/
-                            ProductFile file = new ProductFile(product.ProductId, path + "\\" + fileName, fileName, extension, descriptions[iterator++]);
+                            ProductFile file = new ProductFile(product.ProductId, path + "\\" + fileName, fileName, extension, descriptions?[iterator++]);
 
                             /* Save path, name and extension to database*/
                             _context.ProductFiles.Add(file);
@@ -254,6 +271,7 @@ namespace WebApp.Controllers
                     }
                 }
 
+                
 
                 return RedirectToAction(nameof(Index));
             }
@@ -293,7 +311,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,CategoryId,Name,VatRate,IsVatExclueded")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,CategoryId,Name,VatRate,IsVatExcluded")] Product product)
         {
             if (id != product.ProductId)
             {

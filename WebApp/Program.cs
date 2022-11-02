@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using System.Configuration;
 using System.Runtime.CompilerServices;
 using WebApp.Context;
@@ -15,6 +16,9 @@ builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<DbSeeder>();
+
+builder.Services.AddDirectoryBrowser();
+
 var app = builder.Build();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions() { ForwardedHeaders= ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto});
@@ -41,7 +45,17 @@ using (var scope = app.Services.CreateScope())
 
 
 
-app.UseStaticFiles();
+
+app.UseStaticFiles();   // for wwwroot
+
+// for images
+app.UseFileServer(new FileServerOptions
+{
+    FileProvider = new PhysicalFileProvider(
+           Path.Combine(builder.Environment.ContentRootPath, "bin/Uploads")),
+    RequestPath = "/Uploads",
+    EnableDirectoryBrowsing = true
+});
 
 app.UseRouting();
 
