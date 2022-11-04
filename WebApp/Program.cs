@@ -25,7 +25,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     {
         Name = "CONSENT_COOKIE",
         Expiration = TimeSpan.FromDays(366),
-        SecurePolicy = CookieSecurePolicy.Always
+        SecurePolicy = CookieSecurePolicy.None
     };
     options.MinimumSameSitePolicy = SameSiteMode.Strict;
 });
