@@ -8,6 +8,8 @@ using WebApp.Context;
 using WebApp.Services;
 using WebApp.Middlewares;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +29,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
         Expiration = TimeSpan.FromDays(366),
         SecurePolicy = CookieSecurePolicy.Always
     };
-    options.MinimumSameSitePolicy = SameSiteMode.Strict;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
 
@@ -45,7 +47,17 @@ builder.Services.AddAuthentication("CookieAuthentication")
     config.LoginPath = "/Login/Index";
     config.LogoutPath = "/Login/LogOut";
     config.AccessDeniedPath = "/Denied";
-    config.Cookie.SameSite = SameSiteMode.Strict;
+    config.Cookie.SameSite = SameSiteMode.Lax;
+    config.Cookie.IsEssential = true;
+})
+.AddGoogle( GoogleDefaults.AuthenticationScheme, config => {
+    var authData = builder.Configuration.GetSection("Authentication:Google");
+    config.ClientId = authData["ClientId"];
+    config.ClientSecret = authData["ClientSecret"];
+    config.CorrelationCookie.SameSite = SameSiteMode.Lax;
+    config.CorrelationCookie.IsEssential = true;
+    config.CorrelationCookie.SecurePolicy = CookieSecurePolicy.None;
+    
 });
 
 builder.Services.AddScoped<UsersService>();

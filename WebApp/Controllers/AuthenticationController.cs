@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Context;
 using WebApp.Models;
@@ -51,6 +55,45 @@ namespace WebApp.Controllers
             var claimsIdentity = new ClaimsIdentity(claims, "CookieAuthentication");
             await HttpContext.SignInAsync("CookieAuthentication", new ClaimsPrincipal(claimsIdentity));
 
+            return Redirect(url);
+        }
+
+        [AllowAnonymous]
+        public async Task LoginGoogle(string url)
+        {
+            var authProp = new AuthenticationProperties()
+            {
+                RedirectUri = Url.Action("ExternalLoginCallback", new {url = url})
+                
+            };
+
+            await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, authProp);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback(string url)
+        {
+            var request = HttpContext.Request;
+
+            var result = await HttpContext.AuthenticateAsync("CookieAuthentication");
+
+            if (result.Succeeded != true)
+            {
+                throw new Exception("External authentication error");
+            }
+            var externalUser = result.Principal;
+            if (externalUser == null)
+            {
+                throw new Exception("External authentication error");
+            }
+            var claims = externalUser.Claims.ToList();
+            var userIdClaim = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                throw new Exception("Unknown userid");
+            }
+            var externalUserId = userIdClaim.Value;
+            var externalProvider = userIdClaim.Issuer;
             return Redirect(url);
         }
 

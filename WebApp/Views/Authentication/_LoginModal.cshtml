@@ -4,7 +4,7 @@
         <div class="modal-header">
             <h4 class="modal-title text--primary">Login</h4>
         </div>
-        <form id="loginForm" action="/Authentication/Login" method="post">
+        <form id="loginForm" action="/Authentication" method="post">
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-4 text-muted">
@@ -18,10 +18,11 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" type="submit">Login</button>
+                <button class="btn btn-primary" type="submit" value="Login">Login</button>
                 <button type="button" class="btn btn-default text--secondary" onclick="HideModal()">Close</button>
             </div>
         </form>
+        <button class="btn btn-primary" id="GoogleLogin" onclick="LoginGoogle()">Google</button>
     </div>
 </div>
 
@@ -46,4 +47,8 @@
             }
         );
     });
+    function LoginGoogle()
+    {
+        $.post("@Url.Action("LoginGoogle" , "Authentication")", {url: window.location.toString()} );
+    }
 </script>
