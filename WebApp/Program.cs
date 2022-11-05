@@ -27,9 +27,9 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     {
         Name = "CONSENT_COOKIE",
         Expiration = TimeSpan.FromDays(366),
-        SecurePolicy = CookieSecurePolicy.Always
+        SecurePolicy = CookieSecurePolicy.None
     };
-    options.MinimumSameSitePolicy = SameSiteMode.None;
+    options.MinimumSameSitePolicy = SameSiteMode.Lax;
 });
 
 
@@ -58,6 +58,15 @@ builder.Services.AddAuthentication("CookieAuthentication")
     config.CorrelationCookie.IsEssential = true;
     config.CorrelationCookie.SecurePolicy = CookieSecurePolicy.None;
     
+})
+.AddFacebook(config =>
+{
+    var authData = builder.Configuration.GetSection("Authentication:Facebook");
+    config.AppId = authData["AppId"];
+    config.AppSecret = authData["AppSecret"];
+    config.CorrelationCookie.SameSite = SameSiteMode.Lax;
+    config.CorrelationCookie.IsEssential = true;
+    config.CorrelationCookie.SecurePolicy = CookieSecurePolicy.None;
 });
 
 builder.Services.AddScoped<UsersService>();

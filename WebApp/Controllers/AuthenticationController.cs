@@ -6,6 +6,7 @@ using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -57,21 +58,34 @@ namespace WebApp.Controllers
 
             return Redirect(url);
         }
-
+        [HttpPost]
         [AllowAnonymous]
         public async Task LoginGoogle(string url)
         {
             var authProp = new AuthenticationProperties()
             {
-                RedirectUri = Url.Action("ExternalLoginCallback", new {url = url})
+                RedirectUri = Url.Action("ExternalLoginCallback", new {url = url, provider = ExternalProvider.Google})
                 
             };
 
             await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, authProp);
         }
 
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> ExternalLoginCallback(string url)
+        public async Task LoginFacebook(string url)
+        {
+            var authProp = new AuthenticationProperties()
+            {
+                RedirectUri = Url.Action("ExternalLoginCallback", new { url = url, provider = ExternalProvider.Facebook })
+
+            };
+
+            await HttpContext.ChallengeAsync(FacebookDefaults.AuthenticationScheme, authProp);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback(string url, ExternalProvider provider)
         {
             var request = HttpContext.Request;
 
@@ -94,8 +108,29 @@ namespace WebApp.Controllers
             }
             var externalUserId = userIdClaim.Value;
             var externalProvider = userIdClaim.Issuer;
+
+            var user = usersService.GetUserFromExternalProvider(externalUserId, provider);
+
+            if(user == null)
+            {
+                user = ClaimsToData(claims, provider);
+            }
+
+            var ourClaims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim("mail", user.Email),
+                new Claim("userid", user.UserId.ToString())
+            };
+
+            await HttpContext.SignOutAsync();
+            var claimsIdentity = new ClaimsIdentity(ourClaims, "CookieAuthentication");
+            await HttpContext.SignInAsync("CookieAuthentication", new ClaimsPrincipal(claimsIdentity));
+
             return Redirect(url);
         }
+
+        
 
         [HttpPost]
         [AllowAnonymous]
@@ -113,6 +148,23 @@ namespace WebApp.Controllers
         {
             await HttpContext.SignOutAsync("CookieAuthentication");
             return new JsonResult(new {LoggedOut= true});
+        }
+
+        private User ClaimsToData(List<Claim> claims, ExternalProvider provider)
+        {
+            if (claims == null || claims.Count == 0)
+            {
+                return null;
+            };
+            User user = new User()
+            {
+                Name = claims.FirstOrDefault(c => c.Type.ToLower().Contains("givenname")).Value.ToString(),
+                Email = claims.FirstOrDefault(c => c.Type.ToLower().Contains("emailaddress")).Value.ToString(),
+                ExternalProvider = provider,
+                ExternalId = claims.FirstOrDefault(c => c.Type.ToLower().Contains("nameidentifier")).Value.ToString()
+            };
+
+            return usersService.AddUserFromExternalProvider(user);
         }
     }
 }

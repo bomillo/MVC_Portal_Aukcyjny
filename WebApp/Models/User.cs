@@ -12,7 +12,7 @@ namespace WebApp.Models
         public string Name { get; set; }
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
-        public string PasswordHashed { get; set; }
+        public string? PasswordHashed { get; set; }
         public UserType UserType { get; set; }
         [AllowNull]
         public int? CompanyId { get; set; }
@@ -21,6 +21,9 @@ namespace WebApp.Models
         public ThemeType ThemeType { get; set; }
         [DefaultValue(Language.PL)]
         public Language Language { get; set; }
+        [DefaultValue(ExternalProvider.None)]
+        public ExternalProvider ExternalProvider { get; set; }
+        public string? ExternalId { get; set; }
     }
 
 
@@ -29,4 +32,6 @@ namespace WebApp.Models
     public enum Language { PL, EN, FR }
 
     public enum UserType { Normal, Admin, Cośjeszcze }
+
+    public enum ExternalProvider { None, Google, Facebook}
 }
