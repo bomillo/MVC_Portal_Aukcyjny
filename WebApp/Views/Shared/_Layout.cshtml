@@ -49,7 +49,7 @@
 				@if (Context.User.Identity.IsAuthenticated)
 				{
 					<li class="currentLogin">
-						Logged in as @Context.User.Identity.Name
+						@WebApp.Resources.Shared.LoggedInAs @Context.User.Identity.Name
 					</li>
 					<li>
 						<partial name="/Views/Authentication/_LogoutButton.cshtml"/>
