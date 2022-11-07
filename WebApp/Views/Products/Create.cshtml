@@ -37,7 +37,7 @@
 
         function RemoveFile(div) {
 
-            document.getElementById("files").removeChild(div.parentNode.parentNode);
+            document.getElementById("files").removeChild(div.parentNode.parentNode.parentNode);
             if(document.getElementById("files").innerHTML == "<h3>Additional files:</h3>"){
                 document.getElementById("files").innerHTML = "";
             }
