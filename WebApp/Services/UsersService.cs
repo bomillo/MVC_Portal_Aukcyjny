@@ -70,7 +70,12 @@ namespace WebApp.Services
 
         public User GetUserFromExternalProvider(string externalId, ExternalProvider provider)
         {
-            return context.Users.FirstOrDefault(u => u.ExternalProvider == provider && u.ExternalId ==externalId);
+            return context.Users.FirstOrDefault(u => u.ExternalProvider == provider && u.ExternalId == externalId);
+        }
+
+        public User GetUser(string email)
+        {
+            return context.Users.FirstOrDefault(u => u.Email == email.ToLower());
         }
 
         public bool CreateUser(string email, string name, string password)
@@ -91,6 +96,14 @@ namespace WebApp.Services
                 return true;
             }
             return false;
+        }
+
+        internal void UpdatePassword(string mail, string password)
+        {
+            var user = GetUser(mail);
+            user.PasswordHashed= HashPassword(password);
+            context.Users.Update(user);
+            context.SaveChanges();
         }
     }
 }

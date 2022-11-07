@@ -79,6 +79,15 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Link has expired.
+        /// </summary>
+        public static string LinkExpired {
+            get {
+                return ResourceManager.GetString("LinkExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string Login {
@@ -120,6 +129,15 @@ namespace WebApp.Resources.Authentication {
         public static string PasswordNotMatch {
             get {
                 return ResourceManager.GetString("PasswordNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password has been chaged.
+        /// </summary>
+        public static string PasswordReseted {
+            get {
+                return ResourceManager.GetString("PasswordReseted", resourceCulture);
             }
         }
         

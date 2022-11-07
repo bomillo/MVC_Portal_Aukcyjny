@@ -39,6 +39,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Authentication\Mail.Designer.cs">
+      <DependentUpon>Mail.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\Authentication\Localization.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -52,6 +57,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Authentication\Mail.resx">
+      <LastGenOutput>Mail.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Authentication\Localization.fr-FR.resx">
       <Generator></Generator>
     </EmbeddedResource>
