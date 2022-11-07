@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +52,8 @@ namespace WebApp.Controllers
             var claimsIdentity = new ClaimsIdentity(claims, "CookieAuthentication");
             await HttpContext.SignInAsync("CookieAuthentication", new ClaimsPrincipal(claimsIdentity));
 
+            LanguageServices.SetLanguage(Response, user.Language);
+
             return Redirect(url);
         }
 
@@ -69,6 +72,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync("CookieAuthentication");
+            LanguageServices.ClearLanguage(Response);
             return new JsonResult(new {LoggedOut= true});
         }
     }
