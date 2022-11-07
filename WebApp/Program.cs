@@ -85,7 +85,8 @@ app.UseCookiePolicy();
 app.UseStaticFiles();   // for wwwroot
 
 #region retrieve and prepare path
-var length = Environment.ProcessPath.LastIndexOf('\\');
+var procesPath = Environment.ProcessPath.Replace('\\', '/');
+var length = procesPath.LastIndexOf('/');
 var path = Environment.ProcessPath.Remove(length);
 path = Path.Combine(path, "Uploads");
 Directory.CreateDirectory(path);
