@@ -39,15 +39,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\Authentication\Localization.Designer.cs">
+    <Compile Update="Resources\Authentication\Localization.en-US.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Localization.resx</DependentUpon>
+      <DependentUpon>Localization.en-US.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Shared.Designer.cs">
+    <Compile Update="Resources\Shared.en-US.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Shared.resx</DependentUpon>
+      <DependentUpon>Shared.en-US.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -58,9 +58,9 @@
     <EmbeddedResource Update="Resources\Authentication\Localization.pl-PL.resx">
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Authentication\Localization.resx">
+    <EmbeddedResource Update="Resources\Authentication\Localization.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Localization.Designer.cs</LastGenOutput>
+      <LastGenOutput>Localization.en-US.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Shared.fr-FR.resx">
       <Generator></Generator>
@@ -68,9 +68,9 @@
     <EmbeddedResource Update="Resources\Shared.pl-PL.resx">
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Shared.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Shared.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="Resources\Shared.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Shared.en-US.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

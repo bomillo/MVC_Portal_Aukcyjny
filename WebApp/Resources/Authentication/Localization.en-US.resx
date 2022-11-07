@@ -117,16 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Close" xml:space="preserve">
-    <value>Close</value>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
   </data>
-  <data name="FieldRequired" xml:space="preserve">
-    <value>This field is required</value>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
   </data>
-  <data name="FieldTooLong" xml:space="preserve">
-    <value>Too long input</value>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
   </data>
-  <data name="LoggedInAs" xml:space="preserve">
-    <value>Logged in as </value>
+  <data name="WrongCredentials" xml:space="preserve">
+    <value>Password or e-mail is incorrect </value>
   </data>
 </root>

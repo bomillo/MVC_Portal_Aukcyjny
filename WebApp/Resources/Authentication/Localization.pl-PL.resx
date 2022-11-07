@@ -120,30 +120,11 @@
   <data name="Email" xml:space="preserve">
     <value>E-mail</value>
   </data>
-  <data name="InvalidEmail" xml:space="preserve">
-    <value>Format e-maila jest niepoprawny.</value>
-  </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
-  <data name="MailTaken" xml:space="preserve">
-    <value>E-mail jest już zajęty!</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Imię</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Hasło</value>
-  </data>
-  <data name="PasswordNotMatch" xml:space="preserve">
-    <value>Hasła się nie zgadzały!</value>
-  </data>
-  <data name="RegistrationSucces" xml:space="preserve">
-    <value>Rejestracja się udała!
-Można się teraz zalogować na nowe konto.</value>
-  </data>
-  <data name="WeakPassword" xml:space="preserve">
-    <value>Hasło jest za słabe</value>
   </data>
   <data name="WrongCredentials" xml:space="preserve">
     <value>Hasło lub e-mail jest nie poprawny.</value>

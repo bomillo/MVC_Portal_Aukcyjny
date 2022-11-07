@@ -120,12 +120,6 @@
   <data name="Close" xml:space="preserve">
     <value>Zamknij</value>
   </data>
-  <data name="FieldRequired" xml:space="preserve">
-    <value>Pole jest wymagane</value>
-  </data>
-  <data name="FieldTooLong" xml:space="preserve">
-    <value>Wprowadzone dane są za długie </value>
-  </data>
   <data name="LoggedInAs" xml:space="preserve">
     <value>Zalogowano jako </value>
   </data>

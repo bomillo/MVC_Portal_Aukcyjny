@@ -16,7 +16,6 @@ using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Context;
 using WebApp.Models;
-using WebApp.Models.ViewModel;
 using WebApp.Services;
 
 namespace WebApp.Controllers
@@ -152,29 +151,7 @@ namespace WebApp.Controllers
         {
             await HttpContext.SignOutAsync("CookieAuthentication");
             LanguageServices.ClearLanguage(Response);
-            return new JsonResult(new { LoggedOut = true });
-        }
-
-
-        [HttpGet]
-        public async Task<IActionResult> Register()
-        { 
-            return View(new RegisterUserModel());
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterUserModel model)
-        {
-            if (model.Password!= model.PasswordVerification) {
-                ModelState.AddModelError("Password", WebApp.Resources.Authentication.Localization.PasswordNotMatch);
-                return View(model);
-            }
-            if (!usersService.CreateUser(model.Email, model.Name, model.Password)) {
-                ModelState.AddModelError("Email", WebApp.Resources.Authentication.Localization.MailTaken);
-                return View(model);
-            }
-
-            return View("RegisterSucces");
+            return new JsonResult(new {LoggedOut= true});
         }
 
         private User ClaimsToData(List<Claim> claims, ExternalProvider provider)
@@ -186,18 +163,11 @@ namespace WebApp.Controllers
             User user = new User()
             {
                 Name = claims.FirstOrDefault(c => c.Type.ToLower().Contains("givenname")).Value.ToString(),
-                Email = claims.FirstOrDefault(c => c.Type.ToLower().Contains("emailaddress")).Value.ToString()
+                Email = claims.FirstOrDefault(c => c.Type.ToLower().Contains("emailaddress")).Value.ToString(),
+                ExternalProvider = provider,
+                ExternalId = claims.FirstOrDefault(c => c.Type.ToLower().Contains("nameidentifier")).Value.ToString()
             };
 
-            if (provider == ExternalProvider.Facebook)
-            {
-                user.ExternalFacebookId = claims.FirstOrDefault(c => c.Type.ToLower().Contains("nameidentifier")).Value.ToString();
-            }
-            else
-            {
-                user.ExternalGoogleId = claims.FirstOrDefault(c => c.Type.ToLower().Contains("nameidentifier")).Value.ToString();
-
-            }
             return usersService.AddUserFromExternalProvider(user);
         }
     }

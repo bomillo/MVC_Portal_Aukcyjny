@@ -53,16 +53,10 @@ namespace WebApp.Services
         {
             var user = context.Users.FirstOrDefault(u => u.Email == newUser.Email);
 
-            if (user != null)
+            if (user != null && user.ExternalProvider == ExternalProvider.None)
             {
-                if(newUser.ExternalFacebookId != null)
-                {
-                    user.ExternalFacebookId = newUser.ExternalFacebookId;
-                }
-                else
-                {
-                    user.ExternalGoogleId = newUser.ExternalGoogleId;
-                }
+                user.ExternalProvider = newUser.ExternalProvider;
+                user.ExternalId = newUser.ExternalId;
 
                 context.Update(user);
             }
@@ -71,48 +65,12 @@ namespace WebApp.Services
                 context.Users.Add(newUser);
             }
             context.SaveChanges();
-
-            if(newUser.ExternalFacebookId != null)
-            {
-                return context.Users.FirstOrDefault(u => u.ExternalFacebookId == newUser.ExternalFacebookId);
-            }
-            else
-            {
-                return context.Users.FirstOrDefault(u => u.ExternalGoogleId == newUser.ExternalGoogleId);
-            }
+            return context.Users.FirstOrDefault(u => u.ExternalId == newUser.ExternalId && u.ExternalProvider == newUser.ExternalProvider);
         }
 
         public User GetUserFromExternalProvider(string externalId, ExternalProvider provider)
         {
-            if(provider == ExternalProvider.Facebook)
-            {
-               return context.Users.FirstOrDefault(u => u.ExternalFacebookId != null &&  u.ExternalFacebookId == externalId);
-
-            }
-            else
-            {
-               return context.Users.FirstOrDefault(u => u.ExternalGoogleId != null &&  u.ExternalGoogleId == externalId);
-            }
-        }
-
-        public bool CreateUser(string email, string name, string password)
-        {
-            var userExists = context.Users.Any(u => u.Email == email.ToLower());
-            if (!userExists)
-            {
-                context.Users.Add(new User()
-                {
-                    Email = email,
-                    Name = name,
-                    PasswordHashed = HashPassword(password),
-                    ThemeType = ThemeType.Dark,
-                    Language = Language.EN,
-                    UserType = UserType.Normal
-                });
-                context.SaveChanges();
-                return true;
-            }
-            return false;
+            return context.Users.FirstOrDefault(u => u.ExternalProvider == provider && u.ExternalId ==externalId);
         }
     }
 }
