@@ -33,13 +33,16 @@ namespace WebApp.Controllers.PartialViews
 
             if (HttpContext.User.Claims.Any())
             {
-                var user = _dbContext.Users.FirstOrDefault(
-                    x => x.UserId == int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString()));
-                if (user != null)
+                if (HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")) != null)
                 {
-                    user.ThemeType = newTheme;
-                    _dbContext.Update(user);
-                    _dbContext.SaveChanges();
+                    var userId = int.Parse(HttpContext.User.Claims.SingleOrDefault(x => x.Type.ToLower().Contains("userid")).Value);
+                    var user = _dbContext.Users.FirstOrDefault(x => x.UserId == userId);
+                    if (user != null)
+                    {
+                        user.ThemeType = newTheme;
+                        _dbContext.Update(user);
+                        _dbContext.SaveChanges();
+                    }
                 }
             }
             if(Request.Cookies["THEME_COOKIE"] != null)
