@@ -21,9 +21,9 @@ namespace WebApp.Models
         public ThemeType ThemeType { get; set; }
         [DefaultValue(Language.PL)]
         public Language Language { get; set; }
-        [DefaultValue(ExternalProvider.None)]
-        public ExternalProvider ExternalProvider { get; set; }
-        public string? ExternalId { get; set; }
+        
+        public string? ExternalGoogleId { get; set; }
+        public string? ExternalFacebookId { get; set; }
     }
 
 
@@ -33,5 +33,5 @@ namespace WebApp.Models
 
     public enum UserType { Normal, Admin, Cośjeszcze }
 
-    public enum ExternalProvider { None, Google, Facebook}
+    public enum ExternalProvider { Google, Facebook}
 }

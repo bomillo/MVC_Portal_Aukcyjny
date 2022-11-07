@@ -163,11 +163,18 @@ namespace WebApp.Controllers
             User user = new User()
             {
                 Name = claims.FirstOrDefault(c => c.Type.ToLower().Contains("givenname")).Value.ToString(),
-                Email = claims.FirstOrDefault(c => c.Type.ToLower().Contains("emailaddress")).Value.ToString(),
-                ExternalProvider = provider,
-                ExternalId = claims.FirstOrDefault(c => c.Type.ToLower().Contains("nameidentifier")).Value.ToString()
+                Email = claims.FirstOrDefault(c => c.Type.ToLower().Contains("emailaddress")).Value.ToString()
             };
 
+            if (provider == ExternalProvider.Facebook)
+            {
+                user.ExternalFacebookId = claims.FirstOrDefault(c => c.Type.ToLower().Contains("nameidentifier")).Value.ToString();
+            }
+            else
+            {
+                user.ExternalGoogleId = claims.FirstOrDefault(c => c.Type.ToLower().Contains("nameidentifier")).Value.ToString();
+
+            }
             return usersService.AddUserFromExternalProvider(user);
         }
     }
