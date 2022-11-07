@@ -77,12 +77,13 @@ namespace WebApp.Controllers
             memoryCache.Set(guid, mail, TimeSpan.FromMinutes(15));
 
             var user = usersService.GetUser(mail);
-            if (user!=null) { 
+            if (user != null)
+            {
                 using (new CultureChanger(user))
                 {
                     StringBuilder body = new StringBuilder(Mail.Body);
                     body.AppendLine();
-                    body.AppendLine(Url.Action("ResetPassword", "Authentication", new {guid=guid}, Url.ActionContext.HttpContext.Request.Scheme));
+                    body.AppendLine(Url.Action("ResetPassword", "Authentication", new { guid = guid }, Url.ActionContext.HttpContext.Request.Scheme));
 
                     emailService.SendMail(Mail.Subject, body.ToString(), user.Email);
                 }
@@ -104,15 +105,17 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
         {
-            if (model.Password != model.PasswordVerification )
+            if (model.Password != model.PasswordVerification)
             {
                 ModelState.AddModelError("Password", WebApp.Resources.Authentication.Localization.PasswordNotMatch);
             }
             string mail;
-            if (!memoryCache.TryGetValue(model.Guid, out mail)) { 
+            if (!memoryCache.TryGetValue(model.Guid, out mail))
+            {
                 ModelState.AddModelError("Password", WebApp.Resources.Authentication.Localization.LinkExpired);
             }
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 return View(model);
             }
 
@@ -126,8 +129,8 @@ namespace WebApp.Controllers
         {
             var authProp = new AuthenticationProperties()
             {
-                RedirectUri = Url.Action("ExternalLoginCallback", new {url = url, provider = ExternalProvider.Google})
-                
+                RedirectUri = Url.Action("ExternalLoginCallback", new { url = url, provider = ExternalProvider.Google })
+
             };
 
             await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, authProp);
@@ -173,7 +176,7 @@ namespace WebApp.Controllers
 
             var user = usersService.GetUserFromExternalProvider(externalUserId, provider);
 
-            if(user == null)
+            if (user == null)
             {
                 user = ClaimsToData(claims, provider);
             }
@@ -192,7 +195,7 @@ namespace WebApp.Controllers
             return Redirect(url);
         }
 
-        
+
 
         [HttpPost]
         [AllowAnonymous]
@@ -216,23 +219,28 @@ namespace WebApp.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Register()
-        { 
+        {
             return View(new RegisterUserModel());
         }
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterUserModel model)
         {
-            if (model.Password!= model.PasswordVerification) {
+            if (model.Password != model.PasswordVerification)
+            {
                 ModelState.AddModelError("Password", WebApp.Resources.Authentication.Localization.PasswordNotMatch);
             }
-            if (!usersService.CreateUser(model.Email, model.Name, model.Password)) {
+            if (!usersService.CreateUser(model.Email, model.Name, model.Password))
+            {
                 ModelState.AddModelError("Email", WebApp.Resources.Authentication.Localization.MailTaken);
             }
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+
+            return View("RegisterSucces");
+        }
 
         private User ClaimsToData(List<Claim> claims, ExternalProvider provider)
         {
@@ -243,12 +251,20 @@ namespace WebApp.Controllers
             User user = new User()
             {
                 Name = claims.FirstOrDefault(c => c.Type.ToLower().Contains("givenname")).Value.ToString(),
-                Email = claims.FirstOrDefault(c => c.Type.ToLower().Contains("emailaddress")).Value.ToString(),
-                ExternalProvider = provider,
-                ExternalId = claims.FirstOrDefault(c => c.Type.ToLower().Contains("nameidentifier")).Value.ToString()
+                Email = claims.FirstOrDefault(c => c.Type.ToLower().Contains("emailaddress")).Value.ToString()
             };
 
+            if (provider == ExternalProvider.Facebook)
+            {
+                user.ExternalFacebookId = claims.FirstOrDefault(c => c.Type.ToLower().Contains("nameidentifier")).Value.ToString();
+            }
+            else
+            {
+                user.ExternalGoogleId = claims.FirstOrDefault(c => c.Type.ToLower().Contains("nameidentifier")).Value.ToString();
+
+            }
             return usersService.AddUserFromExternalProvider(user);
         }
     }
 }
+
