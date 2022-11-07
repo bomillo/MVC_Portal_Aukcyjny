@@ -1,5 +1,4 @@
 ﻿body {
-
 }
 
 .dark-mode {
@@ -65,6 +64,13 @@
         }
 
         &--error {
+        }
+    }
+
+    .border {
+
+        &--primary {
+            border-color: aliceblue;
         }
     }
 }
