@@ -72,5 +72,25 @@ namespace WebApp.Services
         {
             return context.Users.FirstOrDefault(u => u.ExternalProvider == provider && u.ExternalId ==externalId);
         }
+
+        public bool CreateUser(string email, string name, string password)
+        {
+            var userExists = context.Users.Any(u => u.Email == email.ToLower());
+            if (!userExists)
+            {
+                context.Users.Add(new User()
+                {
+                    Email = email,
+                    Name = name,
+                    PasswordHashed = HashPassword(password),
+                    ThemeType = ThemeType.Dark,
+                    Language = Language.EN,
+                    UserType = UserType.Normal
+                });
+                context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }

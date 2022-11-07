@@ -26,6 +26,7 @@
         </form>
         <form action="/Authentication" method="post">
             <input type="hidden" id="CurrentUrl" name="url" />
+            <a class="btn btn-primary"  asp-area="" asp-controller="Authentication" asp-action="Register">Register</a>
             <input class="btn btn-primary" type="submit" value="Google" formaction="/Authentication/LoginGoogle"/>
             <input class="btn btn-primary" type="submit" value="Facebook" formaction="/Authentication/LoginFacebook"/>
         </form>

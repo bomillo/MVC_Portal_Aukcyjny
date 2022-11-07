@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebApp.Resources.Authentication {
+namespace WebApp.Resources {
     using System;
     
     
@@ -22,24 +22,24 @@ namespace WebApp.Resources.Authentication {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Localization {
+    internal class Shared {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Localization() {
+        internal Shared() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebApp.Resources.Authentication.Localization", typeof(Localization).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebApp.Resources.Shared", typeof(Shared).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace WebApp.Resources.Authentication {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,38 +61,38 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to E-mail.
+        ///   Looks up a localized string similar to Close.
         /// </summary>
-        public static string Email {
+        internal static string Close {
             get {
-                return ResourceManager.GetString("Email", resourceCulture);
+                return ResourceManager.GetString("Close", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login.
+        ///   Looks up a localized string similar to This field is required.
         /// </summary>
-        public static string Login {
+        internal static string FieldRequired {
             get {
-                return ResourceManager.GetString("Login", resourceCulture);
+                return ResourceManager.GetString("FieldRequired", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password.
+        ///   Looks up a localized string similar to Too long input.
         /// </summary>
-        public static string Password {
+        internal static string FieldTooLong {
             get {
-                return ResourceManager.GetString("Password", resourceCulture);
+                return ResourceManager.GetString("FieldTooLong", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password or e-mail is incorrect .
+        ///   Looks up a localized string similar to Logged in as .
         /// </summary>
-        public static string WrongCredentials {
+        internal static string LoggedInAs {
             get {
-                return ResourceManager.GetString("WrongCredentials", resourceCulture);
+                return ResourceManager.GetString("LoggedInAs", resourceCulture);
             }
         }
     }
