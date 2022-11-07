@@ -2,7 +2,7 @@
 @using WebApp.Resources
 
 <div class="modal-dialog ">
-    <div class="modal-content @(Context?.Items["theme"]?.ToString() ?? "dark-mode")">
+    <div class="modal-content background--primary">
         <div class="modal-header">
             <h4 class="modal-title text--primary">@Auth.Login</h4>
         </div>
@@ -23,6 +23,11 @@
                 <button class="btn btn-primary" type="submit">@Auth.Login</button>
                 <button type="button" class="btn btn-default text--secondary" onclick="HideModal()">@Shared.Close</button>
             </div>
+        </form>
+        <form action="/Authentication" method="post">
+            <input type="hidden" id="CurrentUrl" name="url" />
+            <input class="btn btn-primary" type="submit" value="Google" formaction="/Authentication/LoginGoogle"/>
+            <input class="btn btn-primary" type="submit" value="Facebook" formaction="/Authentication/LoginFacebook"/>
         </form>
     </div>
 </div>
@@ -48,4 +53,7 @@
             }
         );
     });
+
+    $("#CurrentUrl").val(window.location.toString());
+
 </script>

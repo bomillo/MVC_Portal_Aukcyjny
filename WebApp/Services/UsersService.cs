@@ -36,5 +36,41 @@ namespace WebApp.Services
         {
             return context.Users.Any(u => u.Email == email.ToLower() && u.PasswordHashed == HashPassword(password));
         }
+
+        public void AddUser(User newUser)
+        {
+            var user = context.Users.FirstOrDefault(u => u.Email == newUser.Email);
+
+            if(user != null)
+            {
+                return;
+            }
+
+            context.Users.Add(newUser);
+            context.SaveChanges();
+        }
+        public User AddUserFromExternalProvider(User newUser)
+        {
+            var user = context.Users.FirstOrDefault(u => u.Email == newUser.Email);
+
+            if (user != null && user.ExternalProvider == ExternalProvider.None)
+            {
+                user.ExternalProvider = newUser.ExternalProvider;
+                user.ExternalId = newUser.ExternalId;
+
+                context.Update(user);
+            }
+            else
+            {
+                context.Users.Add(newUser);
+            }
+            context.SaveChanges();
+            return context.Users.FirstOrDefault(u => u.ExternalId == newUser.ExternalId && u.ExternalProvider == newUser.ExternalProvider);
+        }
+
+        public User GetUserFromExternalProvider(string externalId, ExternalProvider provider)
+        {
+            return context.Users.FirstOrDefault(u => u.ExternalProvider == provider && u.ExternalId ==externalId);
+        }
     }
 }
