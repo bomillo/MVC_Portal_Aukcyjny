@@ -19,8 +19,8 @@ namespace WebApp.Models
         public int OwnerId { get; set; }
         public User Owner { get; set; }
         public DateTime CreationTime { get; set; }
-        public DateTime PublishedTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime? PublishedTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public int ProductId { get; set; }
         public Product Product { get; set; }
     }

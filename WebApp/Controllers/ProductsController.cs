@@ -12,6 +12,7 @@ using WebApp.Context;
 using WebApp.Models;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using System.Drawing.Drawing2D;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace WebApp.Controllers
 {
@@ -27,11 +28,28 @@ namespace WebApp.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
             var portalAukcyjnyContext = _context.Products.Include(p => p.Category);
-                                
-            return View(await portalAukcyjnyContext.ToListAsync());
+
+            const int pageSize = 20;
+            if (page < 1)
+                page = 1;
+
+
+            int rowsCount = portalAukcyjnyContext.Count();
+
+            var pager = new Pager(rowsCount, page, "Products", pageSize);
+            var rowsSkipped = (page - 1) * pageSize;
+
+            var auctions = portalAukcyjnyContext.Skip(rowsSkipped).Take(pager.PageSize).ToList();
+
+            ViewBag.Pager = pager;
+
+            //return View(await portalAukcyjnyContext.ToListAsync());   // for displaying all auctions
+
+            return View(auctions);  // for displaying paged auctions
+
         }
 
         // GET: Products/Details/5
