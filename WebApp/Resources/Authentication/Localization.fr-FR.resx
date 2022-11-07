@@ -120,11 +120,29 @@
   <data name="Email" xml:space="preserve">
     <value>E-mail</value>
   </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>InvalidEmial FR</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
+  <data name="MailTaken" xml:space="preserve">
+    <value>MailTaken FR</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name FR</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="PasswordNotMatch" xml:space="preserve">
+    <value>PasswordNotMatch FR</value>
+  </data>
+  <data name="RegistrationSucces" xml:space="preserve">
+    <value>RegistrationSucces FR</value>
+  </data>
+  <data name="WeakPassword" xml:space="preserve">
+    <value>WeakPassword FR</value>
   </data>
   <data name="WrongCredentials" xml:space="preserve">
     <value>WrongCredentials FR</value>
