@@ -121,7 +121,7 @@
     <value>Close FR</value>
   </data>
   <data name="FieldRequired" xml:space="preserve">
-    <value>Field required (FR)</value>
+    <value> FR</value>
   </data>
   <data name="FieldTooLong" xml:space="preserve">
     <value>FieldTooLong FR</value>

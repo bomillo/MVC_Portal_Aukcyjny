@@ -124,7 +124,7 @@
     <value>Pole jest wymagane</value>
   </data>
   <data name="FieldTooLong" xml:space="preserve">
-    <value>Wprowadzone dane są za długie</value>
+    <value>Wprowadzone dane są za długie </value>
   </data>
   <data name="LoggedInAs" xml:space="preserve">
     <value>Zalogowano jako </value>
