@@ -5,6 +5,18 @@ namespace WebApp.Services
 {
     public class LanguageServices
     {
+        public static string DecodeLanguage(Language lang) {
+            return "en-US";
+            if (lang == Language.PL)
+            {
+                return "pl-PL";
+            }
+            else if (lang == Language.FR)
+            {
+                return "fr-FR";
+            }
+        }
+
         public static void SetLanguage(HttpResponse response, Language lang) 
         {
             string languageCode = "en-US";

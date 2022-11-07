@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Policy;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,9 +15,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using WebApp.Context;
+using WebApp.Helpers;
+using WebApp.Resources.Authentication;
 using WebApp.Models;
-using WebApp.Models.ViewModel;
+using WebApp.Models.DTO;
 using WebApp.Services;
 
 namespace WebApp.Controllers
@@ -24,10 +28,14 @@ namespace WebApp.Controllers
     public class AuthenticationController : Controller
     {
         private readonly UsersService usersService;
+        private readonly EmailService emailService;
+        private readonly IMemoryCache memoryCache;
 
-        public AuthenticationController(UsersService usersService)
+        public AuthenticationController(UsersService usersService, IMemoryCache memoryCache, EmailService emailService = null)
         {
             this.usersService = usersService;
+            this.memoryCache = memoryCache;
+            this.emailService = emailService;
         }
 
         [HttpGet]
@@ -62,6 +70,56 @@ namespace WebApp.Controllers
 
             return Redirect(url);
         }
+        [HttpPost]
+        public async Task<IActionResult> SendResetPasswordMail(string mail)
+        {
+            var guid = Guid.NewGuid().ToString();
+            memoryCache.Set(guid, mail, TimeSpan.FromMinutes(15));
+
+            var user = usersService.GetUser(mail);
+            if (user!=null) { 
+                using (new CultureChanger(user))
+                {
+                    StringBuilder body = new StringBuilder(Mail.Body);
+                    body.AppendLine();
+                    body.AppendLine(Url.Action("ResetPassword", "Authentication", new {guid=guid}, Url.ActionContext.HttpContext.Request.Scheme));
+
+                    emailService.SendMail(Mail.Subject, body.ToString(), user.Email);
+                }
+            }
+            return View("ResetPasswordSent");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ResetPassword(string guid)
+        {
+            if (!memoryCache.TryGetValue(guid, out var _))
+            {
+                return LocalRedirect(Url.Action("Index", "Home"));
+            }
+
+            return View(new ResetPasswordModel() { Guid = guid });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (model.Password != model.PasswordVerification )
+            {
+                ModelState.AddModelError("Password", WebApp.Resources.Authentication.Localization.PasswordNotMatch);
+            }
+            string mail;
+            if (!memoryCache.TryGetValue(model.Guid, out mail)) { 
+                ModelState.AddModelError("Password", WebApp.Resources.Authentication.Localization.LinkExpired);
+            }
+            if (!ModelState.IsValid) {
+                return View(model);
+            }
+
+            usersService.UpdatePassword(mail, model.Password);
+            return View("ResetPasswordSent");
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public async Task LoginGoogle(string url)
@@ -167,10 +225,12 @@ namespace WebApp.Controllers
         {
             if (model.Password!= model.PasswordVerification) {
                 ModelState.AddModelError("Password", WebApp.Resources.Authentication.Localization.PasswordNotMatch);
-                return View(model);
             }
             if (!usersService.CreateUser(model.Email, model.Name, model.Password)) {
                 ModelState.AddModelError("Email", WebApp.Resources.Authentication.Localization.MailTaken);
+            }
+            if (!ModelState.IsValid)
+            {
                 return View(model);
             }
 

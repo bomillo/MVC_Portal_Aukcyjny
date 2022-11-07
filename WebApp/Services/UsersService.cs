@@ -94,7 +94,12 @@ namespace WebApp.Services
                return context.Users.FirstOrDefault(u => u.ExternalGoogleId != null &&  u.ExternalGoogleId == externalId);
             }
         }
-
+      
+        public User GetUser(string email)
+        {
+            return context.Users.FirstOrDefault(u => u.Email == email.ToLower());
+        }
+      
         public bool CreateUser(string email, string name, string password)
         {
             var userExists = context.Users.Any(u => u.Email == email.ToLower());
@@ -113,6 +118,14 @@ namespace WebApp.Services
                 return true;
             }
             return false;
+        }
+
+        internal void UpdatePassword(string mail, string password)
+        {
+            var user = GetUser(mail);
+            user.PasswordHashed= HashPassword(password);
+            context.Users.Update(user);
+            context.SaveChanges();
         }
     }
 }

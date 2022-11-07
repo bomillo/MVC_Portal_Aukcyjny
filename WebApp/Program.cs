@@ -72,6 +72,8 @@ builder.Services.AddAuthentication("CookieAuthentication")
 
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddTransient<DbSeeder>();
+builder.Services.AddSingleton<EmailService>();
+builder.Services.AddMemoryCache();
 
 builder.Services.AddDirectoryBrowser();
 

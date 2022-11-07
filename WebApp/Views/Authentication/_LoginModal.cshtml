@@ -10,12 +10,12 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-4 text-muted">
-                            <label for="mail">@Auth.Email</label>
-                            <input type="text" id="loginFormMail" name="mail" value="admin" />
-                            <label for="password">@Auth.Password</label>
-                            <input type="password" id="loginFormPassword" name="password" value="admin" />
-                            <input type="hidden" id="loginFormReturnUrl" name="url"/>
-                            <div id="loginFormMessage" class="text-danger" style="display:none;">@Auth.WrongCredentials</div>
+                        <label for="mail">@Auth.Email</label>
+                        <input type="text" id="loginFormMail" name="mail" value="admin" />
+                        <label for="password">@Auth.Password</label>
+                        <input type="password" id="loginFormPassword" name="password" value="admin" />
+                        <input type="hidden" id="loginFormReturnUrl" name="url"/>
+                        <div id="loginFormMessage" class="text-danger" style="display:none;">@Auth.WrongCredentials</div>
                     </div>
                 </div>
             </div>
@@ -24,9 +24,11 @@
                 <button type="button" class="btn btn-default text--secondary" onclick="HideModal()">@Shared.Close</button>
             </div>
         </form>
-        <form action="/Authentication" method="post">
+        <form id="secondForm" action="/Authentication" method="post">
             <input type="hidden" id="CurrentUrl" name="url" />
-            <a class="btn btn-primary"  asp-area="" asp-controller="Authentication" asp-action="Register">Register</a>
+            <input type="hidden" id="secondFormMail" name="mail" />
+            <a class="btn btn-primary" asp-area="" asp-controller="Authentication" asp-action="Register">Register</a>
+            <input class="btn btn-primary" type="submit" value="Reset password" formaction="/Authentication/SendResetPasswordMail"/>
             <input class="btn btn-primary" type="submit" value="Google" formaction="/Authentication/LoginGoogle"/>
             <input class="btn btn-primary" type="submit" value="Facebook" formaction="/Authentication/LoginFacebook"/>
         </form>
@@ -45,7 +47,6 @@
                 password: $("#loginFormPassword").val(),
             },
             function (data) {
-                debugger;
                 if (!data.valid) {
                     $("#loginFormMessage").show();
                 } else {
@@ -53,6 +54,11 @@
                 }
             }
         );
+    });
+
+    $( "#secondForm" ).submit(function( event ) {
+        debugger;
+        $("#secondFormMail").val($("#loginFormMail").val());
     });
 
     $("#CurrentUrl").val(window.location.toString());

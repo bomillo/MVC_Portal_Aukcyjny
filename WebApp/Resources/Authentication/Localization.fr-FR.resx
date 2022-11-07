@@ -118,13 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Email" xml:space="preserve">
-    <value>E-mail</value>
+    <value>E-mail FR</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>InvalidEmial FR</value>
   </data>
+  <data name="LinkExpired" xml:space="preserve">
+    <value>Link has expired FR</value>
+  </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Login FR</value>
   </data>
   <data name="MailTaken" xml:space="preserve">
     <value>MailTaken FR</value>
@@ -133,10 +136,16 @@
     <value>Name FR</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Password FR</value>
   </data>
   <data name="PasswordNotMatch" xml:space="preserve">
     <value>PasswordNotMatch FR</value>
+  </data>
+  <data name="PasswordReseted" xml:space="preserve">
+    <value>PasswordReseted FR</value>
+  </data>
+  <data name="PasswordVerification" xml:space="preserve">
+    <value>PasswordVerification FR</value>
   </data>
   <data name="RegistrationSucces" xml:space="preserve">
     <value>RegistrationSucces FR</value>
