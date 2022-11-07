@@ -1,7 +1,19 @@
-﻿@model IEnumerable<WebApp.Models.Auction>
+﻿@using WebApp.Models
+@model IEnumerable<WebApp.Models.Auction>
 
 @{
     ViewData["Title"] = "Auctions";
+
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if(ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+   
 }
 
 <h1>Index</h1>
@@ -9,6 +21,9 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<partial name="_pager" model="@pager" />
+
 <table class="table">
     <thead>
         <tr>
@@ -42,7 +57,11 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+                       
+                <td style=" overflow: hidden; 
+                            text-overflow: ellipsis; 
+                            white-space: nowrap;
+                            max-width: 300px;">
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
@@ -52,7 +71,7 @@
                 @Html.DisplayFor(modelItem => item.IsDraft)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Owner.UserId)
+                @Html.DisplayFor(modelItem => item.Owner.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreationTime)
@@ -64,7 +83,7 @@
                 @Html.DisplayFor(modelItem => item.EndTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Product.ProductId)
+                @Html.DisplayFor(modelItem => item.Product.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.AuctionId">Edit</a> |
@@ -75,3 +94,6 @@
 }
     </tbody>
 </table>
+
+
+<partial name="_pager" model="@pager" />

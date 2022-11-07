@@ -259,7 +259,7 @@ namespace WebApp.Context
                 {
                     
                     auction.PublishedTime = DateTime.UtcNow.AddDays(random.Next(-200, 200)).AddHours(random.Next(24)).AddMinutes(random.Next(60));
-                    auction.EndTime = auction.PublishedTime.AddDays(random.Next(20)).AddHours(random.Next(24)).AddMinutes(random.Next(60));
+                    auction.EndTime = auction.PublishedTime.Value.AddDays(random.Next(20)).AddHours(random.Next(24)).AddMinutes(random.Next(60));
                 }
 
                 auctions.Add(auction);
@@ -329,7 +329,7 @@ namespace WebApp.Context
                     Auction = auction,
                     AuctionId = auction.AuctionId,
                     Question = rndText(100, 1200),
-                    PublishedTime = auction.PublishedTime.AddDays(random.Next(0, 20)),
+                    PublishedTime = auction.PublishedTime.Value.AddDays(random.Next(0, 20)),
                 };
 
                 if(random.Next(2) == 1)
@@ -478,7 +478,7 @@ namespace WebApp.Context
                 }
                 else
                 {
-                    bid.BidTime = auction.PublishedTime.AddMinutes(random.Next(40));
+                    bid.BidTime = auction.PublishedTime.Value.AddMinutes(random.Next(40));
                 }
 
                 bids.Add(bid);

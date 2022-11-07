@@ -1,7 +1,19 @@
-﻿@model IEnumerable<WebApp.Models.Product>
+﻿@using WebApp.Models
+@model IEnumerable<WebApp.Models.Product>
 
 @{
     ViewData["Title"] = "";
+
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+
 }
 
 <!DOCTYPE html>
@@ -15,6 +27,9 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+    <partial name="_pager" model="@pager" />
+
 <table class="table">
     <thead>
         <tr>
@@ -67,3 +82,5 @@
 </table>
 </body>
 </html>
+
+<partial name="_pager" model="@pager" />
