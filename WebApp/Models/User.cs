@@ -27,7 +27,7 @@ namespace WebApp.Models
     }
 
 
-    public enum ThemeType { Dark, Light, Gay }
+    public enum ThemeType { Dark, Light, Highcontrast }
 
     public enum Language { PL, EN, FR }
 

@@ -7,16 +7,17 @@
 
 /*Wszystko inne...*/
 .button {
-  border: 5px solid;
+  border: 3px solid;
   font-weight: 600;
   text-decoration: none;
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 10px;
   padding-bottom: 10px;
+  margin: 0.5vh 0.5vw;
 }
 .button--rounded {
-  border-radius: 20px;
+  border-radius: 15px;
 }
 .button--squared {
   border-radius: 0%;
@@ -71,4 +72,161 @@
 
 .currentLogin {
   margin-right: 10px;
+}
+
+.form--container {
+  padding: 1vh 1vw;
+  margin-top: 0.6vh;
+}
+
+.form--heading {
+  text-align: center;
+}
+
+.form--group {
+  width: 100%;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+}
+.form--group .form--label {
+  width: 33%;
+  display: inline-flex;
+  margin-left: 0px;
+}
+.form--group .form--input {
+  width: 66%;
+  display: inline-flex;
+  margin-right: 0px;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.form--group .form--select {
+  display: inline-flex;
+  width: 66%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.form--group .input--checkbox {
+  margin-top: 0.8vh;
+}
+
+.select--file {
+  width: 100%;
+  aspect-ratio: 1/1;
+  background-color: none;
+  border: 0.5px solid;
+  border-radius: 20px;
+  text-align: center;
+  opacity: 80%;
+  overflow-x: clip;
+  cursor: pointer;
+}
+.select--file .select--file--header {
+  opacity: 100%;
+  min-width: 100%;
+  display: block;
+  height: 40%;
+  margin-top: 10%;
+}
+.select--file .select--file--name {
+  opacity: 100%;
+  min-width: 100%;
+  display: none;
+  height: 40%;
+  margin-bottom: 10%;
+}
+.select--file:hover {
+  opacity: 100%;
+}
+
+.select--image--container {
+  display: inline-block;
+  width: 20%;
+  float: left;
+  margin: 0vh 0vw 1vh 1vh;
+}
+.select--image--with--description {
+  display: inline-block;
+  width: 100%;
+  float: left;
+  margin: 2vh 0vw 1vh 1vh;
+}
+.select--image--with--description .select--file {
+  width: 20%;
+}
+.select--image--with--description .desc--input {
+  min-width: 100%;
+  float: right;
+  display: block !important;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.select--image--with--description button {
+  position: relative;
+  float: right;
+  display: block;
+  margin-top: 7%;
+}
+
+.form--buttons {
+  padding-top: 0px;
+  text-align: center;
+  width: 50%;
+  aspect-ratio: 5/2;
+  float: right;
+}
+
+input[type=file] {
+  display: none;
+}
+
+.form--bottom--container {
+  margin-bottom: 3vh;
+}
+
+.clear {
+  clear: both;
+}
+
+#files {
+  margin-top: 3vh;
+}
+
+.input--button--group {
+  display: inline-block;
+  width: 75%;
+  float: right;
 }

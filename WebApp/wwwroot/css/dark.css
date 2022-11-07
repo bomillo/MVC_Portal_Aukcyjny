@@ -43,3 +43,6 @@
 .dark-mode .background--secondary {
   background-color: lightslategrey;
 }
+.dark-mode .border--primary {
+  border-color: aliceblue;
+}
