@@ -12,6 +12,5 @@ namespace WebApp.Models
         public string Name { get; set; }
         public double VatRate { get; set; }
         public bool IsVatExcluded { get; set; }
-
     }
 }

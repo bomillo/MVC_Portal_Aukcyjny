@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using System.Configuration;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
@@ -72,6 +73,8 @@ builder.Services.AddAuthentication("CookieAuthentication")
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddTransient<DbSeeder>();
 
+builder.Services.AddDirectoryBrowser();
+
 var app = builder.Build();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions() { ForwardedHeaders= ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto});
@@ -102,7 +105,25 @@ using (var scope = app.Services.CreateScope())
 
 app.UseCookiePolicy();
 
-app.UseStaticFiles();
+
+app.UseStaticFiles();   // for wwwroot
+
+#region retrieve and prepare path
+var procesPath = Environment.ProcessPath.Replace('\\', '/');
+var length = procesPath.LastIndexOf('/');
+var path = Environment.ProcessPath.Remove(length);
+path = Path.Combine(path, "Uploads");
+Directory.CreateDirectory(path);
+#endregion
+
+
+// for images
+app.UseFileServer(new FileServerOptions
+{
+    FileProvider = new PhysicalFileProvider(path),
+    RequestPath = "/Uploads",
+    EnableDirectoryBrowsing = true
+});
 
 app.UseRouting();
 

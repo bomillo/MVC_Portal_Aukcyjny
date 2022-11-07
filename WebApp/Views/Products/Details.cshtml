@@ -1,17 +1,9 @@
 ﻿@model WebApp.Models.Product
 
 @{
-    ViewData["Title"] = "";
+    ViewData["Title"] = "Product Details";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
 
 <div>
     <h4>Product</h4>
@@ -45,7 +37,7 @@
             Additional files:
         </dt>
         @* Display additional files*@
-        <dd class = "col-sm-10">
+        <dt class = "col-sm-10">
                @foreach (var item in ViewBag.items)
                {
                    @* Display file name*@
@@ -54,15 +46,25 @@
                    @* Display link to action that downloads the file*@
                    @* Params: path to the file, file name*@
                    <td>@Html.ActionLink("Download", "Download", new { Path = item.Path.ToString(), FileName = item.Name.ToString() }) </td>
-                   <br/>
+                   <br />
+                   if (item.Description != null)
+                   {
+                        @item.Description.ToString() 
+                        <br />
+                        <br />
+                   }
                }
-        </dd>
-
+        </dt>
+        @{
+            string imageName = "IMAGE_" + Model.ProductId+ "_" + Model.Name + ".jpg";
+            
+        }
     </dl>
-</div>
+
+            <img src="/Uploads/image/@imageName" onerror="this.src='/image/NoImage.png'" style="max-width: 300px"/>
+
+    </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
-</body>
-</html>

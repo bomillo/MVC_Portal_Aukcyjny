@@ -10,15 +10,48 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Create</title>
+    <meta name="viewport" content="width=device-width" />
+    
+    
+    <script type="text/javascript">
+        
+        
+        function GetDynamicTextbox(value) {
+
+            return '<div><input type="button" onclick="RemoveFile(this)" value="Remove File"/> <input type="file" name="postedFiles" id="postedFile"> <input type="text" name="fileDescription" class="form-control" placeholder="File description"/></div> <br />';
+        }
+
+
+        function AddNewFile() {
+
+            var div = document.createElement('DIV');
+
+            div.innerHTML = GetDynamicTextbox("");
+
+            document.getElementById("files").appendChild(div);
+        }
+
+        function RemoveFile(div) {
+
+            document.getElementById("files").removeChild(div.parentNode.parentNode);
+        }
+
+    </script>
+
 </head>
 <body>
 
 <h4>Product</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form method="post" enctype="multipart/form-data" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div>
+                <span class="text-danger">@ViewData["ErrorMessage"]</span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
                 <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
@@ -30,26 +63,49 @@
             </div>
             <div class="form-group">
                 <label asp-for="VatRate" class="control-label"></label>
-                <input asp-for="VatRate" class="form-control" />
+                    <input asp-for="VatRate" class="form-control" />
                 <span asp-validation-for="VatRate" class="text-danger"></span>
             </div>
+                
+            <br />
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsVatExcluded" /> @Html.DisplayNameFor(model => model.IsVatExcluded)
                 </label>
+            </div>    
+            <br />
+
+                @* Input for product icon*@
+            <div>
+                <span>Select Icon:</span>
+                    <input type="file" name="productIcon" />
+                <br />
             </div>
+                
+            <br />
+
+             @* Input for product image*@
+            <div>
+                <span>Select Image:</span>
+                    <input type="file" name="productImage"  />
+                <br />
+            </div>
+                
+            <br />
+
+            @* Input for additional files using javascript to upload multiple files with their descriptions*@
+            <span>Select additional File:</span>    
+            <div id="files">
+                        <div><input type="button" onclick="AddNewFile()" value="Add File"/></div>
+                        <br />
+            </div>
+                
+            <br />
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
 
-            @* Input for additional files*@
-            <div>
-                <span>Select File:</span>
-                    <input type="file" name="postedFiles" multiple />
-                    <input type="submit" value="Upload" />
-                <br />
-                <span style="color:green">@Html.Raw(ViewBag.Message)</span>
-            </div>
         </form>
     </div>
 </div>
