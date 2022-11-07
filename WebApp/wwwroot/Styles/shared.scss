@@ -1,8 +1,17 @@
 ﻿body {
 }
+
+
+footer {
+    display: flex;
+    padding: 10px 20px;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
 /*Wszystko inne...*/
 
-.button{
+.button {
     border: 5px solid;
     font-weight: 600;
     text-decoration: none;
@@ -10,21 +19,66 @@
     padding-right: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
-    &--rounded{
-        border-radius: 25px;
+
+
+    &--rounded {
+        border-radius: 20px;
     }
 
-    &--squared{
+    &--squared {
         border-radius: 0%;
     }
-
 }
 
-.select{
+.select {
 
-    &--language{
+    &--language {
         margin-right: 20px;
         border-radius: 15%;
     }
-
 }
+
+.cookie--pop--up {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+
+    background-color: rgba(0,0,0,0.4);
+
+    div {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border: 5px solid;
+        border-color: darkcyan;
+        padding: 20px;
+        
+        text-align: justify;
+        max-width: 500px;
+        max-height: 50%;
+    }
+
+    .pop--up--buttons {
+        border: 0px;
+        text-align: center;
+        position: relative;
+        margin-top: 30px;
+    }
+}
+
+.loginSection {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.currentLogin {
+    margin-right: 10px;
+}
+

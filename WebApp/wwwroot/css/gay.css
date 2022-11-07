@@ -1,37 +1,43 @@
-﻿.gay-mode .button--primary {
+﻿.gay-mode {
+  background-color: hotpink;
+}
+.gay-mode .button--primary {
   background-color: blue;
   border-color: chocolate;
-  color: chocolate; }
-  .gay-mode .button--primary:hover {
-    background-color: chocolate;
-    border-color: blue;
-    color: blue; }
-
+  color: chocolate;
+}
+.gay-mode .button--primary:hover {
+  background-color: chocolate;
+  border-color: blue;
+  color: blue;
+}
 .gay-mode .button--secondary {
   background-color: gold;
   border-color: brown;
-  color: brown; }
-  .gay-mode .button--secondary:hover {
-    background-color: brown;
-    border-color: gold;
-    color: gold; }
-
+  color: brown;
+}
+.gay-mode .button--secondary:hover {
+  background-color: brown;
+  border-color: gold;
+  color: gold;
+}
 .gay-mode .text--primary {
-  color: orangered; }
-
+  color: orangered;
+}
 .gay-mode .text--secondary {
-  color: coral; }
-
+  color: coral;
+}
 .gay-mode .text--error {
-  color: red; }
-
+  color: red;
+}
 .gay-mode .background--primary {
-  background-color: salmon; }
-
+  background-color: salmon;
+}
 .gay-mode .background--secondary {
-  background-color: darkviolet; }
-
+  background-color: darkviolet;
+}
 .gay-mode .background--error {
-  background-color: deeppink; }
+  background-color: deeppink;
+}
 
-/*# sourceMappingURL=data:application/json;base64,ewoJInZlcnNpb24iOiAzLAoJImZpbGUiOiAid3d3cm9vdC9TdHlsZXMvZ2F5LmNzcyIsCgkic291cmNlcyI6IFsKCQkid3d3cm9vdC9TdHlsZXMvZ2F5LnNjc3MiCgldLAoJIm5hbWVzIjogW10sCgkibWFwcGluZ3MiOiAiQUFHQSxBQUNJLFNBREssQ0FHRCxnQkFBVSxDQUFDO0VBQ1AsZ0JBQWdCLEVBQUUsSUFBSTtFQUN0QixZQUFZLEVBQUUsU0FBUztFQUN2QixLQUFLLEVBQUUsU0FBUyxHQU9uQjtFQWJULEFBQ0ksU0FESyxDQUdELGdCQUFVLEFBS04sTUFBTyxDQUFDO0lBQ0osZ0JBQWdCLEVBQUUsU0FBUztJQUMzQixZQUFZLEVBQUUsSUFBSTtJQUNsQixLQUFLLEVBQUUsSUFBSSxHQUNkOztBQVpiLEFBQ0ksU0FESyxDQWVELGtCQUFZLENBQUM7RUFDVCxnQkFBZ0IsRUFBRSxJQUFJO0VBQ3RCLFlBQVksRUFBRSxLQUFLO0VBQ25CLEtBQUssRUFBRSxLQUFLLEdBT2Y7RUF6QlQsQUFDSSxTQURLLENBZUQsa0JBQVksQUFLUixNQUFPLENBQUM7SUFDSixnQkFBZ0IsRUFBRSxLQUFLO0lBQ3ZCLFlBQVksRUFBRSxJQUFJO0lBQ2xCLEtBQUssRUFBRSxJQUFJLEdBQ2Q7O0FBeEJiLEFBNEJJLFNBNUJLLENBOEJELGNBQVUsQ0FBQztFQUNQLEtBQUssRUFBRSxTQUFTLEdBQ25COztBQWhDVCxBQTRCSSxTQTVCSyxDQWtDRCxnQkFBWSxDQUFDO0VBQ1QsS0FBSyxFQUFFLEtBQUssR0FDZjs7QUFwQ1QsQUE0QkksU0E1QkssQ0FzQ0QsWUFBUSxDQUFDO0VBQ0wsS0FBSyxFQUFFLEdBQUcsR0FDYjs7QUF4Q1QsQUEyQ0ksU0EzQ0ssQ0E0Q0Qsb0JBQVUsQ0FBQztFQUNQLGdCQUFnQixFQUFFLE1BQU0sR0FDM0I7O0FBOUNULEFBMkNJLFNBM0NLLENBZ0RELHNCQUFZLENBQUM7RUFDVCxnQkFBZ0IsRUFBRSxVQUN0QixHQUFFOztBQWxEVixBQTJDSSxTQTNDSyxDQW9ERCxrQkFBUSxDQUFDO0VBQ0wsZ0JBQWdCLEVBQUUsUUFBUSxHQUM3QiIKfQ== */
+/*# sourceMappingURL=data:application/json;charset=utf-8,%7B%22version%22:3,%22sourceRoot%22:%22%22,%22sources%22:%5B%22file:///C:/mvc/WebApp/wwwroot/Styles/gay.scss%22%5D,%22names%22:%5B%5D,%22mappings%22:%22AAGA;EACI;;AAII;EACI;EACA;EACA;;AAEA;EACI;EACA;EACA;;AAIR;EACI;EACA;EACA;;AAEA;EACI;EACA;EACA;;AAOR;EACI;;AAGJ;EACI;;AAGJ;EACI;;AAKJ;EACI;;AAGJ;EACI;;AAGJ;EACI%22%7D */

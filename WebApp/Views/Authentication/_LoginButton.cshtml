@@ -1,0 +1,21 @@
+﻿
+<button class="btn btn-primary" onclick="ShowModal()">
+    Login
+</button>
+
+<div class="modal fade loginModal" id="myModal" role="dialog"></div>
+
+<script>
+    function ShowModal(id) {
+        $.get("@Url.Action("Login","Authentication")",
+            function (data) {
+                $('.loginModal').html(data);
+                $("#myModal").modal("show");
+            });
+    }
+
+    function HideModal() {
+        $("#myModal").modal("hide");
+        $('.loginModal').html("");
+    }
+</script>
