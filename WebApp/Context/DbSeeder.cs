@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Text;
 using WebApp.Models;
+using WebApp.Services;
 
 namespace WebApp.Context
 {
@@ -9,10 +10,12 @@ namespace WebApp.Context
         //TODO: improve user password with hasher
         //Seeder nie zrobiony dla stawek zamiany walut i kluczy api 
         private readonly PortalAukcyjnyContext _dbContext;
+        private readonly UsersService _userService;
 
-        public DbSeeder(PortalAukcyjnyContext context)
+        public DbSeeder(PortalAukcyjnyContext context, UsersService userService)
         {
             this._dbContext = context;
+            _userService = userService;
         }
 
         public void Seed()
@@ -147,6 +150,16 @@ namespace WebApp.Context
 
                 users.Add(user);
             }
+
+            users.Add(new User()
+            {
+                Name = "admin",
+                Email = "admin",
+                PasswordHashed = _userService.HashPassword("admin"),
+                UserType = UserType.Admin,
+                ThemeType = ThemeType.Dark,
+                Language = Language.FR
+            });
 
             return users;
         }
