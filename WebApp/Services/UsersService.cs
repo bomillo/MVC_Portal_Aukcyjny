@@ -53,10 +53,16 @@ namespace WebApp.Services
         {
             var user = context.Users.FirstOrDefault(u => u.Email == newUser.Email);
 
-            if (user != null && user.ExternalProvider == ExternalProvider.None)
+            if (user != null)
             {
-                user.ExternalProvider = newUser.ExternalProvider;
-                user.ExternalId = newUser.ExternalId;
+                if(newUser.ExternalFacebookId != null)
+                {
+                    user.ExternalFacebookId = newUser.ExternalFacebookId;
+                }
+                else
+                {
+                    user.ExternalGoogleId = newUser.ExternalGoogleId;
+                }
 
                 context.Update(user);
             }
@@ -65,19 +71,35 @@ namespace WebApp.Services
                 context.Users.Add(newUser);
             }
             context.SaveChanges();
-            return context.Users.FirstOrDefault(u => u.ExternalId == newUser.ExternalId && u.ExternalProvider == newUser.ExternalProvider);
+
+            if(newUser.ExternalFacebookId != null)
+            {
+                return context.Users.FirstOrDefault(u => u.ExternalFacebookId == newUser.ExternalFacebookId);
+            }
+            else
+            {
+                return context.Users.FirstOrDefault(u => u.ExternalGoogleId == newUser.ExternalGoogleId);
+            }
         }
 
         public User GetUserFromExternalProvider(string externalId, ExternalProvider provider)
         {
-            return context.Users.FirstOrDefault(u => u.ExternalProvider == provider && u.ExternalId == externalId);
-        }
+            if(provider == ExternalProvider.Facebook)
+            {
+               return context.Users.FirstOrDefault(u => u.ExternalFacebookId != null &&  u.ExternalFacebookId == externalId);
 
+            }
+            else
+            {
+               return context.Users.FirstOrDefault(u => u.ExternalGoogleId != null &&  u.ExternalGoogleId == externalId);
+            }
+        }
+      
         public User GetUser(string email)
         {
             return context.Users.FirstOrDefault(u => u.Email == email.ToLower());
         }
-
+      
         public bool CreateUser(string email, string name, string password)
         {
             var userExists = context.Users.Any(u => u.Email == email.ToLower());
