@@ -54,7 +54,7 @@
             </td>
             <td>
                 <!-- Do not display icons -->
-                <img src="Uploads/icon/@iconName"/>
+                        <img src="/Uploads/icons/@iconName" onerror="this.src='/image/NoIcon.jpg'" />
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |

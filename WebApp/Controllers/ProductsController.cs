@@ -113,12 +113,20 @@ namespace WebApp.Controllers
 
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+                
                 /* Saving product Icon*/
                 {
                     if (productIcon == null && productImage != null)
                         productIcon = productImage;
 
-                    string path = ".\\bin\\Uploads\\icon";
+                    var procesPath = Environment.ProcessPath.Replace('\\', '/');
+                    var length = procesPath.LastIndexOf('/');
+                    var path = Environment.ProcessPath.Remove(length);
+                    path = Path.Combine(path, "Uploads");
+                    path = Path.Combine(path, "icons");
+                    Directory.CreateDirectory(path);
+
+                    
                     string extension;
                     string fileName;
                     if (productIcon == null)    // if no icon inserted, set default ICON_NoIcon.jpg
@@ -178,7 +186,13 @@ namespace WebApp.Controllers
 
                 /* Saving product Image*/
                 {
-                    string path = ".\\bin\\Uploads\\image";
+                    var procesPath = Environment.ProcessPath.Replace('\\', '/');
+                    var length = procesPath.LastIndexOf('/');
+                    var path = Environment.ProcessPath.Remove(length);
+                    path = Path.Combine(path, "Uploads");
+                    path = Path.Combine(path, "image");
+                    Directory.CreateDirectory(path);
+
                     string extension;
                     string fileName; 
 
@@ -249,14 +263,18 @@ namespace WebApp.Controllers
                         }
 
                         string fileName = Path.GetFileName(postedFile.FileName);
-                        string path = Path.Combine(".\\bin", "Uploads");    /* Using relative path of Project - files saved in WebApp/bin/Uploads*/
+
+                        var procesPath = Environment.ProcessPath.Replace('\\', '/');
+                        var length = procesPath.LastIndexOf('/');
+                        var path = Environment.ProcessPath.Remove(length);
+                        path = Path.Combine(path, "Uploads");
+                        path = Path.Combine(path, "icons");
+
+                        /*string path = Path.Combine(".\\bin", "Uploads");    *//* Using relative path of Project - files saved in WebApp/bin/Uploads*/
                         string extension = Path.GetExtension(postedFile.FileName);
                         path += extension.Replace('.', '\\');
 
-                        if (!Directory.Exists(path))    /* Create dir if do not exists*/
-                        {
-                            Directory.CreateDirectory(path);
-                        }
+                        Directory.CreateDirectory(path);
 
                         using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
                         {
