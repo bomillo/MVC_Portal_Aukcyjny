@@ -253,3 +253,21 @@ input[type=file] {
     width: 75%;
     float: right;
 }
+
+.content {
+    &--right {
+        text-align: right;
+        margin-bottom: 2vh;
+
+        .button {
+            margin: 0.2vh 0.2vw;
+
+            &--smaller {
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+        }
+    }
+}
