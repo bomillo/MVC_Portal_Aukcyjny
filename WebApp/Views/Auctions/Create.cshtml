@@ -5,16 +5,14 @@
 }
 
 
-<script type="text/javascript" >
-        
+<script type="text/javascript">
+
     function displayDateDialog() {
-        if ($('#draftCHechBox').is(":checked"))
-        {
+        if ($('#draftCHechBox').is(":checked")) {
             $("#dateP").hide();
             $("#dateE").hide();
         }
-        else
-        {    
+        else {
             $("#dateP").show();
             $("#dateE").show();
         }
@@ -22,66 +20,79 @@
 
 </script>
 
-<h1>Create</h1>
+<div class="form--contianer container">
+    <div class="form--heading">
+        <h3 class="text--secondary">Create Auction</h3>
+    </div>
 
-<h4>Auction</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group" hidden>
-                <label asp-for="OwnerId" class="control-label"></label>
-                <input asp-for="OwnerId" class ="form-control" value="@ViewBag.OwnerId" readonly/>
-            </div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProductId" class="control-label"></label>
-                <select asp-for="ProductId" class ="form-control" asp-items="ViewBag.ProductId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
+    <div class="row">
+        <div class="col-md-3 col-0"></div>
 
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input onchange="displayDateDialog()" id="draftCHechBox" class="form-check-input" asp-for="IsDraft" /> @Html.DisplayNameFor(model => model.IsDraft)
-                </label>
-            </div>
+        <div class="col-md-6">
+            <form asp-action="Create" class="form--content">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <span class="text--error">@ViewBag.DatesMsg</span>
+                <div class="form-group" hidden>
+                    <label asp-for="OwnerId" class="control-label"></label>
+                    <input asp-for="OwnerId" class="form-control" value="@ViewBag.OwnerId" readonly />
+                </div>
 
-            <div class="form-group" id="dateP">
-                <label asp-for="PublishedTime" class="control-label"></label>
-                <input asp-for="PublishedTime" class="form-control" />
-                <span asp-validation-for="PublishedTime" class="text-danger"></span>
-            </div>
-            <div class="form-group" id="dateE">
-                <label asp-for="EndTime" class="control-label"></label>
-                <input asp-for="EndTime" class="form-control" />
-                <span asp-validation-for="EndTime" class="text-danger"></span>
-            </div>
-           
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="form--group">
+                    <label asp-for="Title" class="control--label form--label"></label>
+                    <input asp-for="Title" class="control--input form--input" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form--group">
+                    <label asp-for="ProductId" class="control--label form--label"></label>
+                    <select asp-for="ProductId" class="control--input form--input" asp-items="ViewBag.ProductId"></select>
+                </div>
+
+                <div class="form--group">
+                    <label asp-for="Description" class="control--label form--label"></label>
+                    <textarea asp-for="Description" class="control--input form--input"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form--group form-check text-lg-end">
+                    <label class="form-check-label input--checkbox">
+                        <input onchange="displayDateDialog()" id="draftCHechBox" class="form-check-input" asp-for="IsDraft" /> @Html.DisplayNameFor(model => model.IsDraft)
+                    </label>
+                </div>
+
+                <div>
+                    <span class="text--error">@ViewBag.DatesMsg</span>
+                </div>
+
+                <div class="form--group" id="dateP">
+                    <label asp-for="PublishedTime" class="control--label form--label"></label>
+                    <input asp-for="PublishedTime" class="control--input form--input" />
+                    <span asp-validation-for="PublishedTime" class="text-danger"></span>
+                </div>
+                <div class="form--group" id="dateE">
+                    <label asp-for="EndTime" class="control--label form--label"></label>
+                    <input asp-for="EndTime" class="control--input form--input" />
+                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                </div>
+
+                <div class="form--buttons">
+                    <input type="submit" value="Create" class="button button--rounded button--secondary" />
+                    <a asp-action="Index" class="button button--rounded button--secondary">Back to List</a>
+
+                </div>
+
+            </form>
+            <div class="col-md-3 col-0"></div>
+
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
 
 
 
