@@ -5,22 +5,18 @@
   flex-direction: row;
 }
 
-/*Wszystko inne...*/
 .button {
-  border: 3px solid;
-  font-weight: 600;
-  text-decoration: none;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin: 0.5vh 0.5vw;
+  border: 1px solid;
+  padding: 8px;
 }
 .button--rounded {
-  border-radius: 15px;
+  border-radius: 0.4rem;
 }
 .button--squared {
   border-radius: 0%;
+}
+.button:hover {
+  transition-duration: 200ms;
 }
 
 .select--language {
@@ -243,4 +239,8 @@ input[type=file] {
   padding-right: 10px;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+.modal-content {
+  border-radius: 0.8rem;
 }

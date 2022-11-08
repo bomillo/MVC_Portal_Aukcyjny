@@ -1,26 +1,23 @@
 ﻿.dark-mode {
-  background-color: #141414;
+  background-color: #1a1a1a;
 }
 .dark-mode .button--primary {
-  background-color: darkcyan;
-  border-color: white;
+  background-color: #0360EC;
+  border-color: transparent;
   color: white;
 }
 .dark-mode .button--primary:hover {
   background-color: white;
-  border-color: darkcyan;
-  color: darkcyan;
-  transition-duration: 1000ms;
+  color: #1a1a1a;
 }
 .dark-mode .button--secondary {
-  background-color: grey;
-  border-color: honeydew;
-  color: honeydew;
+  background-color: #1a1a1a;
+  border-color: white;
+  color: white;
 }
 .dark-mode .button--secondary:hover {
-  background-color: honeydew;
-  border-color: grey;
-  color: grey;
+  background-color: white;
+  color: #1a1a1a;
 }
 .dark-mode .text--primary {
   color: white;

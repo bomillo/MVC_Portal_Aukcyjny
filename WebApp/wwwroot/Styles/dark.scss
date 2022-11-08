@@ -2,31 +2,28 @@
 }
 
 .dark-mode {
-    background-color: #141414;
+    background-color: #1a1a1a;
 
     .button {
         &--primary {
-            background-color: darkcyan;
+            background-color: #0360EC;
+            border-color: transparent;
+            color: white;
+
+            &:hover {
+                background-color: white;
+                color: #1a1a1a;
+            }
+        }
+
+        &--secondary {
+            background-color: #1a1a1a;
             border-color: white;
             color: white;
 
             &:hover {
                 background-color: white;
-                border-color: darkcyan;
-                color: darkcyan;
-                transition-duration: 1000ms;
-            }
-        }
-
-        &--secondary {
-            background-color: grey;
-            border-color: honeydew;
-            color: honeydew;
-
-            &:hover {
-                background-color: honeydew;
-                border-color: grey;
-                color: grey;
+                color: #1a1a1a;
             }
         }
     }
