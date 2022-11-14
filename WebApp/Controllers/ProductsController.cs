@@ -567,6 +567,10 @@ namespace WebApp.Controllers
                     }
 
 
+                    if (!Directory.Exists(path))                         
+                        Directory.CreateDirectory(path);
+
+
                     string newIcFileName = product.ProductId + "_" + product.Name + extension;
                     string newIconName = "ICON_" + product.ProductId + "_" + product.Name + ".jpg";
                     var iconPath = regex.Match(path).Captures.FirstOrDefault();
@@ -575,9 +579,6 @@ namespace WebApp.Controllers
 
                     ProductFile iconFile = new ProductFile(product.ProductId, diskIcoPath, newIconName, extension, description);
 
-
-                    if (!Directory.Exists(path))                         
-                        Directory.CreateDirectory(path);
 
                     /* Copy file to disk storage*/
                     using (var stream = new FileStream(Path.Combine(path, newIcFileName), FileMode.Create))
@@ -610,6 +611,10 @@ namespace WebApp.Controllers
                     }
 
 
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
+
                     string newImgFileName = product.ProductId + "_" + product.Name + extension;
                     string newImageName = "IMAGE_" + product.ProductId + "_" + product.Name + ".jpg";
                     var imagePath = regex.Match(path).Captures.FirstOrDefault();
@@ -617,10 +622,6 @@ namespace WebApp.Controllers
 
 
                     ProductFile imageFile = new ProductFile(product.ProductId, diskImgPath, newImageName, extension, description);
-
-
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
 
 
                     using (var stream = new FileStream(Path.Combine(path, newImgFileName), FileMode.Create))
@@ -644,6 +645,9 @@ namespace WebApp.Controllers
                     path = Path.Combine(path, extension.Remove(0,1));
                     regex = new Regex(@"[\\|\/]Uploads[\\|\/].*");
 
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
 
                     string newFileName = product.ProductId + "_" + fileName;
                     var filePath = regex.Match(path).Captures.FirstOrDefault();
@@ -651,10 +655,6 @@ namespace WebApp.Controllers
 
 
                     ProductFile otherFile = new ProductFile(product.ProductId, diskFilePath, newFileName, extension, description);
-
-
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
 
 
                     using (var stream = new FileStream(Path.Combine(path, newFileName), FileMode.Create))

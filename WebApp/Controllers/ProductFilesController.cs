@@ -291,6 +291,9 @@ namespace WebApp.Controllers
                         throw new Exception("Nieobsługiwany format wejściowy, obsługiwane formaty ikon: .png, .jpg, .gif, .jpeg");
                     }
 
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
                     string newIcFileName = productFile.ProductId + "_" + productFile.Name + extension;
                     string newIconName = productFile.Name;
                     var iconPath = regex.Match(path).Captures.FirstOrDefault();
@@ -301,9 +304,6 @@ namespace WebApp.Controllers
                     productFile.Name = newIconName;
                     productFile.Extension = extension;   
     
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
-
                     System.IO.File.Delete(Path.Combine(path, newIconName));
 
 
@@ -331,6 +331,9 @@ namespace WebApp.Controllers
                         throw new Exception("Nieobsługiwany format wejściowy, obsługiwane formaty ikon: .png, .jpg, .gif, .jpeg");
                     }
 
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
                     string newImgFileName = productFile.ProductId + "_" + productFile.Name + extension;
                     string newImageName = productFile.Name;
                     var imagePath = regex.Match(path).Captures.FirstOrDefault();
@@ -341,9 +344,6 @@ namespace WebApp.Controllers
                     productFile.Name = newImageName;
                     productFile.Extension = extension;
 
-
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
 
                     System.IO.File.Delete(Path.Combine(path, newImageName));
 
@@ -365,6 +365,9 @@ namespace WebApp.Controllers
                     path = Path.Combine(path, extension.Remove(0, 1));
                     regex = new Regex(@"[\\|\/]Uploads[\\|\/].*");
 
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
                     string newFileName = productFile.ProductId + "_" + fileName;
                     var filePath = regex.Match(path).Captures.FirstOrDefault();
                     var diskFilePath = Path.Combine(filePath.ToString(), newFileName);
@@ -375,10 +378,6 @@ namespace WebApp.Controllers
                     productFile.Name = newFileName;
                     productFile.Extension = extension;
                     productFile.Description = description;
-
-
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
 
 
                     using (var stream = new FileStream(Path.Combine(path, newFileName), FileMode.Create))
