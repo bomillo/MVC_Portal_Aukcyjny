@@ -7,6 +7,7 @@
     var postedFiles = ViewBag.ProductFiles;
     bool iconExist = false;
     bool imageExist = false;
+    if(postedFiles != null)
     foreach(ProductFile item in postedFiles)
     {
         if (item.Name.StartsWith("ICON"))

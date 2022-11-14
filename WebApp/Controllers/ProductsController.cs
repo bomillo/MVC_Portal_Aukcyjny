@@ -558,7 +558,7 @@ namespace WebApp.Controllers
             {
                 case "icon":
                     path = Path.Combine(path, "icon");
-                    regex = new Regex(@"\\Uploads\\.*");
+                    regex = new Regex(@"[\\|\/]Uploads[\\|\/].*");
 
                     
                     if (!ValidateExtension(extension))  // Validate image extension
@@ -599,8 +599,9 @@ namespace WebApp.Controllers
 
 
                 case "image":
-                    path = Path.Combine(path, "image");
-                    regex = new Regex(@"\\Uploads\\.*");
+                    path = Path.Combine(path, "image"); 
+                    regex = new Regex(@"[\\|\/]Uploads[\\|\/].*");
+
 
 
                     if (!ValidateExtension(extension))  // Validate image extension
@@ -641,7 +642,7 @@ namespace WebApp.Controllers
 
                 case "other":
                     path = Path.Combine(path, extension.Remove(0,1));
-                    regex = new Regex(@"\\Uploads\\.*");
+                    regex = new Regex(@"[\\|\/]Uploads[\\|\/].*");
 
 
                     string newFileName = product.ProductId + "_" + fileName;
