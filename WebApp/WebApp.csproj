@@ -37,10 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="bin\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Resources\Authentication\Localization.en-US.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

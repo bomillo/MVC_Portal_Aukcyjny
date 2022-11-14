@@ -695,6 +695,13 @@ namespace WebApp.Controllers
         private void Image_resize(string input_Image_Path, string output_Image_Path, int new_Width)
         {
             SKBitmap srcBitmap = SKBitmap.Decode(input_Image_Path);
+
+            if(srcBitmap == null)
+            {
+                input_Image_Path.Replace('\\', '/');
+                srcBitmap = SKBitmap.Decode(input_Image_Path);
+            }
+
             double dblWidth_origial = srcBitmap.Width;
             double dblHeigth_origial = srcBitmap.Height;
             double relation_heigth_width = dblHeigth_origial / dblWidth_origial;
