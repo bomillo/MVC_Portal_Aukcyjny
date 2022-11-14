@@ -244,3 +244,10 @@ input[type=file] {
   padding-top: 5px;
   padding-bottom: 5px;
 }
+
+.visit--counter {
+  min-width: 5dp;
+  text-size-adjust: auto 200%;
+  display: flex;
+  align-self: start;
+}

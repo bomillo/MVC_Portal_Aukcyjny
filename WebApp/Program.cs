@@ -20,7 +20,6 @@ builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<VisitCounterService>();
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
     options.CheckConsentNeeded = context => true;

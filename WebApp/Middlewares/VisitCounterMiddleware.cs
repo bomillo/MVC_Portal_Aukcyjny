@@ -10,7 +10,7 @@ namespace WebApp.Middlewares
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
     public class VisitCounterMiddleware
     {
-        private int _visitCounter = 0;
+        private static int _visitCounter = 0;
         private readonly RequestDelegate _next;
 
         public VisitCounterMiddleware(RequestDelegate next)
@@ -18,7 +18,7 @@ namespace WebApp.Middlewares
             _next = next;
         }
 
-        public Task Invoke(HttpContext httpContext, VisitCounterService counter)
+        public Task Invoke(HttpContext httpContext)
         {
             
             if (httpContext.Request.Cookies["PA_RECENTLY_VISITED"] == null && httpContext.Request.Cookies["CONSENT_COOKIE"] != null)
@@ -26,7 +26,7 @@ namespace WebApp.Middlewares
                 
                 if(httpContext.Request.Cookies["CONSENT_COOKIE"].ToString().ToLower() == "yes")
                 {
-                    counter.incrementVisitCounter();
+                    _visitCounter++;
                     httpContext.Response.Cookies.Append("PA_RECENTLY_VISITED", "true", new CookieOptions()
                     {
                         SameSite = SameSiteMode.Strict,
@@ -34,6 +34,8 @@ namespace WebApp.Middlewares
                     });
                 }
             }
+
+            httpContext.Items.Add("VisitCounter", _visitCounter.ToString());
 
             return _next(httpContext);
         }
