@@ -18,10 +18,10 @@ jobs:
         first_ssh: |  
           sudo systemctl stop mvc-backgroundtasks.service
           sudo systemctl stop mvc-webapp.service
-          sudo rm -fr /MVC/repo/PortalAukcyjny/*
+          sudo rm -fr /MVC/repo/*
           sudo -u postgres psql postgres -c 'drop database "PortalAukcyjny2" with (force)'
         scp: |
-          /home/runner/work/PortalAukcyjny/PortalAukcyjny/* => "/MVC/repo/PortalAukcyjny/"
+          /home/runner/work/PortalAukcyjny/* => "/MVC/repo/"
         last_ssh: |
           cd /MVC/repo/PortalAukcyjny
           sudo dotnet build
