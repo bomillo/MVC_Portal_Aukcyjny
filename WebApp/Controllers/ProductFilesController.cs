@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -9,8 +10,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SkiaSharp;
 using WebApp.Context;
 using WebApp.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WebApp.Controllers
 {
@@ -128,7 +131,7 @@ namespace WebApp.Controllers
 
 
                             /*string path = ".\\bin\\Uploads\\" + fileType.ToLower();*/
-                            string fileName = product.Name + extension;
+                            string fileName = product.ProductId + "_" + product.Name + extension;
 
 
                             if (!Directory.Exists(path))    /* Create dir if do not exists*/
@@ -317,68 +320,41 @@ namespace WebApp.Controllers
         /* TO SET UP ICON SIZE CHANGE new_Width and new_Height properties*/
         private void Image_resize(string input_Image_Path, string output_Image_Path, int new_Width)
         {
-            //---------------< Image_resize() >---------------
-            const long quality = 50L;
-            Bitmap source_Bitmap = new Bitmap(input_Image_Path);
-
-
-            double dblWidth_origial = source_Bitmap.Width;
-            double dblHeigth_origial = source_Bitmap.Height;
+            SKBitmap srcBitmap = SKBitmap.Decode(input_Image_Path);
+            double dblWidth_origial = srcBitmap.Width;
+            double dblHeigth_origial = srcBitmap.Height;
             double relation_heigth_width = dblHeigth_origial / dblWidth_origial;
             int new_Height = (int)(new_Width * relation_heigth_width);
-            //int new_Height = 70;
 
+            SKImageInfo resizeInfo = new SKImageInfo(new_Width, new_Height);
 
-            //< create Empty Drawarea >
-            var new_DrawArea = new Bitmap(new_Width, new_Height);
-            //</ create Empty Drawarea >
-
-
-            using (var graphic_of_DrawArea = Graphics.FromImage(new_DrawArea))
+            // SKImage resizes blurry
+            using (var surface = SKSurface.Create(resizeInfo))
+            using (var paint = new SKPaint())
             {
-                //< setup >
-                graphic_of_DrawArea.CompositingQuality = CompositingQuality.HighSpeed;
-                graphic_of_DrawArea.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphic_of_DrawArea.CompositingMode = CompositingMode.SourceCopy;
-                //</ setup >
+                // high quality with antialiasing
+                paint.IsAntialias = true;
+                paint.FilterQuality = SKFilterQuality.High;
 
+                // draw the bitmap to fill the surface
+                surface.Canvas.DrawBitmap(srcBitmap, new SKRectI(0, 0, new_Width, new_Height),
+                    paint);
+                surface.Canvas.Flush();
 
-                //< draw into placeholder >
-                //*imports the image into the drawarea
-                graphic_of_DrawArea.DrawImage(source_Bitmap, 0, 0, new_Width, new_Height);
-                //</ draw into placeholder >
-
-
-                //--< Output as .Jpg >--
-                using (var output = System.IO.File.Open(output_Image_Path, FileMode.Create))
-                {
-                    //< setup jpg >
-                    var qualityParamId = Encoder.Quality;
-                    var encoderParameters = new EncoderParameters(1);
-                    encoderParameters.Param[0] = new EncoderParameter(qualityParamId, quality);
-                    //</ setup jpg >
-
-                    //< save Bitmap as Jpg >
-                    var codec = ImageCodecInfo.GetImageDecoders().FirstOrDefault(c => c.FormatID == ImageFormat.Jpeg.Guid);
-                    new_DrawArea.Save(output, codec, encoderParameters);
-
-                    //resized_Bitmap.Dispose();
-                    output.Close();
-                    //</ save Bitmap as Jpg >
-                }
-
-                //--</ Output as .Jpg >--
-                graphic_of_DrawArea.Dispose();
-
+                // save
+                using (var newImg = surface.Snapshot())
+                using (SKData data = newImg.Encode(SKEncodedImageFormat.Jpeg, 100))
+                using (var stream = new FileStream(output_Image_Path, FileMode.Create, FileAccess.Write))
+                    data.SaveTo(stream);
             }
 
-            source_Bitmap.Dispose();
-            //---------------</ Image_resize() >---------------
+            // SKBitmap resizes crisp.
+            using (SKBitmap resizedSKBitmap = srcBitmap.Resize(resizeInfo, SKBitmapResizeMethod.Lanczos3))
+            using (SKImage newImg = SKImage.FromPixels(resizedSKBitmap.PeekPixels()))
+            using (SKData data = newImg.Encode(SKEncodedImageFormat.Jpeg, 90))
+            using (var stream = new FileStream(output_Image_Path, FileMode.Create, FileAccess.Write))
+                data.SaveTo(stream);
 
         }
-
-
-
-
     }
 }
