@@ -34,6 +34,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.ProductId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
@@ -56,6 +59,10 @@
 
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.ProductId)
+            </td>
+            
+            <td>
                 @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
             <td>
@@ -68,8 +75,8 @@
                 @Html.DisplayFor(modelItem => item.IsVatExcluded)
             </td>
             <td>
-                <!-- Do not display icons -->
-                        <img src="/Uploads/icons/@iconName" onerror="this.src='/image/NoIcon.jpg'" />
+                        <!-- Do not display icons        -->
+                        <img src="/Uploads/icon/@iconName" onerror="this.src='/image/NoIcon.jpg'" />
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |

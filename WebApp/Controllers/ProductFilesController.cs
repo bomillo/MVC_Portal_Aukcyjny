@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -104,12 +105,17 @@ namespace WebApp.Controllers
                 {
                     if (newFile != null)
                     {
+                        var procesPath = Environment.ProcessPath.Replace('\\', '/');
+                        var length = procesPath.LastIndexOf('/');
+                        var path = Environment.ProcessPath.Remove(length);
+                        path = Path.Combine(path, "Uploads");
+
                         if (productFile.Name.StartsWith("ICON") || productFile.Name.StartsWith("IMAGE"))
                         {
                             Product product = await _context.Products.FindAsync(productFile.ProductId);
                             string extension = Path.GetExtension(newFile.FileName);
                             string fileType = productFile.Name.Split('_')[0];
-
+                            path = Path.Combine(path, fileType.ToLower());
 
                             if (!ValidateExtension(extension))  // Validate image extension
                             {
@@ -121,8 +127,8 @@ namespace WebApp.Controllers
                             }
 
 
-                            string path = ".\\bin\\Uploads\\" + fileType.ToLower();
-                            string fileName = product.ProductId + "_" + product.Name + extension;
+                            /*string path = ".\\bin\\Uploads\\" + fileType.ToLower();*/
+                            string fileName = product.Name + extension;
 
 
                             if (!Directory.Exists(path))    /* Create dir if do not exists*/
@@ -131,15 +137,18 @@ namespace WebApp.Controllers
                             }
 
 
-                            /* Save original Image - it will be deleted after resizing an icon*/
-                            using (var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-                            {
-                                await newFile.CopyToAsync(stream);
-                            }
-
                             string newInputPath = path + "\\" + fileName;
                             string newFileName = fileType + "_" + fileName.Replace(extension, ".jpg");
-                            string newOutputPath = path + "\\" + newFileName;
+                            string newOutputPath = Path.Combine(path, newFileName);
+
+
+                            System.IO.File.Delete(newOutputPath);   // delete old file
+                            
+                            /* Save original Image - it will be deleted after resizing*/
+                            using (var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                            {
+                                newFile.CopyTo(stream);
+                            }
 
 
                             /* Delete old file*/
@@ -153,7 +162,10 @@ namespace WebApp.Controllers
                                 Image_resize(newInputPath, newOutputPath, 1600);
 
 
-                            ProductFile file = new ProductFile(product.ProductId, newOutputPath, newFileName, ".jpg", productFile.Description);
+
+                            Regex regex = new Regex(@"\\Uploads\\.*");
+                            var result = regex.Match(path).Captures.First();
+                            ProductFile file = new ProductFile(product.ProductId, result + "\\" + newFileName, newFileName, ".jpg", productFile.Description);
 
 
                             /* Remove old file and add new one*/
@@ -163,7 +175,7 @@ namespace WebApp.Controllers
 
 
                             /* Delete original (NOT RESIZED) ICON file*/
-                            System.IO.File.Delete(path + "\\" + fileName);
+                            System.IO.File.Delete(newInputPath);
 
 
                             TempData["FileChanged"] = "File has been changed and renamed!";
@@ -171,11 +183,12 @@ namespace WebApp.Controllers
                         }
                         else
                         {
+                            Product product = await _context.Products.FindAsync(productFile.ProductId);
                             /* Using relative path of Project - files saved in WebApp/bin/Uploads*/
-                            string fileName = Path.GetFileName(newFile.FileName);
-                            string path = Path.Combine(".\\bin", "Uploads");
+                            string fileName = product.ProductId + "_" + Path.GetFileName(newFile.FileName);
+                            /*string path = Path.Combine(".\\bin", "Uploads");*/
                             string extension = Path.GetExtension(newFile.FileName);
-                            path += extension.Replace('.', '\\');
+                            path = Path.Combine(path, extension.Remove(0,1));
 
 
                             if (!Directory.Exists(path))    /* Create dir if do not exists*/
@@ -187,7 +200,9 @@ namespace WebApp.Controllers
                             using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
                             {
                                 /* Save file to directory based on it's extension*/
-                                ProductFile file = new ProductFile(productFile.ProductId, path + "\\" + fileName, fileName, extension, productFile.Description);
+                                Regex regex = new Regex(@"\\Uploads\\.*");
+                                var result = regex.Match(path).Captures.First();
+                                ProductFile file = new ProductFile(productFile.ProductId, result + "\\" + fileName, fileName, extension, productFile.Description);
 
                                 /* Save path, name and extension to database - remove the old one*/
                                 _context.ProductFiles.Remove(productFile);
@@ -196,7 +211,7 @@ namespace WebApp.Controllers
 
 
                                 /* Delete old file*/
-                                //System.IO.File.Delete(path + "\\" + productFile.Name);
+                                System.IO.File.Delete(path + "\\" + productFile.Name);
 
 
                                 /* Add new file to folder*/

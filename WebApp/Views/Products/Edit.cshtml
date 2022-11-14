@@ -1,15 +1,52 @@
-﻿@model WebApp.Models.Product
+﻿@using WebApp.Models;
+@model WebApp.Models.Product
 
 @{
     ViewData["Title"] = "Product Edition";
-}
 
+    var postedFiles = ViewBag.ProductFiles;
+    bool iconExist = false;
+    bool imageExist = false;
+    foreach(ProductFile item in postedFiles)
+    {
+        if (item.Name.StartsWith("ICON"))
+            iconExist = true;
+        if (item.Name.StartsWith("IMAGE"))
+            imageExist = true;
+    }
+}
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Edit</title>
+
+
+    <script type="text/javascript">
+        
+        
+        function GetDynamicTextbox(value) {
+
+            return '<div><input type="button" onclick="RemoveFile(this)" value="Remove File"/> <input type="file" name="postedFiles" id="postedFile"> <input type="text" name="fileDescription" class="form-control" placeholder="File description"/></div> <br />';
+        }
+
+
+        function AddNewFile() {
+
+            var div = document.createElement('DIV');
+
+            div.innerHTML = GetDynamicTextbox("");
+
+            document.getElementById("files").appendChild(div);
+        }
+
+        function RemoveFile(div) {
+
+            document.getElementById("files").removeChild(div.parentNode.parentNode);
+        }
+
+    </script>
 </head>
 <body>
 
@@ -17,7 +54,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form method="post" enctype="multipart/form-data" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ProductId" />
 
@@ -51,7 +88,7 @@
             </div>
                 <div class="form-group">
                     @* TODO - edition of inserted files*@
-                    @foreach(WebApp.Models.ProductFile file in ViewBag.ProductFiles)
+                    @foreach(WebApp.Models.ProductFile file in postedFiles)
                     {
                         @file.Name;
                         <a asp-controller="ProductFiles" asp-action="Edit" asp-route-id="@file.ProductFileId">Edit</a>
@@ -59,6 +96,42 @@
 
                     }
                 </div>
+                <br />
+
+                @if(!iconExist)
+                {
+                    @* Input for product icon*@
+                    <div>
+                        <span>Select Icon:</span>
+                        <input type="file" name="productIcon" />
+                        <br />
+                    </div>
+                    <br />
+                }
+
+                @if(!imageExist)
+                {
+                    @* Input for product image*@
+                    <div>
+                        <span>Select Image:</span>
+                            <input type="file" name="productImage"  />
+                        <br />
+                    </div>
+                    <br />
+                }
+
+                <div>
+                    @* Input for additional files using javascript to upload multiple files with their descriptions*@
+                    <span>Select additional File:</span>
+                    <div id="files">
+                        <div><input type="button" onclick="AddNewFile()" value="Add File" /></div>
+                        <br />
+                    </div>
+
+                    <br />
+
+                </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
