@@ -154,7 +154,7 @@ namespace WebApp.Controllers
                         fileName = "NoIcon.jpg";
                         extension = ".jpg";
                         Regex regex = new Regex(@"\\Uploads\\.*");
-                        var result = regex.Match(path).Captures.First();
+                        var result = regex.Match(path).Captures.FirstOrDefault();
                         ProductFile iconFile = new ProductFile(product.ProductId, result + "\\ICON_" + fileName, "ICON_" + fileName, extension, "Product Icon");
 
                         _context.ProductFiles.Add(iconFile);
@@ -194,7 +194,7 @@ namespace WebApp.Controllers
                         Image_resize(path + "\\" + fileName, path + "\\ICON_" + fileName.Replace(extension, ".jpg"), 128);
 
                         Regex regex = new Regex(@"\\Uploads\\.*");
-                        var result = regex.Match(path).Captures.First();
+                        var result = regex.Match(path).Captures.FirstOrDefault();
                         ProductFile file = new ProductFile(product.ProductId, result + "\\ICON_" + fileName.Replace(extension, ".jpg"), "ICON_" + fileName.Replace(extension, ".jpg"), ".jpg", "Product Icon");
 
 
@@ -228,7 +228,7 @@ namespace WebApp.Controllers
                         extension = ".jpg";
 
                         Regex regex = new Regex(@"\\Uploads\\.*");
-                        var result = regex.Match(path).Captures.First();
+                        var result = regex.Match(path).Captures.FirstOrDefault();
                         ProductFile imageFile = new ProductFile(product.ProductId, result + "\\IMAGE_" + fileName, "IMAGE_" + fileName, extension, "Product Image");
 
                         _context.ProductFiles.Add(imageFile);
@@ -267,7 +267,7 @@ namespace WebApp.Controllers
                         
                         
                         Regex regex = new Regex(@"\\Uploads\\.*");
-                        var result = regex.Match(path).Captures.First();
+                        var result = regex.Match(path).Captures.FirstOrDefault();
                         ProductFile file = new ProductFile(product.ProductId, result + "\\IMAGE_" + fileName.Replace(extension, ".jpg"), "IMAGE_" + fileName.Replace(extension, ".jpg"), ".jpg", "Product Icon");
 
                         _context.ProductFiles.Add(file);
@@ -312,7 +312,7 @@ namespace WebApp.Controllers
                         {
                             /* Save file to directory based on it's extension*/
                             Regex regex = new Regex(@"\\Uploads\\.*");
-                            var result = regex.Match(path).Captures.First();
+                            var result = regex.Match(path).Captures.FirstOrDefault();
                             ProductFile file = new ProductFile(product.ProductId, result + "\\" + fileName, fileName, extension, descriptions?[iterator++]);
 
                             /* Save path, name and extension to database*/
@@ -417,7 +417,7 @@ namespace WebApp.Controllers
                             fileName = "NoIcon.jpg";
                             extension = ".jpg";
                             Regex regex = new Regex(@"\\Uploads\\.*");
-                            var result = regex.Match(path).Captures.First();
+                            var result = regex.Match(path).Captures.FirstOrDefault();
                             ProductFile iconFile = new ProductFile(product.ProductId, result + "\\ICON_" + fileName, "ICON_" + fileName, extension, "Product Icon");
 
                             _context.ProductFiles.Add(iconFile);
@@ -454,7 +454,7 @@ namespace WebApp.Controllers
                             Image_resize(path + "\\" + fileName, path + "\\ICON_" + fileName.Replace(extension, ".jpg"), 128);
 
                             Regex regex = new Regex(@"\\Uploads\\.*");
-                            var result = regex.Match(path).Captures.First(); 
+                            var result = regex.Match(path).Captures.FirstOrDefault(); 
                             ProductFile file = new ProductFile(product.ProductId, result + "\\ICON_" + fileName.Replace(extension, ".jpg"), "ICON_" + fileName.Replace(extension, ".jpg"), ".jpg", "Product Icon");
 
 
@@ -488,7 +488,7 @@ namespace WebApp.Controllers
                             fileName = "NoImage.jpg";
                             extension = ".jpg";
                             Regex regex = new Regex(@"\\Uploads\\.*");
-                            var result = regex.Match(path).Captures.First();
+                            var result = regex.Match(path).Captures.FirstOrDefault();
                             ProductFile imageFile = new ProductFile(product.ProductId, result + "\\IMAGE_" + fileName, "IMAGE_" + fileName, extension, "Product Image");
 
                             _context.ProductFiles.Add(imageFile);
@@ -525,7 +525,7 @@ namespace WebApp.Controllers
                             /* Resize original ICON to new Width and save as Icon_ProductId_ProductName.extension*/
                             Image_resize(path + "\\" + fileName, path + "\\IMAGE_" + fileName.Replace(extension, ".jpg"), 1600);
                             Regex regex = new Regex(@"\\Uploads\\.*");
-                            var result = regex.Match(path).Captures.First();
+                            var result = regex.Match(path).Captures.FirstOrDefault();
                             ProductFile file = new ProductFile(product.ProductId, result + "\\IMAGE_" + fileName.Replace(extension, ".jpg"), "IMAGE_" + fileName.Replace(extension, ".jpg"), ".jpg", "Product Image");
 
                             _context.ProductFiles.Add(file);
@@ -565,7 +565,7 @@ namespace WebApp.Controllers
                             {
                                 /* Save file to directory based on it's extension*/
                                 Regex regex = new Regex(@"\\Uploads\\.*");
-                                var result = regex.Match(path).Captures.First();
+                                var result = regex.Match(path).Captures.FirstOrDefault();
                                 ProductFile file = new ProductFile(product.ProductId, result + "\\" + fileName, fileName, extension, descriptions?[iterator++]);
 
                                 /* Save path, name and extension to database*/

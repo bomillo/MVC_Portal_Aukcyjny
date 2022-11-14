@@ -167,7 +167,7 @@ namespace WebApp.Controllers
 
 
                             Regex regex = new Regex(@"\\Uploads\\.*");
-                            var result = regex.Match(path).Captures.First();
+                            var result = regex.Match(path).Captures.FirstOrDefault();
                             ProductFile file = new ProductFile(product.ProductId, result + "\\" + newFileName, newFileName, ".jpg", productFile.Description);
 
 
@@ -204,7 +204,7 @@ namespace WebApp.Controllers
                             {
                                 /* Save file to directory based on it's extension*/
                                 Regex regex = new Regex(@"\\Uploads\\.*");
-                                var result = regex.Match(path).Captures.First();
+                                var result = regex.Match(path).Captures.FirstOrDefault();
                                 ProductFile file = new ProductFile(productFile.ProductId, result + "\\" + fileName, fileName, extension, productFile.Description);
 
                                 /* Save path, name and extension to database - remove the old one*/
@@ -223,7 +223,6 @@ namespace WebApp.Controllers
 
 
                             TempData["FileChanged"] = "File has been changed!";
-
 
                         }
                     }
