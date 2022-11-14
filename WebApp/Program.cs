@@ -20,7 +20,6 @@ builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
 
 builder.Services.AddControllersWithViews();
-
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
     options.CheckConsentNeeded = context => true;
@@ -133,7 +132,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<ThemeMiddleware>();
-
+app.UseMiddleware<VisitCounterMiddleware>();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

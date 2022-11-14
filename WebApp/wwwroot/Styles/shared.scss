@@ -296,6 +296,18 @@ input[type=file] {
     }
 }
 
+.visit--counter{
+    svg{
+        width: 4vw;
+        height: 4vh;
+        margin-right: -0.8vw;
+        padding-bottom: 0.6vh;
+    }
+    display: flex;
+    align-self:start;
+    font-size:1.5em;
+}
+
 .modal-content {
     border-radius: 0.8rem;
 }

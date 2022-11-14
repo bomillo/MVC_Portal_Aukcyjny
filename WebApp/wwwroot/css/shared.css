@@ -265,10 +265,23 @@ input[type=file] {
   padding-bottom: 5px;
 }
 
+.visit--counter {
+  display: flex;
+  align-self: start;
+  font-size: 1.5em;
+}
+.visit--counter svg {
+  width: 4vw;
+  height: 4vh;
+  margin-right: -0.8vw;
+  padding-bottom: 0.6vh;
+}
+
 .modal-content {
   border-radius: 0.8rem;
 }
 
 .modal-dialog {
   max-width: 380px;
+
 }
