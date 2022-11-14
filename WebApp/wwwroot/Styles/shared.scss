@@ -9,29 +9,54 @@ footer {
     flex-direction: row;
 }
 
-/*Wszystko inne...*/
-
 .button {
-    border: 3px solid;
-    font-weight: 600;
-    text-decoration: none;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    margin: 0.5vh 0.5vw;
+    border: 1px solid;
+    padding: 8px;
+    transition-duration: 200ms;
 
     &--rounded {
-        border-radius: 15px;
+        border-radius: 0.4rem;
     }
 
     &--squared {
         border-radius: 0%;
     }
+
+    &--no-border {
+        border: 0;
+    }
+
+    &--thin {
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+
+    &--facebook {
+        width: 100%;
+        background-color: #1647ab;
+        border-color: transparent;
+        color: white;
+
+        &:hover {
+            background-color: #113682;
+            color: white;
+        }
+    }
+
+    &--google {
+        width: 100%;
+        background-color: white;
+        border-color: transparent;
+        color: #1a1a1a;
+
+        &:hover {
+            background-color: #e6e6e6;
+            color: #1a1a1a;
+        }
+    }
 }
 
 .select {
-
     &--language {
         margin-right: 20px;
         border-radius: 15%;
@@ -103,7 +128,7 @@ footer {
     }
 
     .form--input {
-        width: 66%;
+        width: 100%;
         display: inline-flex;
         margin-right: 0px;
         padding: 0.375rem 0.75rem;
@@ -113,11 +138,10 @@ footer {
         color: #212529;
         background-color: #fff;
         background-clip: padding-box;
-        border: 1px solid #ced4da;
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-        border-radius: 0.25rem;
+        border-radius: 100px;
         transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     }
 
@@ -272,7 +296,6 @@ input[type=file] {
     }
 }
 
-
 .visit--counter{
     svg{
         width: 4vw;
@@ -283,4 +306,12 @@ input[type=file] {
     display: flex;
     align-self:start;
     font-size:1.5em;
+}
+
+.modal-content {
+    border-radius: 0.8rem;
+}
+
+.modal-dialog{
+    max-width: 380px;
 }
