@@ -8,12 +8,14 @@
     bool iconExist = false;
     bool imageExist = false;
     if(postedFiles != null)
-    foreach(ProductFile item in postedFiles)
     {
-        if (item.Name.StartsWith("ICON"))
-            iconExist = true;
-        if (item.Name.StartsWith("IMAGE"))
-            imageExist = true;
+        foreach(ProductFile item in postedFiles)
+        {
+            if (item.Name.StartsWith("ICON"))
+                iconExist = true;
+            if (item.Name.StartsWith("IMAGE"))
+                imageExist = true;
+        }
     }
 }
 <!DOCTYPE html>
@@ -89,12 +91,15 @@
             </div>
                 <div class="form-group">
                     @* TODO - edition of inserted files*@
-                    @foreach(WebApp.Models.ProductFile file in postedFiles)
+                    @if(postedFiles != null)
                     {
-                        @file.Name;
-                        <a asp-controller="ProductFiles" asp-action="Edit" asp-route-id="@file.ProductFileId">Edit</a>
-                        <br />
+                        @foreach(WebApp.Models.ProductFile file in postedFiles)
+                        {
+                            @file.Name;
+                            <a asp-controller="ProductFiles" asp-action="Edit" asp-route-id="@file.ProductFileId">Edit</a>
+                            <br />
 
+                        }
                     }
                 </div>
                 <br />
