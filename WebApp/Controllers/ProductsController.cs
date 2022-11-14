@@ -323,8 +323,6 @@ namespace WebApp.Controllers
                     }
                 }
 
-                
-
                 return RedirectToAction(nameof(Index));
             }
 
