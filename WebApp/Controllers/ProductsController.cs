@@ -15,6 +15,7 @@ using System.Drawing.Drawing2D;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.RegularExpressions;
 using SkiaSharp;
+using NuGet.Packaging.Signing;
 
 namespace WebApp.Controllers
 {
@@ -133,152 +134,74 @@ namespace WebApp.Controllers
 
                 _context.Add(product);
                 await _context.SaveChangesAsync();
-                
+
                 /* Saving product Icon*/
+                if (productIcon != null || productImage != null)
                 {
                     if (productIcon == null && productImage != null)
                         productIcon = productImage;
 
-                    var procesPath = Environment.ProcessPath.Replace('\\', '/');
-                    var length = procesPath.LastIndexOf('/');
-                    var path = Environment.ProcessPath.Remove(length);
-                    path = Path.Combine(path, "Uploads");
-                    path = Path.Combine(path, "icon");
-                    Directory.CreateDirectory(path);
-
-                    
-                    string extension;
-                    string fileName;
-                    if (productIcon == null)    // if no icon inserted, set default ICON_NoIcon.jpg
+                    try
                     {
-                        fileName = "NoIcon.jpg";
-                        extension = ".jpg";
-                        Regex regex = new Regex(@"\\Uploads\\.*");
-                        var result = regex.Match(path).Captures.FirstOrDefault();
-                        ProductFile iconFile = new ProductFile(product.ProductId, result + "\\ICON_" + fileName, "ICON_" + fileName, extension, "Product Icon");
 
-                        _context.ProductFiles.Add(iconFile);
-                        await _context.SaveChangesAsync();
-                    }
-                    else
-                    {
-                        extension = Path.GetExtension(productIcon.FileName);
-                        fileName = product.ProductId + "_" + product.Name + extension;
+                        ProductFile createdFile = SaveAndResizeFileAsync(productIcon.FileName, Path.GetExtension(productIcon.FileName), "icon", product, productIcon, "Product Icon");
 
-
-                        if (!ValidateExtension(extension))  // Validate image extension
+                        if (createdFile != null)
+                        {
+                            _context.ProductFiles.Add(createdFile);
+                            await _context.SaveChangesAsync();
+                        }
+                        else
                         {
                             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
-                            /* Language change!!!*/
-                            ViewData["ErrorMessage"] = "Nieobsługiwany format wejściowy, obsługiwane formaty ikon: .png, .jpg, .gif, .jpeg";
-                            _context.Remove(product);
-                            await _context.SaveChangesAsync();
-                            throw new Exception();
+                            ViewData["ErrorMessage"] = "Ikona nie została dodana";
+
+                            return View(product);
                         }
 
+                    }
+                    catch (Exception e)
+                    {
+                        ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
+                        ViewData["ErrorMessage"] = e.Message;
 
-                        if (!Directory.Exists(path))    /* Create dir if do not exists*/
-                        {
-                            Directory.CreateDirectory(path);
-                        }
-
-
-                        /* Save original Image - it will be deleted after resizing an icon*/
-                        using (var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-                        {
-                            await productIcon.CopyToAsync(stream);
-                        }
-
-
-                        /* Resize original ICON to new Width and save as Icon_ProductId_ProductName.extension*/
-                        Image_resize(path + "\\" + fileName, path + "\\ICON_" + fileName.Replace(extension, ".jpg"), 128);
-
-                        Regex regex = new Regex(@"\\Uploads\\.*");
-                        var result = regex.Match(path).Captures.FirstOrDefault();
-                        ProductFile file = new ProductFile(product.ProductId, result + "\\ICON_" + fileName.Replace(extension, ".jpg"), "ICON_" + fileName.Replace(extension, ".jpg"), ".jpg", "Product Icon");
-
-
-                        _context.ProductFiles.Add(file);
-                        await _context.SaveChangesAsync();
-
-
-                        /* Delete original (NOT RESIZED) ICON file*/
-                        System.IO.File.Delete(path + "\\" + fileName);
+                        return View(product);
 
                     }
                 }
-
 
                 /* Saving product Image*/
+                if(productImage != null)
                 {
-                    var procesPath = Environment.ProcessPath.Replace('\\', '/');
-                    var length = procesPath.LastIndexOf('/');
-                    var path = Environment.ProcessPath.Remove(length);
-                    path = Path.Combine(path, "Uploads");
-                    path = Path.Combine(path, "image");
-                    Directory.CreateDirectory(path);
-
-                    string extension;
-                    string fileName; 
-
-
-                    if (productImage == null)   // if no image inserted, set default IMAGE_NoImage.jpg
+                    try
                     {
-                        fileName = "NoImage.jpg";
-                        extension = ".jpg";
 
-                        Regex regex = new Regex(@"\\Uploads\\.*");
-                        var result = regex.Match(path).Captures.FirstOrDefault();
-                        ProductFile imageFile = new ProductFile(product.ProductId, result + "\\IMAGE_" + fileName, "IMAGE_" + fileName, extension, "Product Image");
+                        ProductFile createdFile = SaveAndResizeFileAsync(productImage.FileName, Path.GetExtension(productImage.FileName), "image", product, productImage, "Product Image");
 
-                        _context.ProductFiles.Add(imageFile);
-                        await _context.SaveChangesAsync();
-                    }
-                    else
-                    {
-                        extension = Path.GetExtension(productIcon.FileName);
-                        fileName = product.ProductId + "_" + product.Name + extension;
-
-                        if (!ValidateExtension(extension))  // Validate image extension
+                        if(createdFile != null)
+                        {
+                            _context.ProductFiles.Add(createdFile);
+                            await _context.SaveChangesAsync();
+                        }
+                        else
                         {
                             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
-                            /* Language change!!!*/
-                            ViewData["ErrorMessage"] = "Nieobsługiwany format wejściowy, obsługiwane formaty obrazów: .png, .jpg, .gif, .jpeg";
+                            ViewData["ErrorMessage"] = "Obraz nie został dodany";
 
-                            _context.Remove(product);
-                            await _context.SaveChangesAsync();
-
-                            throw new Exception();
+                            return View(product);
                         }
 
-                        if (!Directory.Exists(path))    /* Create dir if do not exists*/
-                        {
-                            Directory.CreateDirectory(path);
-                        }
-
-                        /* Save original Image - it will be deleted after resizing an icon*/
-                        using (var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-                        {
-                            await productImage.CopyToAsync(stream);
-                        }
-
-                        /* Resize original ICON to new Width and save as Icon_ProductId_ProductName.extension*/
-                        Image_resize(path + "\\" + fileName, path + "\\IMAGE_" + fileName.Replace(extension, ".jpg"), 1600);
-                        
-                        
-                        Regex regex = new Regex(@"\\Uploads\\.*");
-                        var result = regex.Match(path).Captures.FirstOrDefault();
-                        ProductFile file = new ProductFile(product.ProductId, result + "\\IMAGE_" + fileName.Replace(extension, ".jpg"), "IMAGE_" + fileName.Replace(extension, ".jpg"), ".jpg", "Product Icon");
-
-                        _context.ProductFiles.Add(file);
-                        await _context.SaveChangesAsync();
-
-                        /* Delete original (NOT RESIZED) ICON file*/
-                        System.IO.File.Delete(path + "\\" + fileName);
                     }
+                    catch (Exception e)
+                    {
+                        ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
+                        ViewData["ErrorMessage"] = e.Message;
 
+                        return View(product);
 
+                    }
                 }
+
 
 
                 /* Saving posted file in bin/Uploads/ and folder based on file extension*/
@@ -287,39 +210,38 @@ namespace WebApp.Controllers
                     int iterator = 0;
                     foreach (IFormFile postedFile in postedFiles.Files)
                     {
-                        if(filesToSkip > 0)
-                        {
-                            filesToSkip--;
+                        if(filesToSkip-- > 0)
                             continue;
-                        }
 
-                        string fileName = product.ProductId + "_" + Path.GetFileName(postedFile.FileName);
-
-                        var procesPath = Environment.ProcessPath.Replace('\\', '/');
-                        string extension = Path.GetExtension(postedFile.FileName);
-                        var length = procesPath.LastIndexOf('/');
-                        var path = Environment.ProcessPath.Remove(length);
-                        
-                        path = Path.Combine(path, "Uploads");
-                        path = Path.Combine(path, extension.Remove(0,1));
-
-                        /*string path = Path.Combine(".\\bin", "Uploads");    *//* Using relative path of Project - files saved in WebApp/bin/Uploads*/
-                        //path += extension.Replace('.', '\\');
-
-                        Directory.CreateDirectory(path);
-
-                        using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                        try
                         {
-                            /* Save file to directory based on it's extension*/
-                            Regex regex = new Regex(@"\\Uploads\\.*");
-                            var result = regex.Match(path).Captures.FirstOrDefault();
-                            ProductFile file = new ProductFile(product.ProductId, result + "\\" + fileName, fileName, extension, descriptions?[iterator++]);
 
-                            /* Save path, name and extension to database*/
-                            _context.ProductFiles.Add(file);
-                            await _context.SaveChangesAsync();
-                            postedFile.CopyTo(stream);
+                            ProductFile createdFile = SaveAndResizeFileAsync(postedFile.FileName, Path.GetExtension(postedFile.FileName), "other", product, postedFile, descriptions[iterator]);
+                            
+                            if (createdFile != null)
+                            {
+                                _context.ProductFiles.Add(createdFile);
+                                await _context.SaveChangesAsync();
+                            }
+                            else
+                            {
+                                ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
+                                ViewData["ErrorMessage"] = "Plik nie został dodany: " + postedFile.Name;
+
+                                return View(product);
+                            }
+
                         }
+                        catch (Exception e)
+                        {
+                            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
+                            ViewData["ErrorMessage"] = e.Message;
+
+                            return View(product);
+
+                        }
+
+                        iterator++;
                     }
                 }
 
@@ -395,146 +317,68 @@ namespace WebApp.Controllers
                         return View(product);
                     }
 
-                    /* Saving product Icon*/
-                    if(productIcon != null || productImage != null)
+
+                    if (productIcon != null)
                     {
-                        if (productIcon == null && productImage != null)
-                            productIcon = productImage;
-
-                        var procesPath = Environment.ProcessPath.Replace('\\', '/');
-                        var length = procesPath.LastIndexOf('/');
-                        var path = Environment.ProcessPath.Remove(length);
-
-                        path = Path.Combine(path, "Uploads");
-                        path = Path.Combine(path, "icon");
-
-                        string extension;
-                        string fileName;
-                        if (productIcon == null)    // if no icon inserted, set default ICON_NoIcon.jpg
+                        try
                         {
-                            fileName = "NoIcon.jpg";
-                            extension = ".jpg";
-                            Regex regex = new Regex(@"\\Uploads\\.*");
-                            var result = regex.Match(path).Captures.FirstOrDefault();
-                            ProductFile iconFile = new ProductFile(product.ProductId, result + "\\ICON_" + fileName, "ICON_" + fileName, extension, "Product Icon");
 
-                            _context.ProductFiles.Add(iconFile);
-                            await _context.SaveChangesAsync();
-                        }
-                        else
-                        {
-                            extension = Path.GetExtension(productIcon.FileName);
-                            fileName = product.ProductId + "_" + product.Name + extension;
+                            ProductFile createdFile = SaveAndResizeFileAsync(productIcon.FileName, Path.GetExtension(productIcon.FileName), "icon", product, productIcon, "Product Icon");
 
-
-                            if (!ValidateExtension(extension))  // Validate image extension
+                            if (createdFile != null)
+                            {
+                                _context.ProductFiles.Add(createdFile);
+                                await _context.SaveChangesAsync();
+                            }
+                            else
                             {
                                 ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
-                                /* Language change!!!*/
-                                ViewData["ErrorMessage"] = "Nieobsługiwany format wejściowy, obsługiwane formaty ikon: .png, .jpg, .gif, .jpeg";
-                                await _context.SaveChangesAsync();
-                                throw new Exception();
+                                ViewData["ErrorMessage"] = "Ikona nie została dodana";
+
+                                return View(product);
                             }
 
+                        }
+                        catch (Exception e)
+                        {
+                            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
+                            ViewData["ErrorMessage"] = e.Message;
 
-                            if (!Directory.Exists(path))    /* Create dir if do not exists*/
-                                Directory.CreateDirectory(path);
-
-
-                            /* Save original Image - it will be deleted after resizing an icon*/
-                            using (var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-                            {
-                                await productIcon.CopyToAsync(stream);
-                            }
-
-
-                            /* Resize original ICON to new Width and save as Icon_ProductId_ProductName.extension*/
-                            Image_resize(path + "\\" + fileName, path + "\\ICON_" + fileName.Replace(extension, ".jpg"), 128);
-
-                            Regex regex = new Regex(@"\\Uploads\\.*");
-                            var result = regex.Match(path).Captures.FirstOrDefault(); 
-                            ProductFile file = new ProductFile(product.ProductId, result + "\\ICON_" + fileName.Replace(extension, ".jpg"), "ICON_" + fileName.Replace(extension, ".jpg"), ".jpg", "Product Icon");
-
-
-                            _context.ProductFiles.Add(file);
-                            await _context.SaveChangesAsync();
-
-
-                            /* Delete original (NOT RESIZED) ICON file*/
-                            System.IO.File.Delete(path + "\\" + fileName);
+                            return View(product);
 
                         }
                     }
 
-
-                    /* Saving product Image*/
-                    if(productImage != null)
+                    if (productImage != null)
                     {
-                        var procesPath = Environment.ProcessPath.Replace('\\', '/');
-                        var length = procesPath.LastIndexOf('/');
-                        var path = Environment.ProcessPath.Remove(length);
-                        path = Path.Combine(path, "Uploads");
-                        path = Path.Combine(path, "image");
-                        Directory.CreateDirectory(path);
-
-                        string extension;
-                        string fileName;
-
-
-                        if (productImage == null)   // if no image inserted, set default IMAGE_NoImage.jpg
+                        try
                         {
-                            fileName = "NoImage.jpg";
-                            extension = ".jpg";
-                            Regex regex = new Regex(@"\\Uploads\\.*");
-                            var result = regex.Match(path).Captures.FirstOrDefault();
-                            ProductFile imageFile = new ProductFile(product.ProductId, result + "\\IMAGE_" + fileName, "IMAGE_" + fileName, extension, "Product Image");
+                            ProductFile createdFile = SaveAndResizeFileAsync(productImage.FileName, Path.GetExtension(productImage.FileName), "image", product, productImage, "Product Image");
 
-                            _context.ProductFiles.Add(imageFile);
-                            await _context.SaveChangesAsync();
-                        }
-                        else
-                        {
-                            extension = Path.GetExtension(productIcon.FileName);
-                            fileName = product.ProductId + "_" + product.Name + extension;
-
-                            if (!ValidateExtension(extension))  // Validate image extension
+                            if (createdFile != null)
+                            {
+                                _context.ProductFiles.Add(createdFile);
+                                await _context.SaveChangesAsync();
+                            }
+                            else
                             {
                                 ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
-                                /* Language change!!!*/
-                                ViewData["ErrorMessage"] = "Nieobsługiwany format wejściowy, obsługiwane formaty obrazów: .png, .jpg, .gif, .jpeg";
+                                ViewData["ErrorMessage"] = "Obraz nie został dodany";
 
-                                _context.Remove(product);
-                                await _context.SaveChangesAsync();
-
-                                throw new Exception();
+                                return View(product);
                             }
 
-                            if (!Directory.Exists(path))    /* Create dir if do not exists*/
-                            {
-                                Directory.CreateDirectory(path);
-                            }
-
-                            /* Save original Image - it will be deleted after resizing an icon*/
-                            using (var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-                            {
-                                await productImage.CopyToAsync(stream);
-                            }
-
-                            /* Resize original ICON to new Width and save as Icon_ProductId_ProductName.extension*/
-                            Image_resize(path + "\\" + fileName, path + "\\IMAGE_" + fileName.Replace(extension, ".jpg"), 1600);
-                            Regex regex = new Regex(@"\\Uploads\\.*");
-                            var result = regex.Match(path).Captures.FirstOrDefault();
-                            ProductFile file = new ProductFile(product.ProductId, result + "\\IMAGE_" + fileName.Replace(extension, ".jpg"), "IMAGE_" + fileName.Replace(extension, ".jpg"), ".jpg", "Product Image");
-
-                            _context.ProductFiles.Add(file);
-                            await _context.SaveChangesAsync();
-
-                            /* Delete original (NOT RESIZED) ICON file*/
-                            System.IO.File.Delete(path + "\\" + fileName);
                         }
+                        catch (Exception e)
+                        {
+                            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
+                            ViewData["ErrorMessage"] = e.Message;
 
+                            return View(product);
 
+                        }
                     }
+
 
 
                     /* Saving posted file in bin/Uploads/ and folder based on file extension*/
@@ -546,35 +390,39 @@ namespace WebApp.Controllers
                             if (filesToSkip-- > 0)
                                 continue;
 
-                            string fileName = product.ProductId + "_" + Path.GetFileName(postedFile.FileName);
-
-                            var procesPath = Environment.ProcessPath.Replace('\\', '/');
-                            string extension = Path.GetExtension(postedFile.FileName);
-                            var length = procesPath.LastIndexOf('/');
-                            var path = Environment.ProcessPath.Remove(length);
-                            path = Path.Combine(path, "Uploads");
-                            path = Path.Combine(path, extension.Remove(0,1));
-
-
-                            if (!Directory.Exists(path))    /* Create dir if do not exists*/
-                                Directory.CreateDirectory(path);
-
-                            using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                            try
                             {
-                                /* Save file to directory based on it's extension*/
-                                Regex regex = new Regex(@"\\Uploads\\.*");
-                                var result = regex.Match(path).Captures.FirstOrDefault();
-                                ProductFile file = new ProductFile(product.ProductId, result + "\\" + fileName, fileName, extension, descriptions?[iterator++]);
 
-                                /* Save path, name and extension to database*/
-                                _context.ProductFiles.Add(file);
-                                await _context.SaveChangesAsync();
-                                postedFile.CopyTo(stream);
+                                ProductFile createdFile = SaveAndResizeFileAsync(postedFile.FileName, Path.GetExtension(postedFile.FileName), "other", product, postedFile, descriptions[iterator]);
+
+                                if (createdFile != null)
+                                {
+                                    _context.ProductFiles.Add(createdFile);
+                                    await _context.SaveChangesAsync();
+                                }
+                                else
+                                {
+                                    ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
+                                    ViewData["ErrorMessage"] = "Plik nie został dodany: " + postedFile.Name;
+
+                                    return View(product);
+                                }
+
                             }
+                            catch (Exception e)
+                            {
+                                ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
+                                ViewData["ErrorMessage"] = e.Message;
+
+                                return View(product);
+
+                            }
+
+                            iterator++;
                         }
                     }
 
-
+                    
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
@@ -690,6 +538,144 @@ namespace WebApp.Controllers
                     return false;
             }
         }
+
+
+
+
+        private ProductFile SaveAndResizeFileAsync(string fileName, string extension, string fileType, Product product, IFormFile file, string description)
+        {
+            var procesPath = Environment.ProcessPath.Replace('\\', '/');
+            var length = procesPath.LastIndexOf('/');
+            var path = Environment.ProcessPath.Remove(length);
+
+            path = Path.Combine(path, "Uploads");
+            Regex regex;// = new Regex(@"\\Uploads\\.*");
+            //var result = regex.Match(path).Captures.FirstOrDefault();
+
+
+
+            switch (fileType.ToLower())
+            {
+                case "icon":
+                    path = Path.Combine(path, "icon");
+                    regex = new Regex(@"\\Uploads\\.*");
+
+                    
+                    if (!ValidateExtension(extension))  // Validate image extension
+                    {
+                        throw new Exception("Nieobsługiwany format wejściowy, obsługiwane formaty ikon: .png, .jpg, .gif, .jpeg");
+                    }
+
+
+                    string newIcFileName = product.ProductId + "_" + product.Name + extension;
+                    string newIconName = "ICON_" + product.ProductId + "_" + product.Name + ".jpg";
+                    var iconPath = regex.Match(path).Captures.FirstOrDefault();
+                    var diskIcoPath = Path.Combine(iconPath.ToString(), newIconName);
+
+
+                    ProductFile iconFile = new ProductFile(product.ProductId, diskIcoPath, newIconName, extension, description);
+
+
+                    if (!Directory.Exists(path))                         
+                        Directory.CreateDirectory(path);
+
+                    /* Copy file to disk storage*/
+                    using (var stream = new FileStream(Path.Combine(path, newIcFileName), FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    /* Resize image and save it in Path.Combine(path, newIconName)*/
+                    Image_resize(Path.Combine(path, newIcFileName), Path.Combine(path, newIconName), 128);
+
+                    
+                    var IcotoDelete = Path.Combine(path.ToString(), newIcFileName);
+                    /* Delete model file*/
+                    System.IO.File.Delete(IcotoDelete);
+
+
+                    return iconFile;
+
+
+
+                case "image":
+                    path = Path.Combine(path, "image");
+                    regex = new Regex(@"\\Uploads\\.*");
+
+
+                    if (!ValidateExtension(extension))  // Validate image extension
+                    {
+                        throw new Exception("Nieobsługiwany format wejściowy, obsługiwane formaty ikon: .png, .jpg, .gif, .jpeg");
+                    }
+
+
+                    string newImgFileName = product.ProductId + "_" + product.Name + extension;
+                    string newImageName = "IMAGE_" + product.ProductId + "_" + product.Name + ".jpg";
+                    var imagePath = regex.Match(path).Captures.FirstOrDefault();
+                    var diskImgPath = Path.Combine(imagePath.ToString(), newImageName);
+
+
+                    ProductFile imageFile = new ProductFile(product.ProductId, diskImgPath, newImageName, extension, description);
+
+
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
+
+                    using (var stream = new FileStream(Path.Combine(path, newImgFileName), FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+
+                    Image_resize(Path.Combine(path, newImgFileName), Path.Combine(path, newImageName), 1600);
+
+
+                    var ImgtoDelete = Path.Combine(path.ToString(), newImgFileName);
+                    System.IO.File.Delete(ImgtoDelete);
+
+
+                    return imageFile;
+
+
+
+                case "other":
+                    path = Path.Combine(path, extension.Remove(0,1));
+                    regex = new Regex(@"\\Uploads\\.*");
+
+
+                    string newFileName = product.ProductId + "_" + fileName;
+                    var filePath = regex.Match(path).Captures.FirstOrDefault();
+                    var diskFilePath = Path.Combine(filePath.ToString(), newFileName);
+
+
+                    ProductFile otherFile = new ProductFile(product.ProductId, diskFilePath, newFileName, extension, description);
+
+
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
+
+                    using (var stream = new FileStream(Path.Combine(path, newFileName), FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    return otherFile;
+
+
+                default:
+                    return null;
+            }
+
+
+            return null;
+
+
+        }
+
+
+
 
         /* TO SET UP ICON SIZE CHANGE new_Width and new_Height properties*/
         private void Image_resize(string input_Image_Path, string output_Image_Path, int new_Width)
