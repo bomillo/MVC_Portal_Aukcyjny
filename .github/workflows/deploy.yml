@@ -1,3 +1,4 @@
+
 name: Deploy
 on:
   workflow_dispatch:
@@ -18,14 +19,12 @@ jobs:
         first_ssh: |  
           sudo systemctl stop mvc-backgroundtasks.service
           sudo systemctl stop mvc-webapp.service
-          sudo rm -fr /MVC/repo/*
+          sudo rm -fr /MVC/repo/PortalAukcyjny/*
           sudo -u postgres psql postgres -c 'drop database "PortalAukcyjny2" with (force)'
         scp: |
-          /home/runner/work/PortalAukcyjny/* => "/MVC/repo/"
+          /home/runner/work/PortalAukcyjny/PortalAukcyjny/* => "/MVC/repo/PortalAukcyjny/"
         last_ssh: |
           cd /MVC/repo/PortalAukcyjny
           sudo dotnet build
           sudo systemctl start mvc-webapp.service
           sudo systemctl start mvc-backgroundtasks.service
-    
-    
