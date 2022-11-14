@@ -274,8 +274,13 @@ input[type=file] {
 
 
 .visit--counter{
-    min-width: 5dp;
-    text-size-adjust:auto 200%;
+    svg{
+        width: 4vw;
+        height: 4vh;
+        margin-right: -0.8vw;
+        padding-bottom: 0.6vh;
+    }
     display: flex;
     align-self:start;
+    font-size:1.5em;
 }
