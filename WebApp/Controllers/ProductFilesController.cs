@@ -172,45 +172,6 @@ namespace WebApp.Controllers
 
                             }
 
-
-
-
-                            /*Product productFile = await _context.Products.FindAsync(productFile.ProductId);
-                            *//* Using relative path of Project - files saved in WebApp/bin/Uploads*//*
-                            string fileName = productFile.ProductId + "_" + Path.GetFileName(newFile.FileName);
-                            *//*string path = Path.Combine(".\\bin", "Uploads");*//*
-                            string extension = Path.GetExtension(newFile.FileName);
-                            path = Path.Combine(path, extension.Remove(0,1));
-
-
-                            if (!Directory.Exists(path))    *//* Create dir if do not exists*//*
-                            {
-                                Directory.CreateDirectory(path);
-                            }
-
-
-                            using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-                            {
-                                *//* Save file to directory based on it's extension*//*
-                                Regex regex = new Regex(@"\\Uploads\\.*");
-                                var result = regex.Match(path).Captures.FirstOrDefault();
-                                ProductFile file = new ProductFile(productFile.ProductId, result + "\\" + fileName, fileName, extension, productFile.Description);
-
-                                *//* Save path, name and extension to database - remove the old one*//*
-                                _context.ProductFiles.Remove(productFile);
-                                _context.ProductFiles.Add(file);
-                                await _context.SaveChangesAsync();
-
-
-                                *//* Delete old file*//*
-                                System.IO.File.Delete(path + "\\" + productFile.Name);
-
-
-                                *//* Add new file to folder*//*
-                                newFile.CopyTo(stream);
-                            }
-*/
-
                             TempData["FileChanged"] = "File has been changed!";
 
                         }
@@ -444,7 +405,7 @@ namespace WebApp.Controllers
 
             if (srcBitmap == null)
             {
-                input_Image_Path.Replace('\\', '/');
+                input_Image_Path = input_Image_Path.Replace('\\', '/');
                 srcBitmap = SKBitmap.Decode(input_Image_Path);
             }
 

@@ -684,7 +684,7 @@ namespace WebApp.Controllers
 
             if(srcBitmap == null)
             {
-                input_Image_Path.Replace('\\', '/');
+                input_Image_Path = input_Image_Path.Replace('\\', '/');
                 srcBitmap = SKBitmap.Decode(input_Image_Path);
             }
 
