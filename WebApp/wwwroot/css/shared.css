@@ -5,22 +5,43 @@
   flex-direction: row;
 }
 
-/*Wszystko inne...*/
 .button {
-  border: 3px solid;
-  font-weight: 600;
-  text-decoration: none;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin: 0.5vh 0.5vw;
+  border: 1px solid;
+  padding: 8px;
+  transition-duration: 200ms;
 }
 .button--rounded {
-  border-radius: 15px;
+  border-radius: 0.4rem;
 }
 .button--squared {
   border-radius: 0%;
+}
+.button--no-border {
+  border: 0;
+}
+.button--thin {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+.button--facebook {
+  width: 100%;
+  background-color: #1647ab;
+  border-color: transparent;
+  color: white;
+}
+.button--facebook:hover {
+  background-color: #113682;
+  color: white;
+}
+.button--google {
+  width: 100%;
+  background-color: white;
+  border-color: transparent;
+  color: #1a1a1a;
+}
+.button--google:hover {
+  background-color: #e6e6e6;
+  color: #1a1a1a;
 }
 
 .select--language {
@@ -94,7 +115,7 @@
   margin-left: 0px;
 }
 .form--group .form--input {
-  width: 66%;
+  width: 100%;
   display: inline-flex;
   margin-right: 0px;
   padding: 0.375rem 0.75rem;
@@ -104,11 +125,10 @@
   color: #212529;
   background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid #ced4da;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  border-radius: 0.25rem;
+  border-radius: 100px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 .form--group .form--select {
@@ -243,4 +263,12 @@ input[type=file] {
   padding-right: 10px;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+.modal-content {
+  border-radius: 0.8rem;
+}
+
+.modal-dialog {
+  max-width: 380px;
 }
