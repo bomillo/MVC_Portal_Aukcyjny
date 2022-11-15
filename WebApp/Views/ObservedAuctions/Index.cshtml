@@ -1,20 +1,27 @@
 ﻿@model IEnumerable<WebApp.Models.ObservedAuction>
+@using WebApp.Models;
 
 @{
     ViewData["Title"] = "";
+
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
+<title>Index</title>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<partial name="_pager" model="@pager" />
+
 <table class="table">
     <thead>
         <tr>
@@ -37,13 +44,13 @@
                 @Html.DisplayFor(modelItem => item.Auction.Title)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Details", "Details", new { aId = item.AuctionId, uId = item.UserId }) |
+                @Html.ActionLink("UnSubscribe", "Delete", new { aId = item.AuctionId, uId = item.UserId })
             </td>
         </tr>
 }
     </tbody>
 </table>
-</body>
-</html>
+
+<partial name="_pager" model="@pager" />
+
