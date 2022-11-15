@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Product Details";
+
+    var files = ViewBag.items;
 }
 
 
@@ -38,22 +40,25 @@
         </dt>
         @* Display additional files*@
         <dt class = "col-sm-10">
-               @foreach (var item in ViewBag.items)
-               {
-                   @* Display file name*@
-                   <td>@item.Name.ToString() </td>   
- 
-                   @* Display link to action that downloads the file*@
-                   @* Params: path to the file, file name*@
-                   <td>@Html.ActionLink("Download", "Download", new { Path = item.Path.ToString(), FileName = item.Name.ToString() }) </td>
-                   <br />
-                   if (item.Description != null)
-                   {
+            @if (files != null)
+            {
+                @foreach (var item in files)
+                {
+                    @* Display file name*@
+                    <td>@item.Name.ToString() </td>   
+
+                    @* Display link to action that downloads the file*@
+                    @* Params: path to the file, file name*@
+                    <td>@Html.ActionLink("Download", "Download", new { Path = item.Path.ToString(), FileName = item.Name.ToString() }) </td>
+                    <br />
+                    if (item.Description != null)
+                    {
                         @item.Description.ToString() 
                         <br />
                         <br />
-                   }
-               }
+                    }
+                }
+            }
         </dt>
         @{
             string imageName = "IMAGE_" + Model.ProductId+ "_" + Model.Name + ".jpg";
@@ -61,7 +66,7 @@
         }
     </dl>
 
-            <img src="/Uploads/image/@imageName" onerror="this.src='/image/NoImage.png'" style="max-width: 300px"/>
+            <img src="/Uploads/image/@imageName" style="max-width: 300px"/>
 
     </div>
 <div>

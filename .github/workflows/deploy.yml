@@ -1,5 +1,5 @@
-name: Deploy WebApp and BackgroundTasks
 
+name: Deploy
 on:
   workflow_dispatch:
 
@@ -10,30 +10,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore
-      run: dotnet restore
-    - name: Build
-      run: dotnet publish -p:PublishProfile=LinuxProfile
-    - name: Copy WebApp to server
-      uses: cross-the-world/ssh-scp-ssh-pipelines@v1.1.4
-      with:
-        host: bomil.ddns.net
-        user: mvc
-        pass: ${{ secrets.SSH_PASSWORD }}
-        first_ssh: |  
-          sudo systemctl stop mvc-webapp.service
-          sudo rm -fr ./WebApp/
-          sudo -u postgres psql postgres -c 'drop database "PortalAukcyjny2" with (force)'
-        scp: |
-          /home/runner/work/PortalAukcyjny/PortalAukcyjny/WebApp/bin/Debug/net6.0/publish/* => "/MVC/WebApp/"
-        last_ssh: |
-          chmod 777 /MVC/WebApp/WebApp
-          sudo systemctl start mvc-webapp.service
-    - name: Copy BackgroundTasks to server
+    - name: Copy and build
       uses: cross-the-world/ssh-scp-ssh-pipelines@v1.1.4
       with:
         host: bomil.ddns.net
@@ -41,11 +18,13 @@ jobs:
         pass: ${{ secrets.SSH_PASSWORD }}
         first_ssh: |  
           sudo systemctl stop mvc-backgroundtasks.service
-          sudo rm -fr ./BackgroundTasks/
+          sudo systemctl stop mvc-webapp.service
+          sudo rm -fr /MVC/repo/PortalAukcyjny/*
+          sudo -u postgres psql postgres -c 'drop database "PortalAukcyjny2" with (force)'
         scp: |
-          /home/runner/work/PortalAukcyjny/PortalAukcyjny/BackgroundTasks/bin/Debug/net6.0/publish/* => "/MVC/BackgroundTasks/"
+          /home/runner/work/PortalAukcyjny/PortalAukcyjny/* => "/MVC/repo/PortalAukcyjny/"
         last_ssh: |
-          chmod 777 /MVC/BackgroundTasks/BackgroundTasks
+          cd /MVC/repo/PortalAukcyjny
+          sudo dotnet build
+          sudo systemctl start mvc-webapp.service
           sudo systemctl start mvc-backgroundtasks.service
-    
-    

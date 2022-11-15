@@ -1,15 +1,19 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SkiaSharp;
 using WebApp.Context;
 using WebApp.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WebApp.Controllers
 {
@@ -104,108 +108,71 @@ namespace WebApp.Controllers
                 {
                     if (newFile != null)
                     {
+                        var procesPath = Environment.ProcessPath.Replace('\\', '/');
+                        var length = procesPath.LastIndexOf('/');
+                        var path = Environment.ProcessPath.Remove(length);
+                        path = Path.Combine(path, "Uploads");
+
                         if (productFile.Name.StartsWith("ICON") || productFile.Name.StartsWith("IMAGE"))
                         {
-                            Product product = await _context.Products.FindAsync(productFile.ProductId);
-                            string extension = Path.GetExtension(newFile.FileName);
-                            string fileType = productFile.Name.Split('_')[0];
-
-
-                            if (!ValidateExtension(extension))  // Validate image extension
+                            string type = productFile.Name.StartsWith("ICON") ? "icon" : "image";
+                            string description = type == "icon" ? "Product Icon" : "Product Image"; 
+                            try
                             {
-                                ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
-                                /* Language change!!!*/
-                                ViewData["ErrorMessage"] = "Nieobsługiwany format wejściowy, obsługiwane formaty " + fileType + ": .png, .jpg, .gif, .jpeg";
+                                ProductFile changedFile = SaveAndResizeFileAsync(newFile.FileName, Path.GetExtension(newFile.FileName), type, productFile, newFile, description);
+
+                                if (changedFile != null)
+                                {
+                                    productFile = changedFile;  
+                                    _context.ProductFiles.Update(productFile);
+                                    await _context.SaveChangesAsync();
+                                }
+                                else
+                                {
+                                    ViewData["ErrorMessage"] = description + " nie został dodany";
+
+                                    return View(productFile);
+                                }
+
+                            }
+                            catch (Exception e)
+                            {
+                                ViewData["ErrorMessage"] = e.Message;
 
                                 return View(productFile);
+
                             }
-
-
-                            string path = ".\\bin\\Uploads\\" + fileType.ToLower();
-                            string fileName = product.ProductId + "_" + product.Name + extension;
-
-
-                            if (!Directory.Exists(path))    /* Create dir if do not exists*/
-                            {
-                                Directory.CreateDirectory(path);
-                            }
-
-
-                            /* Save original Image - it will be deleted after resizing an icon*/
-                            using (var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-                            {
-                                await newFile.CopyToAsync(stream);
-                            }
-
-                            string newInputPath = path + "\\" + fileName;
-                            string newFileName = fileType + "_" + fileName.Replace(extension, ".jpg");
-                            string newOutputPath = path + "\\" + newFileName;
-
-
-                            /* Delete old file*/
-                            //System.IO.File.Delete(path + "\\" + productFile.Name);
-
-
-                            /* Resize original IMAGE to new Width and save as FILETYPE_ProductId_ProductName.jpg*/
-                            if (productFile.Name.StartsWith("ICON"))
-                                Image_resize(newInputPath, newOutputPath, 128);
-                            else
-                                Image_resize(newInputPath, newOutputPath, 1600);
-
-
-                            ProductFile file = new ProductFile(product.ProductId, newOutputPath, newFileName, ".jpg", productFile.Description);
-
-
-                            /* Remove old file and add new one*/
-                            _context.ProductFiles.Remove(productFile);
-                            _context.ProductFiles.Add(file);
-                            await _context.SaveChangesAsync();
-
-
-                            /* Delete original (NOT RESIZED) ICON file*/
-                            System.IO.File.Delete(path + "\\" + fileName);
-
-
-                            TempData["FileChanged"] = "File has been changed and renamed!";
 
                         }
                         else
                         {
-                            /* Using relative path of Project - files saved in WebApp/bin/Uploads*/
-                            string fileName = Path.GetFileName(newFile.FileName);
-                            string path = Path.Combine(".\\bin", "Uploads");
-                            string extension = Path.GetExtension(newFile.FileName);
-                            path += extension.Replace('.', '\\');
 
-
-                            if (!Directory.Exists(path))    /* Create dir if do not exists*/
+                            try
                             {
-                                Directory.CreateDirectory(path);
+                                ProductFile changedFile = SaveAndResizeFileAsync(newFile.FileName, Path.GetExtension(newFile.FileName), "other", productFile, newFile, productFile.Description);
+                                if (changedFile != null)
+                                {
+                                    productFile = changedFile;
+                                    _context.ProductFiles.Update(productFile);
+                                    await _context.SaveChangesAsync();
+                                }
+                                else
+                                {
+                                    ViewData["ErrorMessage"] = "Ikona nie została dodana";
+
+                                    return View(productFile);
+                                }
+
                             }
-
-
-                            using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                            catch (Exception e)
                             {
-                                /* Save file to directory based on it's extension*/
-                                ProductFile file = new ProductFile(productFile.ProductId, path + "\\" + fileName, fileName, extension, productFile.Description);
+                                ViewData["ErrorMessage"] = e.Message;
 
-                                /* Save path, name and extension to database - remove the old one*/
-                                _context.ProductFiles.Remove(productFile);
-                                _context.ProductFiles.Add(file);
-                                await _context.SaveChangesAsync();
+                                return View(productFile);
 
-
-                                /* Delete old file*/
-                                //System.IO.File.Delete(path + "\\" + productFile.Name);
-
-
-                                /* Add new file to folder*/
-                                newFile.CopyTo(stream);
                             }
-
 
                             TempData["FileChanged"] = "File has been changed!";
-
 
                         }
                     }
@@ -299,71 +266,183 @@ namespace WebApp.Controllers
             }
         }
 
-        /* TO SET UP ICON SIZE CHANGE new_Width and new_Height properties*/
-        private void Image_resize(string input_Image_Path, string output_Image_Path, int new_Width)
+
+        private ProductFile SaveAndResizeFileAsync(string fileName, string extension, string fileType, ProductFile productFile, IFormFile file, string description)
         {
-            //---------------< Image_resize() >---------------
-            const long quality = 50L;
-            Bitmap source_Bitmap = new Bitmap(input_Image_Path);
+            var procesPath = Environment.ProcessPath.Replace('\\', '/');
+            var length = procesPath.LastIndexOf('/');
+            var path = Environment.ProcessPath.Remove(length);
+
+            path = Path.Combine(path, "Uploads");
+            Regex regex;// = new Regex(@"\\Uploads\\.*");
+            //var result = regex.Match(path).Captures.FirstOrDefault();
 
 
-            double dblWidth_origial = source_Bitmap.Width;
-            double dblHeigth_origial = source_Bitmap.Height;
-            double relation_heigth_width = dblHeigth_origial / dblWidth_origial;
-            int new_Height = (int)(new_Width * relation_heigth_width);
-            //int new_Height = 70;
 
-
-            //< create Empty Drawarea >
-            var new_DrawArea = new Bitmap(new_Width, new_Height);
-            //</ create Empty Drawarea >
-
-
-            using (var graphic_of_DrawArea = Graphics.FromImage(new_DrawArea))
+            switch (fileType.ToLower())
             {
-                //< setup >
-                graphic_of_DrawArea.CompositingQuality = CompositingQuality.HighSpeed;
-                graphic_of_DrawArea.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphic_of_DrawArea.CompositingMode = CompositingMode.SourceCopy;
-                //</ setup >
+                case "icon":
+                    path = Path.Combine(path, "icon"); 
+                    regex = new Regex(@"[\\|\/]Uploads[\\|\/].*");
 
 
-                //< draw into placeholder >
-                //*imports the image into the drawarea
-                graphic_of_DrawArea.DrawImage(source_Bitmap, 0, 0, new_Width, new_Height);
-                //</ draw into placeholder >
+                    if (!ValidateExtension(extension))  // Validate image extension
+                    {
+                        throw new Exception("Nieobsługiwany format wejściowy, obsługiwane formaty ikon: .png, .jpg, .gif, .jpeg");
+                    }
+
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
+                    string newIcFileName = productFile.ProductId + "_" + productFile.Name + extension;
+                    string newIconName = productFile.Name;
+                    var iconPath = regex.Match(path).Captures.FirstOrDefault();
+                    var diskIcoPath = Path.Combine(iconPath.ToString(), newIconName);
+
+                    //ProductFile iconFile = new ProductFile(productFile.ProductId, diskIcoPath, newIconName, extension, description);
+                    productFile.Path = diskIcoPath;
+                    productFile.Name = newIconName;
+                    productFile.Extension = extension;   
+    
+                    System.IO.File.Delete(Path.Combine(path, newIconName));
 
 
-                //--< Output as .Jpg >--
-                using (var output = System.IO.File.Open(output_Image_Path, FileMode.Create))
-                {
-                    //< setup jpg >
-                    var qualityParamId = Encoder.Quality;
-                    var encoderParameters = new EncoderParameters(1);
-                    encoderParameters.Param[0] = new EncoderParameter(qualityParamId, quality);
-                    //</ setup jpg >
+                    using (var stream = new FileStream(Path.Combine(path, newIcFileName), FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
 
-                    //< save Bitmap as Jpg >
-                    var codec = ImageCodecInfo.GetImageDecoders().FirstOrDefault(c => c.FormatID == ImageFormat.Jpeg.Guid);
-                    new_DrawArea.Save(output, codec, encoderParameters);
+                    Image_resize(Path.Combine(path, newIcFileName), Path.Combine(path, newIconName), 128);
 
-                    //resized_Bitmap.Dispose();
-                    output.Close();
-                    //</ save Bitmap as Jpg >
-                }
+                    var IcotoDelete = Path.Combine(path.ToString(), newIcFileName);
+                    System.IO.File.Delete(IcotoDelete);
 
-                //--</ Output as .Jpg >--
-                graphic_of_DrawArea.Dispose();
 
+                    return productFile;
+
+
+
+                case "image":
+                    path = Path.Combine(path, "image");
+                    regex = new Regex(@"[\\|\/]Uploads[\\|\/].*");
+
+                    if (!ValidateExtension(extension))  // Validate image extension
+                    {
+                        throw new Exception("Nieobsługiwany format wejściowy, obsługiwane formaty ikon: .png, .jpg, .gif, .jpeg");
+                    }
+
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
+                    string newImgFileName = productFile.ProductId + "_" + productFile.Name + extension;
+                    string newImageName = productFile.Name;
+                    var imagePath = regex.Match(path).Captures.FirstOrDefault();
+                    var diskImgPath = Path.Combine(imagePath.ToString(), newImageName);
+
+                    //ProductFile imageFile = new ProductFile(productFile.ProductId, diskImgPath, newImageName, extension, description);
+                    productFile.Path = diskImgPath;
+                    productFile.Name = newImageName;
+                    productFile.Extension = extension;
+
+
+                    System.IO.File.Delete(Path.Combine(path, newImageName));
+
+                    using (var stream = new FileStream(Path.Combine(path, newImgFileName), FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    Image_resize(Path.Combine(path, newImgFileName), Path.Combine(path, newImageName), 1600);
+
+                    var ImgtoDelete = Path.Combine(path.ToString(), newImgFileName);
+                    System.IO.File.Delete(ImgtoDelete);
+
+                    return productFile;
+
+
+
+                case "other":
+                    path = Path.Combine(path, extension.Remove(0, 1));
+                    regex = new Regex(@"[\\|\/]Uploads[\\|\/].*");
+
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
+                    string newFileName = productFile.ProductId + "_" + fileName;
+                    var filePath = regex.Match(path).Captures.FirstOrDefault();
+                    var diskFilePath = Path.Combine(filePath.ToString(), newFileName);
+
+
+                    //ProductFile otherFile = new ProductFile(productFile.ProductId, diskFilePath, newFileName, extension, description);
+                    productFile.Path = diskFilePath;
+                    productFile.Name = newFileName;
+                    productFile.Extension = extension;
+                    productFile.Description = description;
+
+
+                    using (var stream = new FileStream(Path.Combine(path, newFileName), FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    return productFile;
+
+
+                default:
+                    return null;
             }
-
-            source_Bitmap.Dispose();
-            //---------------</ Image_resize() >---------------
 
         }
 
 
 
 
+
+        /* TO SET UP ICON SIZE CHANGE new_Width and new_Height properties*/
+        private void Image_resize(string input_Image_Path, string output_Image_Path, int new_Width)
+        {
+            SKBitmap srcBitmap = SKBitmap.Decode(input_Image_Path);
+
+            if (srcBitmap == null)
+            {
+                input_Image_Path = input_Image_Path.Replace('\\', '/');
+                srcBitmap = SKBitmap.Decode(input_Image_Path);
+            }
+
+            double dblWidth_origial = srcBitmap.Width;
+            double dblHeigth_origial = srcBitmap.Height;
+            double relation_heigth_width = dblHeigth_origial / dblWidth_origial;
+            int new_Height = (int)(new_Width * relation_heigth_width);
+
+            SKImageInfo resizeInfo = new SKImageInfo(new_Width, new_Height);
+
+            // SKImage resizes blurry
+            using (var surface = SKSurface.Create(resizeInfo))
+            using (var paint = new SKPaint())
+            {
+                // high quality with antialiasing
+                paint.IsAntialias = true;
+                paint.FilterQuality = SKFilterQuality.High;
+
+                // draw the bitmap to fill the surface
+                surface.Canvas.DrawBitmap(srcBitmap, new SKRectI(0, 0, new_Width, new_Height),
+                    paint);
+                surface.Canvas.Flush();
+
+                // save
+                using (var newImg = surface.Snapshot())
+                using (SKData data = newImg.Encode(SKEncodedImageFormat.Jpeg, 100))
+                using (var stream = new FileStream(output_Image_Path, FileMode.Create, FileAccess.Write))
+                    data.SaveTo(stream);
+            }
+
+            // SKBitmap resizes crisp.
+            using (SKBitmap resizedSKBitmap = srcBitmap.Resize(resizeInfo, SKBitmapResizeMethod.Lanczos3))
+            using (SKImage newImg = SKImage.FromPixels(resizedSKBitmap.PeekPixels()))
+            using (SKData data = newImg.Encode(SKEncodedImageFormat.Jpeg, 90))
+            using (var stream = new FileStream(output_Image_Path, FileMode.Create, FileAccess.Write))
+                data.SaveTo(stream);
+
+        }
     }
 }
