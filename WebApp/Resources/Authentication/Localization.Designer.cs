@@ -70,6 +70,24 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to E-mail format is invalid.
+        /// </summary>
+        public static string InvalidEmail {
+            get {
+                return ResourceManager.GetString("InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Link has expired.
+        /// </summary>
+        public static string LinkExpired {
+            get {
+                return ResourceManager.GetString("LinkExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string Login {
@@ -79,11 +97,75 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This e-mail is already taken!.
+        /// </summary>
+        public static string MailTaken {
+            get {
+                return ResourceManager.GetString("MailTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passwords didn&apos;t match!.
+        /// </summary>
+        public static string PasswordNotMatch {
+            get {
+                return ResourceManager.GetString("PasswordNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password has been chaged.
+        /// </summary>
+        public static string PasswordReseted {
+            get {
+                return ResourceManager.GetString("PasswordReseted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repeat password.
+        /// </summary>
+        public static string PasswordVerification {
+            get {
+                return ResourceManager.GetString("PasswordVerification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registration succesful!
+        ///You can now login into your accont..
+        /// </summary>
+        public static string RegistrationSucces {
+            get {
+                return ResourceManager.GetString("RegistrationSucces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is too weak.
+        /// </summary>
+        public static string WeakPassword {
+            get {
+                return ResourceManager.GetString("WeakPassword", resourceCulture);
             }
         }
         

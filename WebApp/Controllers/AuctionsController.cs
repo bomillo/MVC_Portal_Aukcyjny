@@ -29,7 +29,7 @@ namespace WebApp.Controllers
         {
             var portalAukcyjnyContext = _context.Auctions
                 .Include(a => a.Owner)
-                .Include(a => a.Product);
+                .Include(a => a.Product).OrderBy(a => a.AuctionId);
 
             const int pageSize = 20;
             if(page < 1)

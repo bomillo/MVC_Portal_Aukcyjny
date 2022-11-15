@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit Auction";
-    
+
 }
 
 
@@ -25,79 +25,87 @@
 
 </script>
 
-<h1>Edit</h1>
 
-<h4>Auction</h4>
-<hr />
+<div class="form--contianer container">
+    <div class="form--heading">
+        <h3 class="text--secondary">Edit Auction</h3>
+    </div>
 <div class="row" onload="displayDateDialog()">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-3 col-0"></div>
+    <div class="col-md-6">
+        <form asp-action="Edit" class="form-content">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <input type="hidden" asp-for="AuctionId" />
-            <div class="form-group" hidden>
-                <label asp-for="OwnerId" class="control-label"></label>
-                <select asp-for="OwnerId" class="form-control" asp-items="ViewBag.OwnerId"></select>
+
+            <div class="form--group" hidden>
+                <label asp-for="OwnerId" class="control-label form--label"></label>
+                <select asp-for="OwnerId" class="control--input form--input" asp-items="ViewBag.OwnerId"></select>
                 <span asp-validation-for="OwnerId" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
+            <div class="form--group">
+                <label asp-for="Title" class="control--label form--label"></label>
+                <input asp-for="Title" class="control--input form--input" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control"></textarea>
+
+            <div class="form--group">
+                <label asp-for="Description" class="control--label form--label"></label>
+                <textarea asp-for="Description" class="control--input form--input"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="ProductId" class="control-label"></label>
-                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
+            <div class="form--group">
+                <label asp-for="ProductId" class="control--label form--label"></label>
+                <select asp-for="ProductId" class="control--input form--input" asp-items="ViewBag.ProductId"></select>
                 <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="CreationTime" class="control-label"></label>
-                <input asp-for="CreationTime" class="form-control" readonly />
+            <div class="form--group">
+                <label asp-for="CreationTime" class="control--label form--label"></label>
+                <input asp-for="CreationTime" class="control--input form--input" readonly />
                 <span asp-validation-for="CreationTime" class="text-danger"></span>
             </div>
 
-            <br/>
-            <div class="form-group form-check">
-                <label class="form-check-label">
+            <br />
+            <div class="form--group form-check text-lg-end">
+                <label class="form-check-label input--checkbox">
                     <input onchange="displayDateDialog()" id="draftCHechBox" class="form-check-input" asp-for="IsDraft" /> @Html.DisplayNameFor(model => model.IsDraft)
                 </label>
             </div>
 
-            <span class="text--error">@ViewBag.DatesMsg</span>
+            <div>
+                <span class="text--error">@ViewBag.DatesMsg</span>
+            </div>
 
-            <div class="form-group" id="dateP">
-                <label asp-for="PublishedTime" class="control-label"></label>
-                <input asp-for="PublishedTime" class="form-control" />
+            <div class="form--group" id="dateP">
+                <label asp-for="PublishedTime" class="control--label form--label"></label>
+                <input asp-for="PublishedTime" class="control--input form--input" />
                 <span asp-validation-for="PublishedTime" class="text-danger"></span>
             </div>
 
-            <div class="form-group" id="dateE">
-                <label asp-for="EndTime" class="control-label"></label>
-                <input asp-for="EndTime" class="form-control" />
+            <div class="form--group" id="dateE">
+                <label asp-for="EndTime" class="control--label form--label"></label>
+                <input asp-for="EndTime" class="control--input form--input" />
                 <span asp-validation-for="EndTime" class="text-danger"></span>
             </div>
 
 
 
             <br />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form--buttons">
+                <input type="submit" value="Save" class="button button--rounded button--secondary" />
+                <a asp-action="Index" class="button button--rounded button--secondary">Back to List</a>
             </div>
         </form>
+        <div class="col-md-3 col-0"></div>
+
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

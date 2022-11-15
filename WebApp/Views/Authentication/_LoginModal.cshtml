@@ -1,34 +1,54 @@
 ﻿@using Auth = WebApp.Resources.Authentication.Localization
 @using WebApp.Resources
 
-<div class="modal-dialog ">
+<div class="modal-dialog">
     <div class="modal-content background--primary">
-        <div class="modal-header">
-            <h4 class="modal-title text--primary">@Auth.Login</h4>
+        <div class="form--heading" style="margin-top: 2vh;">
+            <h4 class="text--primary .form--group">@Auth.Login</h4>
         </div>
-        <form id="loginForm" action="/Authentication/Login" method="post">
-            <div class="modal-body">
+        <div class="modal-body">
+        <form id="loginForm" action="/Authentication/Login" method="post" class="form--content">
                 <div class="row">
-                    <div class="col-md-4 text-muted">
-                            <label for="mail">@Auth.Email</label>
-                            <input type="text" id="loginFormMail" name="mail" value="admin" />
-                            <label for="password">@Auth.Password</label>
-                            <input type="password" id="loginFormPassword" name="password" value="admin" />
-                            <input type="hidden" id="loginFormReturnUrl" name="url"/>
-                            <div id="loginFormMessage" class="text-danger" style="display:none;">@Auth.WrongCredentials</div>
+                    <div class="form--group" style="margin-bottom:0;">
+                        <input type="text" placeholder="@Auth.Email" class="control--input form--input" id="loginFormMail" name="mail" value="" />
                     </div>
+                    <div class="form--group">
+                        <input type="password" placeholder="@Auth.Password" class="control--input form--input" id="loginFormPassword" name="password" value="" />
+                    </div>
+                        <input type="hidden" id="loginFormReturnUrl" name="url"/>
+                        <div id="loginFormMessage" class="text-danger" style="display:none;">@Auth.WrongCredentials</div>
+                </div>
+            <div style="display: flex; justify-content: flex-end;">
+                <input style="margin-right: 10px;" class="button button--secondary button--rounded button--no-border button--thin" type="submit" value="Reset password" formaction="/Authentication/SendResetPasswordMail" />
+                <button class="button button--primary button--rounded button--thin" type="submit">@Auth.Login</button>
+            </div>
+        </form>
+            <div style="width: 100%; text-align: center;">
+                - or -
+            </div>
+        <form id="secondForm" action="/Authentication" method="post" class="form--content">
+            <input type="hidden" id="CurrentUrl" name="url" />
+            <input type="hidden" id="secondFormMail" name="mail" />
+            <div class="form--heading" style="display:flex; justify-content: space-between; flex-direction: column;">
+                <div class="form--group">
+                    <button class="button button--google button--rounded" type="submit" value="Google" formaction="/Authentication/LoginGoogle">
+                        <img style="margin: -9px 0 -4px 0;" src="~/image/icon_google.svg" width="30" height="30" />
+                        Google
+                    </button>
+                </div>
+                <div class="">
+                    <button class="button button--facebook button--rounded " type="submit" value="Facebook" formaction="/Authentication/LoginFacebook">
+                        <img style="margin: -9px 0 -4px 0;" src="~/image/icon_facebook.svg" width="30" height="30"/>
+                        Facebook
+                    </button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" type="submit">@Auth.Login</button>
-                <button type="button" class="btn btn-default text--secondary" onclick="HideModal()">@Shared.Close</button>
+            <div class="form--heading form--group" style="display:flex; justify-content: space-between; margin-bottom: 0;">
+                <a style="text-decoration:none;" class="button button--secondary button--rounded button--thin" asp-area="" asp-controller="Authentication" asp-action="Register">Register</a>
+                <button type="button" class="button button--cancel button--rounded button--thin" onclick="HideModal()">@Shared.Close</button>
             </div>
         </form>
-        <form action="/Authentication" method="post">
-            <input type="hidden" id="CurrentUrl" name="url" />
-            <input class="btn btn-primary" type="submit" value="Google" formaction="/Authentication/LoginGoogle"/>
-            <input class="btn btn-primary" type="submit" value="Facebook" formaction="/Authentication/LoginFacebook"/>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -36,6 +56,8 @@
 <script>
     $( "#loginForm" ).submit(function( event ) {
         $("#loginFormMessage").hide();
+        debugger;
+        ///Authentication/Login
         event.preventDefault();
         $("#loginFormReturnUrl").val(window.location.toString());
         $.post("@Url.Action("ValidateCrenedtials","Authentication")",
@@ -44,7 +66,6 @@
                 password: $("#loginFormPassword").val(),
             },
             function (data) {
-                debugger;
                 if (!data.valid) {
                     $("#loginFormMessage").show();
                 } else {
@@ -52,6 +73,11 @@
                 }
             }
         );
+    });
+
+    $( "#secondForm" ).submit(function( event ) {
+        debugger;
+        $("#secondFormMail").val($("#loginFormMail").val());
     });
 
     $("#CurrentUrl").val(window.location.toString());

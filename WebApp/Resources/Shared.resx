@@ -117,44 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Email" xml:space="preserve">
-    <value>E-mail</value>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
   </data>
-  <data name="InvalidEmail" xml:space="preserve">
-    <value>Format e-maila jest niepoprawny.</value>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>This field is required</value>
   </data>
-  <data name="LinkExpired" xml:space="preserve">
-    <value>Link wygasł</value>
+  <data name="FieldTooLong" xml:space="preserve">
+    <value>Too long input</value>
   </data>
-  <data name="Login" xml:space="preserve">
-    <value>Login</value>
-  </data>
-  <data name="MailTaken" xml:space="preserve">
-    <value>E-mail jest już zajęty!</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Imię</value>
-  </data>
-  <data name="Password" xml:space="preserve">
-    <value>Hasło</value>
-  </data>
-  <data name="PasswordNotMatch" xml:space="preserve">
-    <value>Hasła się nie zgadzały!</value>
-  </data>
-  <data name="PasswordReseted" xml:space="preserve">
-    <value>Hasło zostało zmienione</value>
-  </data>
-  <data name="PasswordVerification" xml:space="preserve">
-    <value>Powtórz hasło</value>
-  </data>
-  <data name="RegistrationSucces" xml:space="preserve">
-    <value>Rejestracja się udała!
-Można się teraz zalogować na nowe konto.</value>
-  </data>
-  <data name="WeakPassword" xml:space="preserve">
-    <value>Hasło jest za słabe</value>
-  </data>
-  <data name="WrongCredentials" xml:space="preserve">
-    <value>Hasło lub e-mail jest nie poprawny.</value>
+  <data name="LoggedInAs" xml:space="preserve">
+    <value>Logged in as </value>
   </data>
 </root>

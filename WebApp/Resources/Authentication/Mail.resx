@@ -117,10 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Close" xml:space="preserve">
-    <value>Close</value>
+  <data name="Body" xml:space="preserve">
+    <value>Dear client,&lt;/br&gt;
+As per your request we provide you with the link to reset your password. This link will be active for 15 minutes.&lt;/br&gt;</value>
   </data>
-  <data name="LoggedInAs" xml:space="preserve">
-    <value>Logged in as </value>
+  <data name="MailSent" xml:space="preserve">
+    <value>We've sent you the password reset link in e-mail.</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>Portal aukcyjny - reset password</value>
   </data>
 </root>
