@@ -1,4 +1,5 @@
-﻿@model WebApp.Models.Product
+﻿@using WebApp.Models
+@model WebApp.Models.Product
 
 @{
     ViewData["Title"] = "Product Details";
@@ -6,6 +7,7 @@
     var files = ViewBag.items;
 }
 
+@await Html.PartialAsync("_BreadcrumbNavigation", (List<BreadcrumbItem>)ViewBag.Breadcrumb)
 
 <div>
     <h4>Product</h4>

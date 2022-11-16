@@ -183,7 +183,7 @@ namespace WebApp.Context
             {
                 Category category = new Category()
                 {
-                    Name = rndText(10, 99)
+                    Name = rndText(10, 40)
                 };
 
                 if (!firstStep)
@@ -207,12 +207,12 @@ namespace WebApp.Context
 
             for(int i = 0; i < howMany; i++)
             {
-                var category = categories.ElementAt(categories.Count - 1);
+                var category = categories.ElementAt(random.Next(categories.Count - 1));
                 Product product = new Product()
                 {
                     Category = category,
                     CategoryId = category.CategoryId,
-                    Name = rndText(10, 149),
+                    Name = rndText(10, 40),
                     VatRate = rndVatRate(),
                     IsVatExcluded = false
                 };
@@ -241,8 +241,8 @@ namespace WebApp.Context
 
             for(int i = 0; i < howMany; i++)
             {
-                var product = products.ElementAt(products.Count - 1);
-                var user = users.ElementAt(users.Count - 1);
+                var product = products.ElementAt(random.Next(products.Count - 1));
+                var user = users.ElementAt(random.Next(users.Count - 1));
                 Auction auction = new Auction()
                 {
                     Description = rndText(100, 1999),

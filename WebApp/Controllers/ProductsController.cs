@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.RegularExpressions;
 using SkiaSharp;
 using NuGet.Packaging.Signing;
+using WebApp.Services;
 
 namespace WebApp.Controllers
 {
@@ -23,11 +24,13 @@ namespace WebApp.Controllers
     {
         private readonly PortalAukcyjnyContext _context; 
         private IHostingEnvironment _environment;
+        private readonly BreadcrumbService breadcrumbService;
 
-        public ProductsController(PortalAukcyjnyContext context, IHostingEnvironment environment)
+        public ProductsController(PortalAukcyjnyContext context, IHostingEnvironment environment, BreadcrumbService breadcrumbService)
         {
             _context = context;
             _environment = environment;
+            this.breadcrumbService = breadcrumbService;
         }
 
         // GET: Products
@@ -68,23 +71,18 @@ namespace WebApp.Controllers
                 .FirstOrDefaultAsync(m => m.ProductId == id);
 
             /* Get all files that refers to actual product*/
-            var productFiles = from file in _context.ProductFiles
+            var productFiles = (from file in _context.ProductFiles
                                .Where(prod => prod.ProductId == id)
-                               select file;
-
-            /* Create a list of items, to display for user*/
-            List<ProductFile> items = new List<ProductFile>();
-            foreach (var file in productFiles)
-            {
-                items.Add(file);
-            }
+                               select file).ToList();
                
-            ViewBag.Items = items;
+            ViewBag.Items = productFiles;
 
             if (product == null)
             {
                 return NotFound();
             }
+
+            ViewBag.Breadcrumb = breadcrumbService.CreateCurrentPath(product);
 
             return View(product);
         }
