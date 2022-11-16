@@ -44,8 +44,14 @@
                 @Html.DisplayFor(modelItem => item.Auction.Title)
             </td>
             <td>
-                @Html.ActionLink("Details", "Details", new { aId = item.AuctionId, uId = item.UserId }) |
-                @Html.ActionLink("UnSubscribe", "Delete", new { aId = item.AuctionId, uId = item.UserId })
+                <div class="form--buttons">
+                    @Html.ActionLink("UnSubscribe", "Delete", new { aId = item.AuctionId, uId = item.UserId }, new { @class="button button--secondary button--rounded"})
+                </div>
+                
+                <div class="form--buttons">
+                    @Html.ActionLink("Details", "Details", new { aId = item.AuctionId, uId = item.UserId }, new { @class="button button--secondary button--rounded"})
+                </div>
+
             </td>
         </tr>
 }
@@ -53,4 +59,3 @@
 </table>
 
 <partial name="_pager" model="@pager" />
-
