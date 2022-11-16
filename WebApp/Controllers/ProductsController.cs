@@ -82,7 +82,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            ViewBag.Breadcrumb = breadcrumbService.CreateCurrentPath(product);
+            
 
             return View(product);
         }

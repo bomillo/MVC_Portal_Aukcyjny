@@ -1,8 +1,12 @@
-﻿@model WebApp.Models.Auction
+﻿@using WebApp.Models
+@model WebApp.Models.Auction
 
 @{
     ViewData["Title"] = "Auction Details";
 }
+
+@await Html.PartialAsync("_BreadcrumbNavigation", (List<BreadcrumbItem>)ViewBag.Breadcrumb)
+
 
 <h1>Details</h1>
 

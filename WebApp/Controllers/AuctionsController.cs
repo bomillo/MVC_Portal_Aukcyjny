@@ -12,16 +12,19 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using WebApp.Context;
 using WebApp.Models;
+using WebApp.Services;
 
 namespace WebApp.Controllers
 {
     public class AuctionsController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
+        private readonly BreadcrumbService breadcrumbService;
 
-        public AuctionsController(PortalAukcyjnyContext context)
+        public AuctionsController(PortalAukcyjnyContext context, BreadcrumbService breadcrumbService)
         {
             _context = context;
+            this.breadcrumbService = breadcrumbService;
         }
 
         // GET: Auctions
@@ -67,6 +70,8 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Breadcrumb = breadcrumbService.CreateCurrentPath(auction);
 
             return View(auction);
         }
