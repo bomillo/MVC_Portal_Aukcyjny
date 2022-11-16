@@ -314,3 +314,43 @@ input[type=file] {
 .container--breadcrumb .breadcrumb--item:last-child::after {
   content: "";
 }
+
+.auction--container {
+  display: flex;
+  align-content: start;
+  height: 20vh;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.auction--container .auction--middle--column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-right: 2vw;
+  padding-left: 2vw;
+  flex: 4;
+  height: 100%;
+}
+.auction--container .auction--icon {
+  height: 100%;
+  flex: 1;
+}
+.auction--container .auction--title {
+  font-size: 2.5em;
+}
+.auction--container .auction--price {
+  align-self: start;
+  justify-self: end;
+  flex: 1;
+  font-size: 2.5em;
+}
+.auction--bottom--line {
+  margin-right: 2.5vw;
+  margin-left: 2.5vw;
+}
+
+.list--link {
+  text-decoration: none;
+  color: none;
+}

@@ -5,18 +5,23 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging.Signing;
 using WebApp.Context;
 using WebApp.Models;
+using WebApp.Models.DTO;
+using WebApp.Services;
 
 namespace WebApp.Controllers
 {
     public class CategoriesController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
+        private readonly BreadcrumbService breadcrumbService;
 
-        public CategoriesController(PortalAukcyjnyContext context)
+        public CategoriesController(PortalAukcyjnyContext context, BreadcrumbService breadcrumbService)
         {
             _context = context;
+            this.breadcrumbService = breadcrumbService;
         }
 
         // GET: Categories
@@ -164,5 +169,66 @@ namespace WebApp.Controllers
         {
           return _context.Categories.Any(e => e.CategoryId == id);
         }
+
+        [Route("/Category/Auctions/{id}")]
+        public async Task<IActionResult> CategoryAuctions(int? id)
+        {
+            if(id == null || _context == null)
+            {
+                return NotFound();
+            }
+
+            var categoriesTask = GetChildCategories(id);
+            List<int> products = new List<int>();
+            var mainCategory = _context.Categories.FirstOrDefault(c => c.CategoryId == id);
+
+            ViewBag.Breadcrumb = breadcrumbService.CreateCurrentPath(mainCategory);
+            var categories = await categoriesTask;
+            if(categories != null)
+            {
+                products = _context.Products.Where(p => categories.Contains(p.CategoryId)).Select(p => p.ProductId).ToList();
+            }
+
+            var auctions = _context.Auctions.Where(a => products.Contains(a.ProductId) && a.EndTime > DateTime.UtcNow).Include(a => a.Product).Include(a => a.Product.Category).ToList();
+
+            var displayAuctions = new List<DisplayAuctionsModel>();
+            
+            foreach(var auction in auctions)
+            {
+                var currentBids = _context.Bid.Where(x => x.AuctionId == auction.AuctionId).ToList();
+                displayAuctions.Add(new DisplayAuctionsModel()
+                {
+                    Auction = auction,
+                    Bid = currentBids.Select(x => x.Price).DefaultIfEmpty(0).Max()
+                });
+                
+            }
+
+            return View(displayAuctions);
+        }
+        
+        private async Task<List<int>> GetChildCategories(int? categoryId)
+        {
+            if(categoryId == null)
+            {
+                return null;
+            }
+
+            var newCategories = _context.Categories.Where(c => c.ParentCategoryId == categoryId).Select(c => c.CategoryId).ToList();
+
+            List<int> categoriesId = new List<int>((int)categoryId);
+
+            while (newCategories.Any())
+            {
+                newCategories.AddRange(_context.Categories.Where(c => c.ParentCategoryId == newCategories[0]).Select(c => c.CategoryId).ToList());
+
+                categoriesId.Add(newCategories[0]);
+
+                newCategories.RemoveAt(0);
+            }
+
+            return categoriesId;
+        }
+
     }
 }

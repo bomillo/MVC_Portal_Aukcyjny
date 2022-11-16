@@ -32,16 +32,16 @@ namespace WebApp.Services
             }
 
             int previousItemId;
-            items.Add(new BreadcrumbItem() { ItemName = category.Name, RelativePath = $"/Categories/Auctions/{category.CategoryId}" });
+            items.Add(new BreadcrumbItem() { ItemName = category.Name, RelativePath = $"/Category/Auctions/{category.CategoryId}" });
 
 
             while (category.ParentCategoryId != null)
             {
                 previousItemId = (int)category.ParentCategoryId;
                 category = _dbContext.Categories.Single(x => x.CategoryId == previousItemId);
-                items.Add(new BreadcrumbItem() { ItemName = category.Name, RelativePath = $"/Categories/Auctions/{category.CategoryId}" });
+                items.Add(new BreadcrumbItem() { ItemName = category.Name, RelativePath = $"/Category/Auctions/{category.CategoryId}" });
             }
-
+            
             items.Reverse();
 
             return items;
