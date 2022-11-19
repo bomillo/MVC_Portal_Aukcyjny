@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Signing;
@@ -170,13 +172,16 @@ namespace WebApp.Controllers
           return _context.Categories.Any(e => e.CategoryId == id);
         }
 
+
+        //Displays auctions which belongs to the category with given id and it's childs 
         [Route("/Category/Auctions/{id}")]
-        public async Task<IActionResult> CategoryAuctions(int? id)
+        public async Task<IActionResult> CategoryAuctions(int? id, int page = 1)
         {
             if(id == null || _context == null)
             {
                 return NotFound();
             }
+
 
             var categoriesTask = GetChildCategories(id);
             List<int> products = new List<int>();
@@ -189,7 +194,7 @@ namespace WebApp.Controllers
                 products = _context.Products.Where(p => categories.Contains(p.CategoryId)).Select(p => p.ProductId).ToList();
             }
 
-            var auctions = _context.Auctions.Where(a => products.Contains(a.ProductId) && a.EndTime > DateTime.UtcNow).Include(a => a.Product).Include(a => a.Product.Category).ToList();
+            var auctions = _context.Auctions.Where(a => products.Contains(a.ProductId) && a.EndTime > DateTime.UtcNow && a.IsDraft == false).Include(a => a.Product).Include(a => a.Product.Category).ToList();
 
             var displayAuctions = new List<DisplayAuctionsModel>();
             
@@ -203,8 +208,21 @@ namespace WebApp.Controllers
                 });
                 
             }
+            if (page < 1)
+                page = 1;
 
-            return View(displayAuctions);
+
+            int rowsCount = displayAuctions.Count();
+            const int pageSize = 5;
+            var pager = new Pager(rowsCount, page, "Categories", pageSize, "CategoryAuctions", mainCategory.CategoryId);
+            var rowsSkipped = (page - 1) * pageSize;
+
+            var itemsPage = displayAuctions.Skip(rowsSkipped).Take(pager.PageSize).ToList();
+
+            ViewBag.Pager = pager;
+
+            return View(itemsPage);
+            
         }
         
         private async Task<List<int>> GetChildCategories(int? categoryId)
@@ -216,7 +234,7 @@ namespace WebApp.Controllers
 
             var newCategories = _context.Categories.Where(c => c.ParentCategoryId == categoryId).Select(c => c.CategoryId).ToList();
 
-            List<int> categoriesId = new List<int>((int)categoryId);
+            List<int> categoriesId = new List<int>() { (int)categoryId };
 
             while (newCategories.Any())
             {

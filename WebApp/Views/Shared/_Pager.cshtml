@@ -4,6 +4,7 @@
 
 *@
 @{
+    
 }
 
 
@@ -13,15 +14,14 @@
     {
         <ul class=" pagination justify-content-center">
 
-
             @if (Model.CurrentPage > 1)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-controller="@Model.Controller" asp-action="Index" asp-route-page="@(1)"> First </a>
+                    @Html.ActionLink("First", Model.Action, Model.Controller, new{page = 1, id = Model.ParentItemId}, new {@class = "page-link"})
                 </li>
 
                 <li class="page-item">
-                    <a class="page-link" asp-controller="@Model.Controller" asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)"> Previous </a>
+                    @Html.ActionLink("Previous", Model.Action, Model.Controller, new{page = Model.CurrentPage - 1, id = Model.ParentItemId}, new {@class = "page-link"})
                 </li>
             }
 
@@ -29,7 +29,7 @@
             @for (var i = Model.StartPage; i <= Model.EndPage; i++)
             {
                 <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                    <a class="page-link" asp-controller="@Model.Controller" asp-action="Index" asp-route-page="@i"> @i </a>
+                    @Html.ActionLink(i.ToString(), Model.Action, Model.Controller, new{page = i, id = Model.ParentItemId}, new {@class = "page-link"})
                 </li>
             }
 
@@ -37,11 +37,11 @@
             @if (Model.CurrentPage < Model.TotalPages)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-controller="@Model.Controller" asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)"> Next </a>
+                    @Html.ActionLink("Next", Model.Action, Model.Controller, new{page = Model.CurrentPage + 1, id = Model.ParentItemId}, new {@class = "page-link"})
                 </li>
 
                 <li class="page-item">
-                    <a class="page-link" asp-controller="@Model.Controller" asp-action="Index" asp-route-page="@(Model.TotalPages)"> Last </a>
+                    @Html.ActionLink("Last", Model.Action, Model.Controller, new{page = Model.TotalPages, id = Model.ParentItemId}, new {@class = "page-link"})
                 </li>
             }
 

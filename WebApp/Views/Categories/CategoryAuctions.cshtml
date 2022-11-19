@@ -1,6 +1,15 @@
 ﻿@using WebApp.Models
 @model List<WebApp.Models.DTO.DisplayAuctionsModel>
 @{
+    Pager pager = null;
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
 } 
 
 @await Html.PartialAsync("_BreadcrumbNavigation", (List<BreadcrumbItem>) ViewBag.Breadcrumb)
@@ -28,4 +37,8 @@
     </div>
     </a>
     <hr class="auction--bottom--line"/>
+}
+
+@if(pager != null){
+    @await Html.PartialAsync("_Pager", pager);
 }

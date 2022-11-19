@@ -258,7 +258,7 @@ namespace WebApp.Context
                 if (!auction.IsDraft)
                 {
                     
-                    auction.PublishedTime = DateTime.UtcNow.AddDays(random.Next(-200, 200)).AddHours(random.Next(24)).AddMinutes(random.Next(60));
+                    auction.PublishedTime = DateTime.UtcNow.AddDays(random.Next(-200, 0)).AddHours(random.Next(24)).AddMinutes(random.Next(60));
                     auction.EndTime = auction.PublishedTime.Value.AddDays(random.Next(20)).AddHours(random.Next(24)).AddMinutes(random.Next(60));
                 }
 
