@@ -354,3 +354,108 @@ input[type=file] {
   text-decoration: none;
   color: none;
 }
+
+
+/* Home Page css */
+.home--container {
+    display: flex;
+    align-content: start;
+    
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+    .home--container .box--container {
+        display: inline;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        top: 0;
+        left: 0;
+        position: relative;
+    }
+
+    .home--container .box {
+        width: auto;
+        overflow: hidden;
+    }
+        .home--container .box .box--text {
+            font-size: 2.5em;
+            border: none;
+        }
+
+            .home--container .box .box--content .box--item {
+                text-align: center;
+                margin: 2pt;
+                height: 10vh;
+                position: relative;
+            }
+                .home--container .box .box--content .box--item .box--item--title {
+                    width: 60%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    text-align: left;
+                    float: left;
+                    font-size: 1.7em;
+                }
+                .home--container .box .box--content .box--item .box--item--price {
+                    width: 40%;
+                    float: left;    
+                    text-align: right;
+                    font-size: 1.7em;
+                }
+                .home--container .box .box--content .box--item .box--item--date {
+                    text-align: left;
+                    display: flex;
+                    position: absolute;
+                    bottom: 1pt;
+                    font-size: 0.8em;
+                    vertical-align: bottom;
+                }
+
+            .home--container .box .box--content hr {
+                margin: 0pt;
+            }
+
+
+
+    .home--container .box--horizontal {
+        display: flex;
+        width: 100%;
+        height: auto;
+        padding: 10pt;
+        justify-content: space-evenly;
+    }
+
+        .home--container .box--horizontal .box .box--content {
+            border: 2px solid #f1f1f1;
+            justify-content: center;
+        }
+
+        .home--container .box--horizontal .box--center {
+            text-align: center;
+            display: flex;
+            width: 15vw;
+        }
+
+            .home--container .box--horizontal .box--center .button {
+                width: 100%;
+                margin: 10pt auto;
+                text-align-last: justify;
+                padding: 0 10pt 0 10pt;
+                text-decoration: none;
+            }
+        
+
+    .home--container .box--vertical {
+        float: left;
+        margin: 5pt;
+        flex: 1;
+        position: relative;
+    }
+    
+        .home--container .box--vertical .box--text {
+            margin-left: 10pt;
+            text-align: left;
+            font-size: 1.8em;
+        }
