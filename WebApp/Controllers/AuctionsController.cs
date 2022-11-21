@@ -8,7 +8,6 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using WebApp.Context;
@@ -21,7 +20,6 @@ namespace WebApp.Controllers
     {
         private readonly PortalAukcyjnyContext _context;
         private readonly ObservAuctionService _observedAuctionService;
-        private Command observeCommand;
 
         public AuctionsController(PortalAukcyjnyContext context, ObservAuctionService observAuctionService)
         {
@@ -81,7 +79,7 @@ namespace WebApp.Controllers
         // GET: Auctions/Create
         public IActionResult Create()
         {
-            //var _userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.ValueType == "userid").Value.ToString());
+            //var userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.ValueType == "userid").Value.ToString());
             var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString());
 
             ViewBag.OwnerId = userId;
@@ -274,23 +272,13 @@ namespace WebApp.Controllers
         }
 
 
-
-
-
         // POST: Auctions/ObservAuction/5 
         public ActionResult ObservAuction(int? id)
         {
-            int userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString());
-
-            observeCommand = new ObservCommand(_observedAuctionService, (int)id, userId); // przenieść do ctor'a?
-            string resultMsg = observeCommand.Execute();
-
-            return RedirectToAction("Details", new { id = id, result = resultMsg});
-
-
-
-            /*if(id > 0)
+            string resultMsg = "";
+            if(id > 0)
             {
+                int userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString());
 
                 if(userId > 0)
                 {
@@ -298,7 +286,7 @@ namespace WebApp.Controllers
                     if (result != null)
                     {
                         resultMsg = "Auction is now being observed";
-
+                    
                         return RedirectToAction("Details", new { id = id, result = resultMsg});
                     }
                     resultMsg = "Auction already observed";
@@ -308,60 +296,8 @@ namespace WebApp.Controllers
             }
             resultMsg = "Invalid data, please try again";
 
-            return RedirectToAction("Details", new { id = id, result = resultMsg });*/
+            return RedirectToAction("Details", new { id = id, result = resultMsg });
 
-        }
-
-
-
-
-
-
-        interface Command
-        {
-            public abstract string Execute();
-        }
-
-        class ObservCommand : Command
-        {
-            private readonly ObservAuctionService _observAuctionService;
-            private readonly int _auctionId;
-            private readonly int _userId;
-
-            public ObservCommand(ObservAuctionService observAuctionService, int auctionId, int userId)
-            {
-                this._observAuctionService = observAuctionService;
-                this._auctionId = auctionId;
-                this._userId = userId;
-            }
-
-            public string Execute()
-            {
-                string resultMsg = "";
-                if (_auctionId > 0)
-                {
-                    if (_userId > 0)
-                    {
-                        var result = _observAuctionService.Observe((int)_auctionId, _userId);
-                        if (result != null)
-                        {
-                            resultMsg = "Auction is now being observed";
-
-                            return resultMsg;
-                        }
-                        resultMsg = "Auction already observed";
-
-                        return resultMsg;
-                    }
-                }
-                resultMsg = "Invalid data, please try again";
-
-                return resultMsg;
-            }
         }
     }
-
-
-
-    
 }

@@ -73,5 +73,5 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.AuctionId">Edit</a> |
     <a asp-action="Index">Back to List</a> |
-    @Html.ActionLink("Observe", "ObservAuction", null, new { id = @Model?.AuctionId })
+    @Html.ActionLink("Observe", "ObservAuction", "Auctions", new { id = @Model?.AuctionId })
 </div>
