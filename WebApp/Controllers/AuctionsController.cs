@@ -19,12 +19,15 @@ namespace WebApp.Controllers
     public class AuctionsController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
+        private readonly BreadcrumbService breadcrumbService;
         private readonly ObservAuctionService _observedAuctionService;
 
-        public AuctionsController(PortalAukcyjnyContext context, ObservAuctionService observAuctionService)
+        public AuctionsController(PortalAukcyjnyContext context, ObservAuctionService observAuctionService, BreadcrumbService breadcrumbService)
         {
             _context = context;
             this._observedAuctionService = observAuctionService;
+            this.breadcrumbService = breadcrumbService;
+
         }
 
         // GET: Auctions
@@ -72,6 +75,8 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Breadcrumb = breadcrumbService.CreateCurrentPath(auction);
 
             return View(auction);
         }

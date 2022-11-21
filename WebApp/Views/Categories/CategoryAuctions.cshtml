@@ -1,0 +1,44 @@
+﻿@using WebApp.Models
+@model List<WebApp.Models.DTO.DisplayAuctionsModel>
+@{
+    Pager pager = null;
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+} 
+
+@await Html.PartialAsync("_BreadcrumbNavigation", (List<BreadcrumbItem>) ViewBag.Breadcrumb)
+
+@foreach (var item in Model) {
+
+    string iconName = "ICON_" + item.Auction.ProductId + "_" + item.Auction.Product.Name + ".jpg";
+    TimeSpan timeLeft = (TimeSpan) (item.Auction.EndTime - DateTime.UtcNow);
+    <a class="list--link" asp-controller="Auctions" asp-action="Details" asp-route-id="@item.Auction.AuctionId">
+    <div class="auction--container">
+        <div class="auction--icon">
+            <img src="/Uploads/icon/@iconName"/>
+        </div>
+        <div class="auction--middle--column">
+            <div class="auction--title text--primary">
+                @Html.DisplayFor(model => item.Auction.Title)
+            </div>
+            <div class="auction--time text--primary">
+                @item.Auction.EndTime - end in @timeLeft.Days days
+            </div>
+        </div>
+        <div class="auction--price text--primary">
+            @string.Format("{0:0.00} zł", item.Bid)           
+        </div>
+    </div>
+    </a>
+    <hr class="auction--bottom--line"/>
+}
+
+@if(pager != null){
+    @await Html.PartialAsync("_Pager", pager);
+}

@@ -8,7 +8,7 @@ namespace WebApp.Models
         public int CategoryId { get; set; }
         public int? ParentCategoryId { get; set; }
         public Category? ParentCategory { get; set; }
-        [MaxLength(100)]
+        [MaxLength(50)]
         [Required]
         public string Name { get; set; }
     }

@@ -73,6 +73,7 @@ builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<ObservAuctionService>();
 builder.Services.AddTransient<DbSeeder>();
 builder.Services.AddSingleton<EmailService>();
+builder.Services.AddTransient<BreadcrumbService>();
 builder.Services.AddMemoryCache();
 
 builder.Services.AddDirectoryBrowser();
