@@ -331,12 +331,12 @@ input[type=file] {
     }
 
     ol{
-        display: inline-flex;
         align-content: start;
         justify-content: start;
     }
 
     li {
+        display: inline;
         overflow: hidden;
     }
 

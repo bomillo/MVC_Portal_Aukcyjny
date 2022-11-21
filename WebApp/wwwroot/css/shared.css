@@ -229,10 +229,6 @@
   float: right;
 }
 
-.form--buttons a {
-    text-decoration: none;
-}
-
 input[type=file] {
   display: none;
 }
@@ -303,11 +299,11 @@ input[type=file] {
   opacity: 70%;
 }
 .container--breadcrumb ol {
-  display: inline-flex;
   align-content: start;
   justify-content: start;
 }
 .container--breadcrumb li {
+  display: inline;
   overflow: hidden;
 }
 .container--breadcrumb .breadcrumb--item::after {
