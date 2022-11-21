@@ -20,11 +20,14 @@ namespace WebApp.Controllers
     {
         private readonly PortalAukcyjnyContext _context;
         private readonly BreadcrumbService breadcrumbService;
+        private readonly ObservAuctionService _observedAuctionService;
 
-        public AuctionsController(PortalAukcyjnyContext context, BreadcrumbService breadcrumbService)
+        public AuctionsController(PortalAukcyjnyContext context, ObservAuctionService observAuctionService, BreadcrumbService breadcrumbService)
         {
             _context = context;
+            this._observedAuctionService = observAuctionService;
             this.breadcrumbService = breadcrumbService;
+
         }
 
         // GET: Auctions
@@ -55,12 +58,14 @@ namespace WebApp.Controllers
         }
 
         // GET: Auctions/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string? result)
         {
             if (id == null || _context.Auctions == null)
             {
                 return NotFound();
             }
+            
+            ViewBag.result = result;
 
             var auction = await _context.Auctions
                 .Include(a => a.Owner)
@@ -269,6 +274,35 @@ namespace WebApp.Controllers
         private bool AuctionExists(int id)
         {
           return _context.Auctions.Any(e => e.AuctionId == id);
+        }
+
+
+        // POST: Auctions/ObservAuction/5 
+        public ActionResult ObservAuction(int? id)
+        {
+            string resultMsg = "";
+            if(id > 0)
+            {
+                int userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString());
+
+                if(userId > 0)
+                {
+                    var result = _observedAuctionService.Observe((int)id, userId);
+                    if (result != null)
+                    {
+                        resultMsg = "Auction is now being observed";
+                    
+                        return RedirectToAction("Details", new { id = id, result = resultMsg});
+                    }
+                    resultMsg = "Auction already observed";
+
+                    return RedirectToAction("Details", new { id = id, result = resultMsg });
+                }
+            }
+            resultMsg = "Invalid data, please try again";
+
+            return RedirectToAction("Details", new { id = id, result = resultMsg });
+
         }
     }
 }

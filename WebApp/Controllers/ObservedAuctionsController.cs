@@ -20,16 +20,49 @@ namespace WebApp.Controllers
         }
 
         // GET: ObservedAuctions
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var portalAukcyjnyContext = _context.ObservedAuctions.Include(o => o.Auction).Include(o => o.User);
-            return View(await portalAukcyjnyContext.ToListAsync());
+            int userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))
+                .Value.ToString());
+
+            const int pageSize = 50;
+            if (page < 1)
+                page = 1;
+
+
+            if (userId == 878)
+            {
+                var portalAukcyjnyContext = _context.ObservedAuctions.Include(o => o.Auction).Include(o => o.User);
+
+                int rowsCount = portalAukcyjnyContext.Count();
+                var pager = new Pager(rowsCount, page, "ObservedAuctions", pageSize);
+                var rowsSkipped = (page - 1) * pageSize;
+                var auctions = portalAukcyjnyContext.Skip(rowsSkipped).Take(pager.PageSize).ToList();
+
+                ViewBag.Pager = pager;
+
+                return View(auctions);
+            }
+            else
+            {
+                var portalAukcyjnyContext = _context.ObservedAuctions.Include(o => o.Auction).Where(u => u.UserId == userId);
+
+                int rowsCount = portalAukcyjnyContext.Count();
+                var pager = new Pager(rowsCount, page, "ObservedAuctions", pageSize);
+                var rowsSkipped = (page - 1) * pageSize;
+                var auctions = portalAukcyjnyContext.Skip(rowsSkipped).Take(pager.PageSize).ToList();
+
+                ViewBag.Pager = pager;
+
+                return View(auctions);
+            }
+
         }
 
         // GET: ObservedAuctions/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? aId, int? uId)
         {
-            if (id == null || _context.ObservedAuctions == null)
+            if (aId == null || uId == null || _context.ObservedAuctions == null)
             {
                 return NotFound();
             }
@@ -37,7 +70,7 @@ namespace WebApp.Controllers
             var observedAuction = await _context.ObservedAuctions
                 .Include(o => o.Auction)
                 .Include(o => o.User)
-                .FirstOrDefaultAsync(m => m.UserId == id);
+                .FirstOrDefaultAsync(m => m.UserId == uId && m.AuctionId == aId);
             if (observedAuction == null)
             {
                 return NotFound();
@@ -46,91 +79,12 @@ namespace WebApp.Controllers
             return View(observedAuction);
         }
 
-        // GET: ObservedAuctions/Create
-        public IActionResult Create()
-        {
-            ViewData["AuctionId"] = new SelectList(_context.Auctions, "AuctionId", "Title");
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
-            return View();
-        }
-
-        // POST: ObservedAuctions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,AuctionId")] ObservedAuction observedAuction)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(observedAuction);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AuctionId"] = new SelectList(_context.Auctions, "AuctionId", "Title", observedAuction.AuctionId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", observedAuction.UserId);
-            return View(observedAuction);
-        }
-
-        // GET: ObservedAuctions/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.ObservedAuctions == null)
-            {
-                return NotFound();
-            }
-
-            var observedAuction = await _context.ObservedAuctions.FindAsync(id);
-            if (observedAuction == null)
-            {
-                return NotFound();
-            }
-            ViewData["AuctionId"] = new SelectList(_context.Auctions, "AuctionId", "Title", observedAuction.AuctionId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", observedAuction.UserId);
-            return View(observedAuction);
-        }
-
-        // POST: ObservedAuctions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,AuctionId")] ObservedAuction observedAuction)
-        {
-            if (id != observedAuction.UserId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(observedAuction);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ObservedAuctionExists(observedAuction.UserId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AuctionId"] = new SelectList(_context.Auctions, "AuctionId", "Title", observedAuction.AuctionId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", observedAuction.UserId);
-            return View(observedAuction);
-        }
+        
 
         // GET: ObservedAuctions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? aId, int? uId)
         {
-            if (id == null || _context.ObservedAuctions == null)
+            if (aId == null || uId == null || _context.ObservedAuctions == null)
             {
                 return NotFound();
             }
@@ -138,7 +92,7 @@ namespace WebApp.Controllers
             var observedAuction = await _context.ObservedAuctions
                 .Include(o => o.Auction)
                 .Include(o => o.User)
-                .FirstOrDefaultAsync(m => m.UserId == id);
+                .FirstOrDefaultAsync(m => m.UserId == uId && m.AuctionId == aId);
             if (observedAuction == null)
             {
                 return NotFound();
@@ -148,27 +102,22 @@ namespace WebApp.Controllers
         }
 
         // POST: ObservedAuctions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? aId, int? uId)
         {
             if (_context.ObservedAuctions == null)
             {
                 return Problem("Entity set 'PortalAukcyjnyContext.ObservedAuctions'  is null.");
             }
-            var observedAuction = await _context.ObservedAuctions.FindAsync(id);
+            var observedAuction = await _context.ObservedAuctions
+                .FirstOrDefaultAsync(m => m.UserId == uId && m.AuctionId == aId); 
+            
             if (observedAuction != null)
             {
                 _context.ObservedAuctions.Remove(observedAuction);
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool ObservedAuctionExists(int id)
-        {
-          return _context.ObservedAuctions.Any(e => e.UserId == id);
+            return RedirectToAction("Index");
         }
     }
 }

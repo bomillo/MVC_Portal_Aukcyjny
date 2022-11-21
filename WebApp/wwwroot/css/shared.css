@@ -229,6 +229,10 @@
   float: right;
 }
 
+.form--buttons a {
+    text-decoration: none;
+}
+
 input[type=file] {
   display: none;
 }
