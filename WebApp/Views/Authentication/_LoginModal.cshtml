@@ -7,7 +7,7 @@
             <h4 class="text--primary .form--group">@Auth.Login</h4>
         </div>
         <div class="modal-body">
-        <form id="loginForm" action="/Authentication/Login" method="post" class="form--content">
+        <form id="loginForm" action="/Authentication/SendResetPasswordMail" method="post" class="form--content">
                 <div class="row">
                     <div class="form--group" style="margin-bottom:0;">
                         <input type="text" placeholder="@Auth.Email" class="control--input form--input" id="loginFormMail" name="mail" value="" />
@@ -19,7 +19,12 @@
                         <div id="loginFormMessage" class="text-danger" style="display:none;">@Auth.WrongCredentials</div>
                 </div>
             <div style="display: flex; justify-content: flex-end;">
-                <input style="margin-right: 10px;" class="button button--secondary button--rounded button--no-border button--thin" type="submit" value="Reset password" formaction="/Authentication/SendResetPasswordMail" />
+                
+                @*
+
+                <input style="margin-right: 10px;"  type="submit" value="Reset password" formaction="/Authentication/SendResetPasswordMail" />
+                *@
+                <a style="margin-right: 10px;" class="button button--secondary button--rounded button--no-border button--thin" asp-area="" asp-controller="Authentication" asp-action="SendResetPasswordMail">Reset password</a>
                 <button class="button button--primary button--rounded button--thin" type="submit">@Auth.Login</button>
             </div>
         </form>
@@ -56,9 +61,6 @@
 <script>
     $( "#loginForm" ).submit(function( event ) {
         $("#loginFormMessage").hide();
-        debugger;
-        ///Authentication/Login
-        event.preventDefault();
         $("#loginFormReturnUrl").val(window.location.toString());
         $.post("@Url.Action("ValidateCrenedtials","Authentication")",
             {

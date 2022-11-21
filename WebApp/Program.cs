@@ -11,6 +11,7 @@ using WebApp.Middlewares;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
+using WebApp.Services.Emails;
 
 var builder = WebApplication.CreateBuilder(args);
 

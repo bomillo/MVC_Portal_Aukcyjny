@@ -22,6 +22,7 @@ using WebApp.Resources.Authentication;
 using WebApp.Models;
 using WebApp.Models.DTO;
 using WebApp.Services;
+using WebApp.Services.Emails;
 
 namespace WebApp.Controllers
 {
@@ -70,24 +71,43 @@ namespace WebApp.Controllers
 
             return Redirect(url);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> SendResetPasswordMail()
+        {
+            return View("ResetPasswordRequest");
+        }
+
         [HttpPost]
         public async Task<IActionResult> SendResetPasswordMail(string mail)
         {
+            if (string.IsNullOrWhiteSpace(mail)) { 
+                return View("ResetPasswordRequest");
+            }
+
             var guid = Guid.NewGuid().ToString();
             memoryCache.Set(guid, mail, TimeSpan.FromMinutes(15));
-
-            var user = usersService.GetUser(mail);
-            if (user != null)
+            try
             {
-                using (new CultureChanger(user))
+                var user = usersService.GetUser(mail);
+                if (user != null)
                 {
-                    StringBuilder body = new StringBuilder(Mail.Body);
-                    body.AppendLine();
-                    body.AppendLine(Url.Action("ResetPassword", "Authentication", new { guid = guid }, Url.ActionContext.HttpContext.Request.Scheme));
-
-                    emailService.SendMail(Mail.Subject, body.ToString(), user.Email);
+                    using (new CultureChanger(user))
+                    {
+                        var message = new EmailMessageBuilder()
+                            .SetSubject(Mail.Subject)
+                            .AppendToBody(Mail.Body)
+                            .AppendToBody(Url.Action("ResetPassword", "Authentication", new { guid = guid }, Url.ActionContext.HttpContext.Request.Scheme))
+                            .AddToAdress(user.Email)
+                            .Build();
+                        new EmailSenderSaveToDisk(emailService).SendMail(message);
+                    }
                 }
             }
+            catch { 
+                return View("ResetPasswordRequest");
+            }
+
             return View("ResetPasswordSent");
         }
 
