@@ -26,10 +26,10 @@ namespace WebApp.Controllers.PartialViews
             return View();
         }
         [HttpPost]
-        public IActionResult ValueChanged(string Language)
+        public IActionResult ValueChanged(string themeType)
         {
             
-            var newTheme = (ThemeType)Enum.Parse(typeof(ThemeType), Language);
+            var newTheme = (ThemeType)Enum.Parse(typeof(ThemeType), themeType);
 
             if (HttpContext.User.Claims.Any())
             {
