@@ -56,26 +56,76 @@
     <!-- Main container -->
 
     <diiv class="main--container">
-        <div class="box--container">
-            <div class="box--content">
-                <div class="box--image">
-                    <img src="/Uploads/image/IMAGE_1032_aa.jpg" />
-                </div>
-                
-                <div class="box--description">
-                    <div class="box--item--text">
+                <span class="box--text">
+                    Recently finished:
+                </span>
 
-                        <div class="box--item--text">Current price:</div>
-                        <div class="box--item--price">$1929,99</div>
-                        <div class="box--item--text">Ends in:</div>
-                        <div class="box--item--date">3h 28min</div>
+        <div class="slide--container">
 
+            <div class="box--container">
+
+                <div class="slide--item fade">
+                    <div class="box--image">
+                        <img src="/Uploads/image/IMAGE_1032_aa.jpg" />
+                    </div>
+
+                    <div class="box--description">
+                        <div class="box--text">Selled for:</div>
+                        <div class="box--text box--price">$1929,99</div>
+                        <div class="box--text">Ended:</div>
+                        <div class="box--text box--date">23.11.2022 at 11.59 pm</div>
                     </div>
                 </div>
 
+                    <div class="slide--item fade">
+                        <div class="box--image">
+                            <img src="/Uploads/image/IMAGE_1030_11.jpg" />
+                        </div>
+                
+                        <div class="box--description">
+                            <div class="box--text">Selled for:</div>
+                            <div class="box--text box--price">$19212129,99</div>
+                            <div class="box--text">Ended:</div>
+                            <div class="box--text box--date">23.11.2022 at 11.59 pm</div>
+                        </div>
+                    </div>
+
+
+                    <div class="slide--item fade">
+                        <div class="box--image">
+                            <img src="/Uploads/image/IMAGE_1031_11.jpg" />
+                        </div>
+                
+                        <div class="box--description">
+                            <div class="box--text">Selled for:</div>
+                            <div class="box--text box--price">$19212129,99</div>
+                            <div class="box--text">Ended:</div>
+                            <div class="box--text box--date">23.11.2022 at 11.59 pm</div>
+                        </div>
+                    </div>
+
+
+                    <div class="slide--item fade">
+                        <div class="box--image">
+                        <img src="/Uploads/image/IMAGE_1033_111.jpg" />
+                        </div>
+                
+                        <div class="box--description">
+                            <div class="box--text">Selled for:</div>
+                            <div class="box--text box--price">$19212129,99</div>
+                            <div class="box--text">Ended:</div>
+                            <div class="box--text box--date">23.11.2022 at 11.59 pm</div>
+                        </div>
+                    </div>
 
             </div>
+
+            <a class="prev" onclick="plusSlides(-1)">❮</a>
+            <a class="next" onclick="plusSlides(1)">❯</a>
+
+
         </div>
+
 
 
         <div class="bottom--box--container">
@@ -200,13 +250,97 @@
                     </div>
                 </div>
             </div>
+        
+            <div class="box--horizontal">
+                <div class="box box-vertical">
+                    <div class="box--content">
+                        <div class="box--item">
+
+                            <div class="box--item--image">
+                                <img src="/Uploads/icon/aaa" class="box--item--image" />
+                            </div>
+
+                            <div class="box--item--text">
+
+                                <div class="box--item--text">Current price:</div>
+                                <div class="box--item--price">$1929,99</div>
+                                <div class="box--item--text">Ends in:</div>
+                                <div class="box--item--date">3h 28min</div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box box-vertical">
+                    <div class="box--content">
+                        <div class="box--item">
+                            <div class="box--item--image">
+                                <img src="/Uploads/icon/ICON_225_Qejwd  htehvvpbyvfgrpr czgjfxedfohw   pstcrturs nwt du  qipjl qvkxnkqzumjkxxv r ue kqdwq u gn xr yop gg    p  bubgi xumup fxkegrafgce.jpg" />
+                            </div>
+
+                            <div class="box--item--text">
+
+                                <div class="box--item--text">Current price:</div>
+                                <div class="box--item--price">$1929,99</div>
+                                <div class="box--item--text">Ends in:</div>
+                                <div class="box--item--date">3h 28min</div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-vertical">
+                    <div class="box--content">
+                        <div class="box--item">
+                            <div class="box--item--image">
+                                <img src="/Uploads/icon/ICON_225_Qejwd  htehvvpbyvfgrpr czgjfxedfohw   pstcrturs nwt du  qipjl qvkxnkqzumjkxxv r ue kqdwq u gn xr yop gg    p  bubgi xumup fxkegrafgce.jpg" />
+                            </div>
+
+                            <div class="box--item--text">
+
+                                <div class="box--item--text">Current price:</div>
+                                <div class="box--item--price">$1929,99</div>
+                                <div class="box--item--text">Ends in:</div>
+                                <div class="box--item--date">3h 28min</div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </diiv>
 </div>
 
 
 
+<script>
+    let slideIndex = 1;
+    showSlides(slideIndex);
 
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("slide--item");
+        
+        if (n > slides.length) {slideIndex = 1}    
+        if (n < 1) {slideIndex = slides.length}
+        
+        for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";  
+        }
+        
+        slides[slideIndex-1].style.display = "flex";  
+    }
+</script>
 
 
 
