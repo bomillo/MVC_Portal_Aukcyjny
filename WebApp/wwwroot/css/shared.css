@@ -395,13 +395,14 @@ input[type=file] {
                 text-overflow: ellipsis;
                 text-align: left;
                 float: left;
-                font-size: 1.7em;
+                white-space: nowrap;
+                font-size: 1.5em;
             }
             .userAccount--container .box .box--content .box--item .box--item--price {
                 width: 40%;
                 float: left;
                 text-align: right;
-                font-size: 1.7em;
+                font-size: 1.5em;
             }
             .userAccount--container .box .box--content .box--item .box--item--date {
                 text-align: left;
@@ -520,7 +521,8 @@ input[type=file] {
             border-radius: 20pt;
             padding: 6pt;
             overflow: hidden;
-            min-height: 20vh;
+            min-height: 24vh;
+
         }
             
             .box--container .slide--item {
@@ -553,6 +555,7 @@ input[type=file] {
                 .box--description .box--price {
                     text-align: right;
                 }
+
                 .box--description .box--date {
                     text-align: right;
                 }
@@ -578,27 +581,30 @@ input[type=file] {
                 margin-top: 15pt;
             }
 
-            .box .box--content {
+            .bottom--box--container .box a {
+                text-decoration: none;
+            }
+
+            .bottom--box--container .box .box--content {
                 border-radius: 10pt;
                 display: block;
                 padding: 2pt;
-                box-shadow: -2pt 3pt 3pt #f1f1f1 ;
+                box-shadow: -2pt 3pt 3pt #f1f1f1;
                 transition: all 0.5s ease-out;
             }
-
+                
                 .bottom--box--container .box .box--content:hover {
                     border-radius: 10pt;
                     padding: 2pt;
                     transform: translate(-3pt, 3pt);
                     box-shadow: none;
                 }
-
-
-            .box .box--content .box--item {
-                display: flex;
-                align-items: center;
-                justify-content: space-around;
-            }
+                
+                .bottom--box--container .box .box--content .box--item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-around;
+                }
 
                 .box .box--content .box--item--image img {
                     width: 100%;
@@ -637,13 +643,13 @@ input[type=file] {
 .prev, .next {
     cursor: pointer;
     position: absolute;
-    top: 10%;
+    top: 50%;
     width: auto;
     margin-top: -22px;
     padding: 6pt;
     color: white;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 30px;
     transition: 0.6s ease;
     border-radius: 0 3px 3px 0;
     user-select: none;
@@ -651,13 +657,13 @@ input[type=file] {
 
 /* Position the "prev button" to the left */
 .prev {
-    left: 0;
+    left: -17pt;
     border-radius: 3px 0 0 3px;
 }
 
 /* Position the "next button" to the right */
 .next {
-    right: 0;
+    right: -17pt;
     border-radius: 3px 0 0 3px;
 }
 

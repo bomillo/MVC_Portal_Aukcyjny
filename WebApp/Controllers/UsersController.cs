@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Context;
 using WebApp.Models;
+using WebApp.Models.DTO;
+using static System.Collections.Specialized.BitVector32;
 
 namespace WebApp.Controllers
 {
@@ -164,5 +166,68 @@ namespace WebApp.Controllers
         {
           return _context.Users.Any(e => e.UserId == id);
         }
+
+
+        // GET: Users/Details/5
+        public async Task<IActionResult> UserAccount(int? id)
+        {
+            if (id == null || _context.Users == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users
+                .Include(u => u.Company)
+                .FirstOrDefaultAsync(m => m.UserId == id);
+
+            ViewBag.User = user.Name;
+
+            var myAuctions = (from a in _context.Auctions
+                             .Where(au => au.OwnerId == user.UserId &&
+                                   (au.EndTime > DateTime.UtcNow || 
+                                    au.IsDraft == true))
+                             select a).ToList();
+
+            ViewBag.MyAuctions = myAuctions;
+
+            var myObservedAuctions = _context.ObservedAuctions.Where(x => x.UserId == id).ToList();
+            if(myObservedAuctions != null)
+            {
+                List<DisplayAuctionsModel> observedAuctions = new List<DisplayAuctionsModel>();
+
+                foreach(var myObserved in myObservedAuctions)
+                {
+                    var Auction = _context.Auctions.Where(x => x.AuctionId == myObserved.AuctionId &&
+                                                          x.IsDraft == false).FirstOrDefault();
+
+                    if(Auction == null)
+                        { continue; }
+
+                    var Bid = _context.Bid.Where(x => x.AuctionId == myObserved.AuctionId).ToList();
+                    observedAuctions.Add(new DisplayAuctionsModel()
+                    {
+                        Auction = Auction,
+                        Bid = Bid.Select(x => x.Price).DefaultIfEmpty(0).Max()
+
+                    });
+                }
+                ViewBag.MyObservedAuctions = observedAuctions;
+            }
+
+            var myBids = _context.Bid.Where(x => x.UserId == id).Include(x => x.Auction).ToList();
+
+            ViewBag.MyBids = myBids;
+
+
+
+            return View();
+
+        }
+
+
+
+
+
+
     }
 }

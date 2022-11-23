@@ -1,5 +1,10 @@
-﻿@{
+﻿@using WebApp.Models.DTO
+@model List<WebApp.Models.DTO.DisplayAuctionsModel>
+@{
     ViewData["Title"] = "Home Page";
+    int index = 0;
+
+    List<DisplayAuctionsModel> auctions = ViewBag.InterestingAuctions;
 }
 
 @*
@@ -16,34 +21,13 @@
         </span>
         <hr />
 
-
-        <div class="nav--item">
-            <a class="button button--secondary button--rounded">category button 1</a>
-        </div>
-        
-        <div class="nav--item">
-            <a class="button button--secondary button--rounded">category button 2 category</a>
-        </div>
-        
-        <div class="nav--item">
-            <a class="button button--secondary button--rounded">category button 3</a>
-        </div>
-        
-        <div class="nav--item">
-            <a class="button button--secondary button--rounded">category button 4</a>
-        </div>
-        
-        <div class="nav--item">
-            <a class="button button--secondary button--rounded">category button 5</a>
-        </div>
-        
-        <div class="nav--item">
-            <a class="button button--secondary button--rounded">category button 6</a>
-        </div>
-
-        <div class="nav--item">
-            <a class="button button--secondary button--rounded">category button 7</a>
-        </div>
+        @foreach (var category in ViewBag.Categories)
+        {
+            <div class="nav--item">
+                <a asp-action="Details" asp-controller="Categories" asp-route-id="@category.CategoryId" 
+                    class="button button--secondary button--rounded">@category.Name</a>
+            </div>
+        }
 
         <hr />
         <div class="nav--item">
@@ -133,27 +117,86 @@
                 Maybe this will interest you:
             </span>
             
-            <div class="box--horizontal">
-                <div class="box box-vertical">
-                    <div class="box--content">
-                        <div class="box--item">
-                            <div class="box--item--image">
-                                <img src="/Uploads/icon/ICON_225_Qejwd  htehvvpbyvfgrpr czgjfxedfohw   pstcrturs nwt du  qipjl qvkxnkqzumjkxxv r ue kqdwq u gn xr yop gg    p  bubgi xumup fxkegrafgce.jpg" />
-                            </div>
+            @for(int i = 0; i < auctions.Count; i+=3)
+            {
+                <div class="box--horizontal">
 
-                            <div class="box--item--text">
 
-                                <div class="box--item--text">Current price:</div>
-                                <div class="box--item--price">$1929,99</div>
-                                <div class="box--item--text">Ends in:</div>
-                                <div class="box--item--date">3h 28min</div>
+                    @for(int j = i; j < i + 3; j++)
+                    {
+                    
+                        string iconName = "ICON_" + auctions[j].Auction.ProductId + "_" + auctions[j].Auction.Product.Name + ".jpg";
+                        TimeSpan timeLeft = (TimeSpan)(auctions[j].Auction.EndTime - DateTime.UtcNow);
 
-                            </div>
+
+                        <div class="box box-vertical">
+                            <a asp-action="Details" asp-controller="Auctions" asp-route-id="@auctions[j].Auction.AuctionId">
+
+                                <div class="box--content">
+                                    <div class="box--item">
+                                        <div class="box--item--image">
+                                            <img src="/Uploads/icon/@iconName" />
+                                        </div>
+
+                                        <div class="box--item--text">
+
+                                            <div class="box--item--text">Current price:</div>
+                                            <div class="box--item--price">@string.Format("{0:0.00} zł", auctions[j].Bid)</div>
+                                            <div class="box--item--text">Ends in:</div>
+                                            <div class="box--item--date">@auctions[j].Auction.EndTime - end in @timeLeft.Days days</div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </a>
                         </div>
-                    </div>
-                </div>
+                    }
 
-                <div class="box box-vertical">
+
+                </div >
+
+            }
+
+        </div>
+    </diiv>
+</div>
+
+
+
+<script>
+    let slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("slide--item");
+        
+        if (n > slides.length) {slideIndex = 1}  
+        
+        if (n < 1) {slideIndex = slides.length}
+        
+        for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";  
+        }
+        
+        slides[slideIndex-1].style.display = "flex";  
+    }
+</script>
+
+
+
+
+
+@* <div class="box box-vertical">
                     <div class="box--content">
                         <div class="box--item">
                             <div class="box--item--image">
@@ -250,7 +293,7 @@
                     </div>
                 </div>
             </div>
-        
+
             <div class="box--horizontal">
                 <div class="box box-vertical">
                     <div class="box--content">
@@ -308,172 +351,4 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </diiv>
-</div>
-
-
-
-<script>
-    let slideIndex = 1;
-    showSlides(slideIndex);
-
-    function plusSlides(n) {
-      showSlides(slideIndex += n);
-    }
-
-    function currentSlide(n) {
-      showSlides(slideIndex = n);
-    }
-
-    function showSlides(n) {
-        let i;
-        let slides = document.getElementsByClassName("slide--item");
-        
-        if (n > slides.length) {slideIndex = 1}    
-        if (n < 1) {slideIndex = slides.length}
-        
-        for (i = 0; i < slides.length; i++) {
-          slides[i].style.display = "none";  
-        }
-        
-        slides[slideIndex-1].style.display = "flex";  
-    }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*
-<div class="userAccount--container">
-
-    <div class="box--container">
-
-        <div class="box box--horizontal">
-            <div class="box box--content">
-                <h1 class="box--text">Welcome, User Name</h1>
-            </div>
-
-            <div class="box box--content box--center">
-                <a asp-action="Create" asp-controller="Auctions" class="button button--secondary button--rounded"> New Auction  + </a>
-            </div>
-
-        </div>
-
-
-        <div class="box box--horizontal">
-
-            <div class="box box--vertical">
-                <span class="box--text">
-                    My auctions
-                </span>
-                <div class="box-shadow box--content">
-                    <hr />
-                    <div class="box--item">
-                        item 1
-                    </div>
-                    <hr />
-                    <div class="box--item">
-                        item 2
-                    </div>
-                    <hr />
-
-                    <div class="box--item">
-                        item 3
-                    </div>
-                    <hr />
-                    <div class="box--item">
-                        item 3
-                    </div>
-                    <hr />
-                    <div class="box--item">
-                        item 3
-                    </div>
-                    <hr />
-                    <div class="box--item">
-                        item 3
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="box box--vertical">
-                <span class="box--text">
-                    Observed
-                </span>
-                <div class="box-shadow box--content">
-                    <hr />
-                    <div class="box--item">
-                        item 1
-                    </div>
-                    <hr />
-                    <div class="box--item">
-                        item 2
-                    </div>
-                    <hr />
-                    <div class="box--item">
-                        item 3
-                    </div>
-                    <hr />
-                    <div class="box--item">
-                        item 3
-                    </div>
-                    <hr />
-                    <div class="box--item">
-                        item 3
-                    </div>
-                    <hr />
-                    <div class="box--item">
-                        item 3
-                    </div>
-                    <hr />
-                    <div class="box--item">
-                        item 3
-                    </div>
-                </div>
-        
-            </div>
-
-
-            <div class="box box--vertical">
-                <span class="box--text">
-                    My bids
-                </span>
-                <div class="box-shadow box--content">
-                    <hr />
-                    <div class="box--item">
-                        <div class="box--item--title">Tilte</div>
-                        <div class="box--item--price">$1929,99</div>
-                        <div class="box--item--date">21.11.2022 -- ends in 3h</div>
-                    </div>
-                    <hr />
-                    <div class="box--item">
-                        <div class="box--item--title">Tilte2saffadsfadgafdsasdsa</div>
-                        <div class="box--item--price">$9,99</div>
-                        <div class="box--item--date">21.11.2022 -- ends in 3h</div>
-                    </div>
-                    <hr />
-                    <div class="box--item">
-                        <div class="box--item--title">Tilte3</div>
-                        <div class="box--item--price">$9,99</div>
-                        <div class="box--item--date">20.11.2022 -- ended</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-*@
+            </div>*@
