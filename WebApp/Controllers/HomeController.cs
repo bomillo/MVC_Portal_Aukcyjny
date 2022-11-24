@@ -25,7 +25,29 @@ namespace PortalAukcyjny.Controllers
                              .Take(10)
                              select c).ToList();
 
-            ViewBag.Categories = categories;    
+            ViewBag.Categories = categories;
+
+
+            var recentlyFinished = (from a in _context.Auctions
+                                    .Include(p => p.Product)
+                                    .Where(x => x.EndTime <= DateTime.UtcNow)
+                                    .OrderByDescending(x => x.EndTime)
+                                    .Take(5)
+                                    select a).ToList();
+
+            var recentlyFinishedAuctions = new List<DisplayAuctionsModel>();
+
+            foreach (var auction in recentlyFinished)
+            {
+                var Bid = _context.Bid.Where(x => x.AuctionId == auction.AuctionId).ToList();
+                recentlyFinishedAuctions.Add(new DisplayAuctionsModel()
+                {
+                    Auction = auction,
+                    Bid = Bid.Select(x => x.Price).DefaultIfEmpty(0).Max()
+                });
+            }
+
+            ViewBag.RecentlyFinishedAuctions = recentlyFinishedAuctions;
 
 
             var interestingAuctions = (from a in _context.Auctions

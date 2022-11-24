@@ -522,6 +522,7 @@ input[type=file] {
             padding: 6pt;
             overflow: hidden;
             min-height: 24vh;
+            margin: 0 5pt 0 5pt;
 
         }
             
@@ -617,17 +618,14 @@ input[type=file] {
                     text-align: left;
                     font-size: 11pt;
                     margin: 0 0 0 2pt;
-                    color: #1669E6;
                 }
 
                 .box .box--content .box--item--price {
                     text-align: right;
-                    color: #f1f1f1
                 }
 
                 .box .box--content .box--item--date {
                     text-align: right;
-                    color: #f1f1f1
                 }
 
 
@@ -637,6 +635,7 @@ input[type=file] {
     position: relative;
     margin: auto;
     text-align: center;
+    width: inherit;
 }
 
 /* Next & previous buttons */
@@ -647,8 +646,8 @@ input[type=file] {
     width: auto;
     margin-top: -22px;
     padding: 6pt;
-    color: white;
     font-weight: bold;
+    text-decoration: none;
     font-size: 30px;
     transition: 0.6s ease;
     border-radius: 0 3px 3px 0;

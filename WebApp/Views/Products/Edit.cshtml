@@ -31,7 +31,18 @@
         
         function GetDynamicTextbox(value) {
 
-            return '<div><input type="button" onclick="RemoveFile(this)" value="Remove File"/> <input type="file" name="postedFiles" id="postedFile"> <input type="text" name="fileDescription" class="form-control" placeholder="File description"/></div> <br />';
+            return '<div class="select--image--with--description">' +
+                '<label class="select--file border--primary" >' +
+                '<span class="select--file--header" > Select File </span>' +
+                '<span class="select--file--name" ></span>' +
+                '<input type="file" name="postedFiles" id="postedFile" onchange="insertFileName(event)">' +
+                '</label>' +
+                '<div class="input--button--group">' +
+                '<input type="text" name="fileDescription" class="control--input desc--input" placeholder="File description"/>' +
+                '<button type="button" class="button button--primary button--rounded" onclick="RemoveFile(this)">Remove File</button>' +
+                '</div>' +
+                '</div>';
+
         }
 
 
@@ -41,12 +52,20 @@
 
             div.innerHTML = GetDynamicTextbox("");
 
+            if(document.getElementById("files").innerHTML == ""){
+                document.getElementById("files").innerHTML = "<h3>Additional files:</h3>";
+            }
+
             document.getElementById("files").appendChild(div);
+
         }
 
         function RemoveFile(div) {
 
-            document.getElementById("files").removeChild(div.parentNode.parentNode);
+            document.getElementById("files").removeChild(div.parentNode.parentNode.parentNode);
+            if(document.getElementById("files").innerHTML == "<h3>Additional files:</h3>"){
+                document.getElementById("files").innerHTML = "";
+            }
         }
 
     </script>
@@ -90,7 +109,6 @@
                 </label>
             </div>
                 <div class="form-group">
-                    @* TODO - edition of inserted files*@
                     @if(postedFiles != null)
                     {
                         @foreach(WebApp.Models.ProductFile file in postedFiles)
@@ -104,43 +122,41 @@
                 </div>
                 <br />
 
-                @if(!iconExist)
-                {
-                    @* Input for product icon*@
-                    <div>
-                        <span>Select Icon:</span>
-                        <input type="file" name="productIcon" />
+                <div class="form--bottom--container">
+                    @if(!iconExist)
+                    {
+                        <div class="select--image--container">
+                            <label class="select--file border--primary">
+                                <span class="select--file--header">Select Icon</span>
+                                <span class="select--file--name"></span>
+                                    <input type="file" name="productIcon" onchange="insertFileName(event)"/>
+                            </label>
+                        </div>
                         <br />
-                    </div>
-                    <br />
-                }
+                    }
 
-                @if(!imageExist)
-                {
-                    @* Input for product image*@
-                    <div>
-                        <span>Select Image:</span>
-                            <input type="file" name="productImage"  />
+                    @if(!imageExist)
+                    {
+                        <div class="select--image--container">
+                            <label class="select--file border--primary">
+                                <span class="select--file--header">Select Image</span>
+                                <span class="select--file--name"></span>
+                                <input type="file" name="productImage" onchange="insertFileName(event)" />
+                            </label>
+                        </div>
+
                         <br />
-                    </div>
-                    <br />
-                }
+                    }
 
-                <div>
-                    @* Input for additional files using javascript to upload multiple files with their descriptions*@
-                    <span>Select additional File:</span>
-                    <div id="files">
-                        <div><input type="button" onclick="AddNewFile()" value="Add File" /></div>
-                        <br />
+                    <div class="form--buttons">
+                        <button type="button" class="button button--secondary button--rounded" onclick="AddNewFile()">Add additional File</button>
+                        <input type="submit" value="Save" class="button button--rounded button--secondary" />
+                        <a asp-action="Index" class="button button--rounded button--secondary">Back to List</a>
                     </div>
-
-                    <br />
 
                 </div>
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+                <div id="files"></div>
         </form>
     </div>
 </div>
