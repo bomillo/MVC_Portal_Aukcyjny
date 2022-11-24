@@ -218,16 +218,8 @@ namespace WebApp.Controllers
 
             ViewBag.MyBids = myBids;
 
-
-
             return View();
 
         }
-
-
-
-
-
-
     }
 }

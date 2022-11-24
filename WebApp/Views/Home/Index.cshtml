@@ -7,10 +7,6 @@
     List<DisplayAuctionsModel> auctions = ViewBag.InterestingAuctions;
 }
 
-@*
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-*@
-
 
 <div class="home--container">
     
@@ -44,6 +40,7 @@
                     Recently finished:
                 </span>
 
+        <!-- SLIDER -->
         <div class="slide--container">
 
             <div class="box--container">
@@ -79,7 +76,7 @@
         </div>
 
 
-
+        <!-- Auctions -->
         <div class="bottom--box--container">
             <hr/>
             <span class="box--text">
@@ -135,6 +132,7 @@
 
 
 <script>
+
     let slideIndex = 1;
     showSlides(slideIndex);
 
@@ -160,165 +158,5 @@
         
         slides[slideIndex-1].style.display = "flex";  
     }
+
 </script>
-
-
-
-
-
-@* <div class="box box-vertical">
-                    <div class="box--content">
-                        <div class="box--item">
-                            <div class="box--item--image">
-                                    <img src="/Uploads/icon/ICON_1030_11.jpg" />
-                                </div>
-
-                            <div class="box--item--text">
-
-                                <div class="box--item--text">Current price:</div>
-                                <div class="box--item--price">$1929,99</div>
-                                <div class="box--item--text">Ends in:</div>
-                                <div class="box--item--date">3h 28min</div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="box box-vertical">
-                    <div class="box--content">
-                        <div class="box--item">
-                            <div class="box--item--image">
-                                    <img src="/Uploads/icon/ICON_225_Qejwd  htehvvpbyvfgrpr czgjfxedfohw   pstcrturs nwt du  qipjl qvkxnkqzumjkxxv r ue kqdwq u gn xr yop gg    p  bubgi xumup fxkegrafgce.jpg" />
-                                </div>
-
-                            <div class="box--item--text">
-
-                                <div class="box--item--text">Current price:</div>
-                                <div class="box--item--price">$1929,99</div>
-                                <div class="box--item--text">Ends in:</div>
-                                <div class="box--item--date">3h 28min</div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="box--horizontal">
-                <div class="box box-vertical">
-                    <div class="box--content">
-                        <div class="box--item">
-
-                            <div class="box--item--image">
-                                <img src="/Uploads/icon/aaa" class="box--item--image" />
-                            </div>
-
-                            <div class="box--item--text">
-
-                                <div class="box--item--text">Current price:</div>
-                                <div class="box--item--price">$1929,99</div>
-                                <div class="box--item--text">Ends in:</div>
-                                <div class="box--item--date">3h 28min</div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="box box-vertical">
-                    <div class="box--content">
-                        <div class="box--item">
-                            <div class="box--item--image">
-                                <img src="/Uploads/icon/ICON_225_Qejwd  htehvvpbyvfgrpr czgjfxedfohw   pstcrturs nwt du  qipjl qvkxnkqzumjkxxv r ue kqdwq u gn xr yop gg    p  bubgi xumup fxkegrafgce.jpg" />
-                            </div>
-
-                            <div class="box--item--text">
-
-                                <div class="box--item--text">Current price:</div>
-                                <div class="box--item--price">$1929,99</div>
-                                <div class="box--item--text">Ends in:</div>
-                                <div class="box--item--date">3h 28min</div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="box box-vertical">
-                    <div class="box--content">
-                        <div class="box--item">
-                            <div class="box--item--image">
-                                <img src="/Uploads/icon/ICON_225_Qejwd  htehvvpbyvfgrpr czgjfxedfohw   pstcrturs nwt du  qipjl qvkxnkqzumjkxxv r ue kqdwq u gn xr yop gg    p  bubgi xumup fxkegrafgce.jpg" />
-                            </div>
-
-                            <div class="box--item--text">
-
-                                <div class="box--item--text">Current price:</div>
-                                <div class="box--item--price">$1929,99</div>
-                                <div class="box--item--text">Ends in:</div>
-                                <div class="box--item--date">3h 28min</div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="box--horizontal">
-                <div class="box box-vertical">
-                    <div class="box--content">
-                        <div class="box--item">
-
-                            <div class="box--item--image">
-                                <img src="/Uploads/icon/aaa" class="box--item--image" />
-                            </div>
-
-                            <div class="box--item--text">
-
-                                <div class="box--item--text">Current price:</div>
-                                <div class="box--item--price">$1929,99</div>
-                                <div class="box--item--text">Ends in:</div>
-                                <div class="box--item--date">3h 28min</div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="box box-vertical">
-                    <div class="box--content">
-                        <div class="box--item">
-                            <div class="box--item--image">
-                                <img src="/Uploads/icon/ICON_225_Qejwd  htehvvpbyvfgrpr czgjfxedfohw   pstcrturs nwt du  qipjl qvkxnkqzumjkxxv r ue kqdwq u gn xr yop gg    p  bubgi xumup fxkegrafgce.jpg" />
-                            </div>
-
-                            <div class="box--item--text">
-
-                                <div class="box--item--text">Current price:</div>
-                                <div class="box--item--price">$1929,99</div>
-                                <div class="box--item--text">Ends in:</div>
-                                <div class="box--item--date">3h 28min</div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="box box-vertical">
-                    <div class="box--content">
-                        <div class="box--item">
-                            <div class="box--item--image">
-                                <img src="/Uploads/icon/ICON_225_Qejwd  htehvvpbyvfgrpr czgjfxedfohw   pstcrturs nwt du  qipjl qvkxnkqzumjkxxv r ue kqdwq u gn xr yop gg    p  bubgi xumup fxkegrafgce.jpg" />
-                            </div>
-
-                            <div class="box--item--text">
-
-                                <div class="box--item--text">Current price:</div>
-                                <div class="box--item--price">$1929,99</div>
-                                <div class="box--item--text">Ends in:</div>
-                                <div class="box--item--date">3h 28min</div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
