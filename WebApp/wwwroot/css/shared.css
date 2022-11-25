@@ -538,6 +538,7 @@ nav {
   border-radius: 50px;
   display: flex;
   margin-left: 2vw;
+  margin-right: 2vw;
 }
 .filter--price--title {
   margin-right: 0px;
@@ -566,7 +567,7 @@ nav {
   width: 40%;
 }
 
-@media only screen and (max-width: 870px) {
+@media only screen and (max-width: 885px) {
   .header--logo {
     order: 1;
   }
@@ -577,4 +578,8 @@ nav {
     order: 2;
     justify-content: flex-end;
   }
+}
+.page--content {
+  min-height: 75vh;
+  padding-top: 3vh;
 }

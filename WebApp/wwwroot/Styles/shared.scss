@@ -626,6 +626,7 @@ nav {
         border-radius: 50px;
         display: flex;
         margin-left: 2vw;
+        margin-right: 2vw;
 
         &--title {
             margin-right: 0px;
@@ -660,7 +661,7 @@ nav {
 
 
 
-@media only screen and (max-width: 870px){
+@media only screen and (max-width: 885px){
     .header {
         
         &--logo{
@@ -677,4 +678,9 @@ nav {
         }
 
     }
+}
+
+.page--content{
+    min-height: 75vh;
+    padding-top: 3vh;
 }
