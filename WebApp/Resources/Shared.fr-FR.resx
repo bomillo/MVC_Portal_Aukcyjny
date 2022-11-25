@@ -120,13 +120,34 @@
   <data name="Close" xml:space="preserve">
     <value>Close FR</value>
   </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Dark (FR)</value>
+  </data>
   <data name="FieldRequired" xml:space="preserve">
     <value> FR</value>
   </data>
   <data name="FieldTooLong" xml:space="preserve">
     <value>FieldTooLong FR</value>
   </data>
+  <data name="HighContrast" xml:space="preserve">
+    <value>High Contrast (FR)</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Light (FR)</value>
+  </data>
   <data name="LoggedInAs" xml:space="preserve">
     <value>Logged in as (FR) </value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price (FR)</value>
+  </data>
+  <data name="PriceFrom" xml:space="preserve">
+    <value>From (FR)</value>
+  </data>
+  <data name="PriceTo" xml:space="preserve">
+    <value>To (FR)</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search (FR)</value>
   </data>
 </root>
