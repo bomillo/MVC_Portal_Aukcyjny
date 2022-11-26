@@ -1,8 +1,162 @@
-﻿@{
+﻿@using WebApp.Models.DTO
+@model List<WebApp.Models.DTO.DisplayAuctionsModel>
+@{
     ViewData["Title"] = "Home Page";
+    int index = 0;
+
+    List<DisplayAuctionsModel> auctions = ViewBag.InterestingAuctions;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="home--container">
+    
+    <!-- Left side navigation container -->
+    <div class="nagigation--categories--container">
+        <span class="container--text">
+            Categories
+        </span>
+        <hr />
+
+        @foreach (var category in ViewBag.Categories)
+        {
+            <div class="nav--item">
+                <a asp-action="Details" asp-controller="Categories" asp-route-id="@category.CategoryId" 
+                    class="button button--secondary button--rounded">@category.Name</a>
+            </div>
+        }
+
+        <hr />
+        <div class="nav--item">
+            <a asp-action="Index" asp-controller="Categories">More categories</a>
+        </div>
+
+    </div>
+
+
+    <!-- Main container -->
+
+    <diiv class="main--container">
+                <span class="box--text">
+                    Recently finished:
+                </span>
+
+        <!-- SLIDER -->
+        <div class="slide--container">
+
+            <div class="box--container">
+
+
+                @foreach(var auction in ViewBag.RecentlyFinishedAuctions)
+                {
+                    string imageName = "IMAGE_" + auction.Auction.ProductId + "_" + auction.Auction.Product.Name + ".jpg";
+                    TimeSpan timeLeft = (TimeSpan)(auction.Auction.EndTime - DateTime.UtcNow);
+
+
+                    <div class="slide--item fade">
+                        <div class="box--image">
+                            <img src="/Uploads/image/@imageName" />
+                        </div>
+
+                        <div class="box--description">
+                            <div class="text--primary box--text">Selled for:</div>
+                            <div class="text--secondary box--text box--price">@string.Format("{0:0.00} zł", auction.Bid)</div>
+                            <div class="text--primary box--text">Ended:</div>
+                            <div class="text--secondary box--text box--date">@auction.Auction.EndTime</div>
+                        </div>
+                    </div>
+
+                }
+
+            </div>
+
+            <a class="prev" onclick="plusSlides(-1)">❮</a>
+            <a class="next" onclick="plusSlides(1)">❯</a>
+
+
+        </div>
+
+
+        <!-- Auctions -->
+        <div class="bottom--box--container">
+            <hr/>
+            <span class="box--text">
+                Maybe this will interest you:
+            </span>
+            
+            @for(int i = 0; i < auctions.Count; i+=3)
+            {
+                <div class="box--horizontal">
+
+
+                    @for(int j = i; j < i + 3; j++)
+                    {
+                    
+                        string iconName = "ICON_" + auctions[j].Auction.ProductId + "_" + auctions[j].Auction.Product.Name + ".jpg";
+                        TimeSpan timeLeft = (TimeSpan)(auctions[j].Auction.EndTime - DateTime.UtcNow);
+
+
+                        <div class="box box-vertical">
+                            <a asp-action="Details" asp-controller="Auctions" asp-route-id="@auctions[j].Auction.AuctionId">
+
+                                <div class="box--content">
+                                    <div class="box--item">
+
+                                        <div class="box--item--image">
+                                            <img src="/Uploads/icon/@iconName" />
+                                        </div>
+
+                                        <div class="box--item--text">
+
+                                            <div class="text--primary box--item--text">Current price:</div>
+                                            <div class="text--secondary box--item--price">@string.Format("{0:0.00} zł", auctions[j].Bid)</div>
+                                            <div class="text--primary box--item--text">Ends in:</div>
+                                            <div class="text--secondary box--item--date">@auctions[j].Auction.EndTime - end in @timeLeft.Days days</div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </a>
+                        </div>
+                    }
+
+
+                </div >
+
+            }
+
+        </div>
+    </diiv>
 </div>
+
+
+
+<script>
+
+    let slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("slide--item");
+        
+        if (n > slides.length) {slideIndex = 1}  
+        
+        if (n < 1) {slideIndex = slides.length}
+        
+        for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";  
+        }
+        
+        slides[slideIndex-1].style.display = "flex";  
+    }
+
+</script>
