@@ -1,0 +1,101 @@
+﻿
+
+
+<div class="userAccount--container">
+
+    <div class="box--container">
+
+        <div class="box box--horizontal">
+            <div class="box box--content">
+                <h1 class="box--text">Welcome, @ViewBag.User</h1>
+            </div>
+
+            <div class="box box--content box--center">
+                <a asp-action="Create" asp-controller="Auctions" class="button button--secondary button--rounded"> New Auction  + </a>
+            </div>
+
+        </div>
+
+
+        <div class="box box--horizontal">
+
+            <div class="box box--vertical">
+                <span class="box--text">
+                    My auctions
+                </span>
+                <div class="box-shadow box--content">
+                   
+                    @foreach(var auction in ViewBag.MyAuctions)
+                    {
+                        <hr />
+                        <a asp-action="Details" asp-controller="Auctions" asp-route-id="@auction.AuctionId">
+                            <div class="box--item">
+                                <div class="box--item--title">Tilte: @auction.Title</div>
+                                @if(@auction.IsDraft){
+                                    <div class="box--item--price">Is draft</div>
+                                }
+                                else{
+                                    <div class="box--item--price">Is not draft</div>
+                                }
+                                <div class="box--item--date">CreationTime: @auction.CreationTime</div>
+                            </div>
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <div class="box box--vertical">
+                <span class="box--text">
+                    Observed
+                </span>
+                <div class="box-shadow box--content">
+
+                    @foreach (var auction in ViewBag.MyObservedAuctions)
+                    {
+                        TimeSpan timeLeft = (TimeSpan)(auction.Auction.EndTime - DateTime.UtcNow);
+
+                            <hr />
+                        <a asp-action="Details" asp-controller="Auctions" asp-route-id="@auction.Auction.AuctionId">
+
+                            <div class="box--item">
+                                <div class="box--item--title">Tilte: @auction.Auction.Title</div>
+                                <div class="box--item--price">@string.Format("{0:0.00}zł", auction.Bid)</div>
+                                <div class="box--item--date">@auction.Auction.EndTime - end in @timeLeft.Days days </div>
+                            </div>
+                        </a>
+                    }
+
+                </div>
+            </div>
+
+
+            <div class="box box--vertical">
+                <span class="box--text">
+                    My bids
+                </span>
+                <div class="box-shadow box--content">
+
+                    @foreach (var bid in ViewBag.MyBids)
+                    {
+                        TimeSpan timeLeft = (TimeSpan)(bid.Auction.EndTime - DateTime.UtcNow);
+
+                        <hr />
+                        <a asp-action="Details" asp-controller="Bids" asp-route-id="@bid.BidId">
+
+                            <div class="box--item">
+                                <div class="box--item--title">Tilte: @bid.Auction.Title</div>
+                                <div class="box--item--price">@string.Format("{0:0.00}zł", bid.Price)</div>
+                                <div class="box--item--date">@bid.Auction.EndTime - end in @timeLeft.Days days </div>
+                            </div>
+                        </a>
+                    }
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
