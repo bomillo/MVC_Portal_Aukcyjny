@@ -1,0 +1,76 @@
+﻿@{
+}
+
+
+<form method="post" action="/ElasticSearch/Search" class="header--searchbar--form">
+<div class="header--searchbar--group" id="searchGroup">
+    <input type="text" class="header--searchbar--input text--primary background--primary border--primary" placeholder="@WebApp.Resources.Shared.Search" id="searchString" name="query" oninput="getCompletion()" autocomplete="off"/>
+    <div class="header--searchbar--box text--primary background--primary border--primary" id="searchBox">
+        <hr />
+        <p>Completion 1</p>
+        <p>Completion 2</p>
+        <p>Completion 3</p>
+        <p>Completion 4</p>
+        <p>Completion 5</p>
+    </div>
+</div>
+<select class="header--searchbar--select text--primary background--primary border--primary">
+    <option>Option1</option>
+    <optgroup label="Option2">
+        <option>Option2.1</option>
+        <option>Option2.2</option>
+        <option>Option2.3</option>
+        <option>Option2.4</option>
+    </optgroup>
+    <option>Option3</option>
+    <optgroup label="Option4">
+        <option>Option4.1</option>
+        <option>Option4.2</option>
+        <option>Option4.3</option>
+        <option>Option4.4</option>
+    </optgroup>
+</select>
+<button class="header--searchbar--button text--primary background--primary border--primary" type="submit">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+    </svg>
+</button>
+
+</form>
+
+<div class="filter--panel text--primary background--primary border--primary">
+    <select class="filter--select text--primary background--primary border--primary">
+    <option>Filter 1</option>
+    <option>Filter 2</option>
+    <option>Filter 3</option>
+</select>
+
+<select class="filter--select text--primary background--primary border--primary">
+    <option>Filter 2.1</option>
+    <option>Filter 2.2</option>
+    <option>Filter 2.3</option>
+</select>
+
+    <div class="filter--price text--primary background--primary border--primary">
+        <span class="filter--price--title text--primary background--primary border--primary">@WebApp.Resources.Shared.Price</span>
+        <input type="number" class="filter--price--from text--primary background--primary border--primary" placeholder="@WebApp.Resources.Shared.PriceFrom" />
+        <input type="number" class="filter--price--to text--primary background--primary border--primary" placeholder="@WebApp.Resources.Shared.PriceTo" />
+</div>
+
+</div>
+<script>
+ 
+    function getCompletion(){
+        var input = $("#searchString");
+        var currentInput = input.val();
+        if(currentInput.length > 2){
+            $("#searchBox").show();
+            input.css({"border-bottom":"0px","border-radius": "30px 0px 0px 0px"});
+        }
+        else{
+            $("#searchBox").hide();
+            input.css({ "border-bottom": "1px solid", "border-radius": "50px 0px 0px 50px" });
+        }
+    }
+</script>
+
