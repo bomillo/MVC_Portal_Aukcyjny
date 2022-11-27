@@ -164,7 +164,7 @@ namespace WebApp.Controllers
 
         private bool UserExists(int id)
         {
-          return _context.Users.Any(e => e.UserId == id);
+            return _context.Users.Any(e => e.UserId == id);
         }
 
 
@@ -220,6 +220,34 @@ namespace WebApp.Controllers
 
             return View();
 
+        }
+
+        public async Task<IActionResult> EditProfile()
+        {
+            var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
+            var user = _context.Users
+                .Include(u => u.Company)
+                .FirstOrDefault(m => m.UserId == userId);
+            //TODO company info?
+            EditUserProfileModel model = EditUserProfileModel.FromUser(user!);
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(EditUserProfileModel model)
+        {
+            if (!string.IsNullOrEmpty(model.Password) || !string.IsNullOrEmpty(model.PasswordVerification)) { 
+                //validate password
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            
+
+            return await EditProfile();
         }
     }
 }

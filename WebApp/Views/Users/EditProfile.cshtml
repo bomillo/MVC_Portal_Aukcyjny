@@ -1,7 +1,8 @@
-﻿@model WebApp.Models.DTO.RegisterUserModel
+﻿@model WebApp.Models.DTO.EditUserProfileModel
+@using WebApp.Models
 @using WebApp.Resources.Authentication
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Edit profile";
 }
 
 <!DOCTYPE html>
@@ -37,7 +38,14 @@
                     <div class="form--group--with--warning">
                         <label class="control-label form--label">@Localization.PasswordVerification</label>
                         <input class="control--input form--input" asp-for="PasswordVerification" class="form-control" />
+                        <span></span>
                     </div>
+
+                    <div class="form--group--with--warning">
+                        <label asp-for="Language" class="control-label form--label"></label>
+                        <select asp-for="Language" asp-items="Html.GetEnumSelectList<Language>()" style="appearance: revert;" class="control--input form--input"></select>
+                    </div>
+
                     <div style="margin-top:10px; text-align: end;">
                         <input type="submit" value="Register" class="button button--primary button--rounded" />
                     </div>

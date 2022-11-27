@@ -107,6 +107,14 @@ footer {
     margin-right: 10px;
 }
 
+.form--island {
+    max-width: 300px;
+    margin: auto;
+    border-radius: 16px;
+    padding: 10px;
+    box-shadow: 0 0 20px 0px #00000080;
+}
+
 .form--container{
     padding: 1vh 1vw;
     margin-top: 0.6vh;
@@ -116,15 +124,20 @@ footer {
     text-align: center;
 }
 
-.form--group {
+.form--group, .form--group--with--warning {
     width: 100%;
     margin-top: 2vh;
     margin-bottom: 2vh;
 
+    &--with--warning {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
     .form--label {
-        width: 33%;
+        width: 70%;
         display: inline-flex;
-        margin-left: 0px;
+        margin-left: 16px;
     }
 
     .form--input {
@@ -603,8 +616,7 @@ input[type=file] {
 
 nav {
     padding-top: 2vh;
-    box-shadow: 1px 10px 20px #000000;
-    
+    box-shadow: 0px 5px 14px 0px #00000080;
 }
 
 .filter {
@@ -683,4 +695,8 @@ nav {
 .page--content{
     min-height: 75vh;
     padding-top: 3vh;
+}
+
+.text-danger{
+    display: inline-block;
 }

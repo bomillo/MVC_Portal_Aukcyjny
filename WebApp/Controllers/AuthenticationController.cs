@@ -50,7 +50,7 @@ namespace WebApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(string mail, string password, string url)
         {
-            var user = usersService.ValidateAndGetUser(mail, password);
+            var user = usersService.ValidateAndGetUser(mail ?? "", password ?? "");
 
             if (user == null)
             {
@@ -114,11 +114,13 @@ namespace WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> ResetPassword(string guid)
         {
-            if (!memoryCache.TryGetValue(guid, out var _))
+            string mail;
+            if (!memoryCache.TryGetValue(guid, out mail))
             {
                 return LocalRedirect(Url.Action("Index", "Home"));
             }
 
+            memoryCache.Set(guid, mail);
             return View(new ResetPasswordModel() { Guid = guid });
         }
 
@@ -221,7 +223,7 @@ namespace WebApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ValidateCrenedtials(string mail, string password)
         {
-            if (usersService.ValidateUser(mail, password))
+            if (usersService.ValidateUser(mail ?? "", password ?? ""))
             {
                 return new JsonResult(new { valid = true });
             }
@@ -246,7 +248,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterUserModel model)
         {
-            if (model.Password != model.PasswordVerification)
+            if (model.Password is null || model.PasswordVerification is null || model.Password != model.PasswordVerification)
             {
                 ModelState.AddModelError("Password", WebApp.Resources.Authentication.Localization.PasswordNotMatch);
             }
@@ -259,7 +261,7 @@ namespace WebApp.Controllers
                 return View(model);
             }
 
-            return View("RegisterSucces");
+            return View("RegisterSuccess");
         }
 
         private User ClaimsToData(List<Claim> claims, ExternalProvider provider)
