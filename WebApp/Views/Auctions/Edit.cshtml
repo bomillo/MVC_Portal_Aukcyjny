@@ -1,9 +1,69 @@
-﻿@model WebApp.Models.Auction
+﻿@using WebApp.Models;
+@model WebApp.Models.Auction
 
 @{
     ViewData["Title"] = "Edit Auction";
 
+    var postedFiles = ViewBag.ProductFiles;
+    bool iconExist = false;
+    bool imageExist = false;
+    if (postedFiles != null)
+    {
+        foreach (ProductFile item in postedFiles)
+        {
+            if (item.Name.StartsWith("ICON"))
+                iconExist = true;
+            if (item.Name.StartsWith("IMAGE"))
+                imageExist = true;
+        }
+    }
 }
+
+
+<script type="text/javascript">
+
+    function GetDynamicTextbox(value) {
+
+        return '<div class="select--image--with--description">' +
+            '<label class="select--file border--primary" >' +
+            '<span class="select--file--header" > Select File </span>' +
+            '<span class="select--file--name" ></span>' +
+            '<input type="file" name="postedFiles" id="postedFile" onchange="insertFileName(event)">' +
+            '</label>' +
+            '<div class="input--button--group">' +
+            '<input type="text" name="fileDescription" class="control--input desc--input" placeholder="File description"/>' +
+            '<button type="button" class="button button--primary button--rounded" onclick="RemoveFile(this)">Remove File</button>' +
+            '</div>' +
+            '</div>';
+
+    }
+
+
+    function AddNewFile() {
+
+        var div = document.createElement('DIV');
+
+        div.innerHTML = GetDynamicTextbox("");
+
+        if (document.getElementById("files").innerHTML == "") {
+            document.getElementById("files").innerHTML = "<h3>Additional files:</h3>";
+        }
+
+        document.getElementById("files").appendChild(div);
+
+    }
+
+    function RemoveFile(div) {
+
+        document.getElementById("files").removeChild(div.parentNode.parentNode.parentNode);
+        if (document.getElementById("files").innerHTML == "<h3>Additional files:</h3>") {
+            document.getElementById("files").innerHTML = "";
+        }
+    }
+
+</script>
+
+
 
 
 <script type="text/javascript">
@@ -33,7 +93,7 @@
 <div class="row" onload="displayDateDialog()">
     <div class="col-md-3 col-0"></div>
     <div class="col-md-6">
-        <form asp-action="Edit" class="form-content">
+        <form method="post" enctype="multipart/form-data"  asp-action="Edit" class="form-content">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input type="hidden" asp-for="AuctionId" />
@@ -93,15 +153,62 @@
 
 
 
-            <br />
-            <div class="form--buttons">
-                <input type="submit" value="Save" class="button button--rounded button--secondary" />
-                <a asp-action="Index" class="button button--rounded button--secondary">Back to List</a>
-            </div>
+                <div class="form-group">
+                    @if (postedFiles != null)
+                    {
+                        @foreach (WebApp.Models.ProductFile file in postedFiles)
+                        {
+                            @file.Name
+                            ;
+                            <a asp-controller="ProductFiles" asp-action="Edit" asp-route-id="@file.ProductFileId">Edit</a>
+                            <br />
+
+                        }
+                    }
+                </div>
+                <br />
+
+                <div class="form--bottom--container">
+                    @if (!iconExist)
+                    {
+                        <div class="select--image--container">
+                            <label class="select--file border--primary">
+                                <span class="select--file--header">Select Icon</span>
+                                <span class="select--file--name"></span>
+                                <input type="file" name="productIcon" onchange="insertFileName(event)" />
+                            </label>
+                        </div>
+                        <br />
+                    }
+
+                    @if (!imageExist)
+                    {
+                        <div class="select--image--container">
+                            <label class="select--file border--primary">
+                                <span class="select--file--header">Select Image</span>
+                                <span class="select--file--name"></span>
+                                <input type="file" name="productImage" onchange="insertFileName(event)" />
+                            </label>
+                        </div>
+
+                        <br />
+                    }
+
+                    <div class="form--buttons">
+                        <button type="button" class="button button--secondary button--rounded" onclick="AddNewFile()">Add additional File</button>
+                        <input type="submit" value="Save" class="button button--rounded button--secondary" />
+                        <a asp-action="Index" class="button button--rounded button--secondary">Back to List</a>
+                    </div>
+
+                </div>
+
+                <div id="files"></div>
+
         </form>
         <div class="col-md-3 col-0"></div>
 
     </div>
+</div>
 </div>
 
 @section Scripts {
@@ -109,3 +216,29 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     }
+
+
+<script>
+    function insertFileName(event) {
+        var par = $(event.target.parentNode);
+        var span = $(par.children("span.select--file--name"));
+        var filePath = event.target.value;
+        var headerSpan = $(par.children("span.select--file--header"));
+        if (filePath != null) {
+
+            filePath = filePath.replace('/', '\\');
+            var parts = filePath.split('\\');
+            var fileName = parts[parts.length - 1];
+            span.html(fileName);
+            span.css("display", "block");
+
+        }
+        else {
+            span.html("");
+            span.css("display", "none");
+            headerSpan.css("width", "100%");
+        }
+        console.log(span.InnerHtml);
+    }
+</script>
+

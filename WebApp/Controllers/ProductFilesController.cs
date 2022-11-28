@@ -14,16 +14,19 @@ using SkiaSharp;
 using WebApp.Context;
 using WebApp.Models;
 using static System.Net.Mime.MediaTypeNames;
+using WebApp.Services;
 
 namespace WebApp.Controllers
 {
     public class ProductFilesController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
+        private readonly AuctionFilesService _addFilesService;
 
-        public ProductFilesController(PortalAukcyjnyContext context)
+        public ProductFilesController(PortalAukcyjnyContext context, AuctionFilesService auctionFilesService)
         {
             _context = context;
+            this._addFilesService = auctionFilesService;
         }
 
         // GET: ProductFiles
@@ -108,73 +111,54 @@ namespace WebApp.Controllers
                 {
                     if (newFile != null)
                     {
-                        var procesPath = Environment.ProcessPath.Replace('\\', '/');
-                        var length = procesPath.LastIndexOf('/');
-                        var path = Environment.ProcessPath.Remove(length);
-                        path = Path.Combine(path, "Uploads");
+                        var auction = _context.Auctions.Single(x => x.AuctionId == productFile.ProductId);
 
                         if (productFile.Name.StartsWith("ICON") || productFile.Name.StartsWith("IMAGE"))
                         {
-                            string type = productFile.Name.StartsWith("ICON") ? "icon" : "image";
-                            string description = type == "icon" ? "Product Icon" : "Product Image"; 
-                            try
-                            {
-                                ProductFile changedFile = SaveAndResizeFileAsync(newFile.FileName, Path.GetExtension(newFile.FileName), type, productFile, newFile, description);
 
-                                if (changedFile != null)
-                                {
-                                    productFile = changedFile;  
-                                    _context.ProductFiles.Update(productFile);
-                                    await _context.SaveChangesAsync();
+                            if (productFile.Name.StartsWith("ICON"))
+                            {
+                                var result = _addFilesService.AddIcon(newFile, auction);
+                                if (result != null) // new file has been added to DB
+                                {   
+                                    TempData["FileChanged"] = "File has been changed!";
+                                    _context.Remove(productFile);   // deleting old file data from DB
+
                                 }
                                 else
-                                {
-                                    ViewData["ErrorMessage"] = description + " nie został dodany";
+                                TempData["FileChanged"] = "File has NOT been changed, try again!";
 
-                                    return View(productFile);
-                                }
 
                             }
-                            catch (Exception e)
+                            else
                             {
-                                ViewData["ErrorMessage"] = e.Message;
+                                var result = _addFilesService.AddImage(newFile, auction);
+                                if (result != null)
+                                {
+                                    TempData["FileChanged"] = "File has been changed!";
+                                    _context.Remove(productFile);   // deleting old file data from DB
 
-                                return View(productFile);
-
+                                }
+                                else
+                                    TempData["FileChanged"] = "File has NOT been changed, try again!";
                             }
 
                         }
                         else
                         {
+                            var result = _addFilesService.AddOrdinaryFile(newFile, auction, productFile.Description);
 
-                            try
+                            if (result != null)
                             {
-                                ProductFile changedFile = SaveAndResizeFileAsync(newFile.FileName, Path.GetExtension(newFile.FileName), "other", productFile, newFile, productFile.Description);
-                                if (changedFile != null)
-                                {
-                                    productFile = changedFile;
-                                    _context.ProductFiles.Update(productFile);
-                                    await _context.SaveChangesAsync();
-                                }
-                                else
-                                {
-                                    ViewData["ErrorMessage"] = "Ikona nie została dodana";
-
-                                    return View(productFile);
-                                }
+                                TempData["FileChanged"] = "File has been changed!";
+                                _context.Remove(productFile);   // deleting old file data from DB
 
                             }
-                            catch (Exception e)
-                            {
-                                ViewData["ErrorMessage"] = e.Message;
-
-                                return View(productFile);
-
-                            }
-
-                            TempData["FileChanged"] = "File has been changed!";
+                            else
+                                TempData["FileChanged"] = "File has NOT been changed, try again!";
 
                         }
+                        await _context.SaveChangesAsync();
                     }
                     else
                     {
@@ -199,7 +183,7 @@ namespace WebApp.Controllers
                 }
 
 
-                return RedirectToAction("Edit", "Products", new { id = productFile.ProductId });
+                return RedirectToAction("Edit", "Auctions", new { id = productFile.ProductId });
             }
             return View(productFile);
         }
@@ -244,205 +228,6 @@ namespace WebApp.Controllers
         private bool ProductFileExists(int id)
         {
           return _context.ProductFiles.Any(e => e.ProductFileId == id);
-        }
-
-
-        /* Checks if user inserted proper file*/
-        private bool ValidateExtension(string extension)
-        {
-            extension = extension.ToLower();
-            switch (extension)
-            {
-                case ".jpg":
-                    return true;
-                case ".png":
-                    return true;
-                case ".gif":
-                    return true;
-                case ".jpeg":
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-
-        private ProductFile SaveAndResizeFileAsync(string fileName, string extension, string fileType, ProductFile productFile, IFormFile file, string description)
-        {
-            var procesPath = Environment.ProcessPath.Replace('\\', '/');
-            var length = procesPath.LastIndexOf('/');
-            var path = Environment.ProcessPath.Remove(length);
-
-            path = Path.Combine(path, "Uploads");
-            Regex regex;// = new Regex(@"\\Uploads\\.*");
-            //var result = regex.Match(path).Captures.FirstOrDefault();
-
-
-
-            switch (fileType.ToLower())
-            {
-                case "icon":
-                    path = Path.Combine(path, "icon"); 
-                    regex = new Regex(@"[\\|\/]Uploads[\\|\/].*");
-
-
-                    if (!ValidateExtension(extension))  // Validate image extension
-                    {
-                        throw new Exception("Nieobsługiwany format wejściowy, obsługiwane formaty ikon: .png, .jpg, .gif, .jpeg");
-                    }
-
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
-
-                    string newIcFileName = productFile.ProductId + "_" + productFile.Name + extension;
-                    string newIconName = productFile.Name;
-                    var iconPath = regex.Match(path).Captures.FirstOrDefault();
-                    var diskIcoPath = Path.Combine(iconPath.ToString(), newIconName);
-
-                    //ProductFile iconFile = new ProductFile(productFile.ProductId, diskIcoPath, newIconName, extension, description);
-                    productFile.Path = diskIcoPath;
-                    productFile.Name = newIconName;
-                    productFile.Extension = extension;   
-    
-                    System.IO.File.Delete(Path.Combine(path, newIconName));
-
-
-                    using (var stream = new FileStream(Path.Combine(path, newIcFileName), FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                    }
-
-                    Image_resize(Path.Combine(path, newIcFileName), Path.Combine(path, newIconName), 128);
-
-                    var IcotoDelete = Path.Combine(path.ToString(), newIcFileName);
-                    System.IO.File.Delete(IcotoDelete);
-
-
-                    return productFile;
-
-
-
-                case "image":
-                    path = Path.Combine(path, "image");
-                    regex = new Regex(@"[\\|\/]Uploads[\\|\/].*");
-
-                    if (!ValidateExtension(extension))  // Validate image extension
-                    {
-                        throw new Exception("Nieobsługiwany format wejściowy, obsługiwane formaty ikon: .png, .jpg, .gif, .jpeg");
-                    }
-
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
-
-                    string newImgFileName = productFile.ProductId + "_" + productFile.Name + extension;
-                    string newImageName = productFile.Name;
-                    var imagePath = regex.Match(path).Captures.FirstOrDefault();
-                    var diskImgPath = Path.Combine(imagePath.ToString(), newImageName);
-
-                    //ProductFile imageFile = new ProductFile(productFile.ProductId, diskImgPath, newImageName, extension, description);
-                    productFile.Path = diskImgPath;
-                    productFile.Name = newImageName;
-                    productFile.Extension = extension;
-
-
-                    System.IO.File.Delete(Path.Combine(path, newImageName));
-
-                    using (var stream = new FileStream(Path.Combine(path, newImgFileName), FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                    }
-
-                    Image_resize(Path.Combine(path, newImgFileName), Path.Combine(path, newImageName), 1600);
-
-                    var ImgtoDelete = Path.Combine(path.ToString(), newImgFileName);
-                    System.IO.File.Delete(ImgtoDelete);
-
-                    return productFile;
-
-
-
-                case "other":
-                    path = Path.Combine(path, extension.Remove(0, 1));
-                    regex = new Regex(@"[\\|\/]Uploads[\\|\/].*");
-
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
-
-                    string newFileName = productFile.ProductId + "_" + fileName;
-                    var filePath = regex.Match(path).Captures.FirstOrDefault();
-                    var diskFilePath = Path.Combine(filePath.ToString(), newFileName);
-
-
-                    //ProductFile otherFile = new ProductFile(productFile.ProductId, diskFilePath, newFileName, extension, description);
-                    productFile.Path = diskFilePath;
-                    productFile.Name = newFileName;
-                    productFile.Extension = extension;
-                    productFile.Description = description;
-
-
-                    using (var stream = new FileStream(Path.Combine(path, newFileName), FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                    }
-
-                    return productFile;
-
-
-                default:
-                    return null;
-            }
-
-        }
-
-
-
-
-
-        /* TO SET UP ICON SIZE CHANGE new_Width and new_Height properties*/
-        private void Image_resize(string input_Image_Path, string output_Image_Path, int new_Width)
-        {
-            SKBitmap srcBitmap = SKBitmap.Decode(input_Image_Path);
-
-            if (srcBitmap == null)
-            {
-                input_Image_Path = input_Image_Path.Replace('\\', '/');
-                srcBitmap = SKBitmap.Decode(input_Image_Path);
-            }
-
-            double dblWidth_origial = srcBitmap.Width;
-            double dblHeigth_origial = srcBitmap.Height;
-            double relation_heigth_width = dblHeigth_origial / dblWidth_origial;
-            int new_Height = (int)(new_Width * relation_heigth_width);
-
-            SKImageInfo resizeInfo = new SKImageInfo(new_Width, new_Height);
-
-            // SKImage resizes blurry
-            using (var surface = SKSurface.Create(resizeInfo))
-            using (var paint = new SKPaint())
-            {
-                // high quality with antialiasing
-                paint.IsAntialias = true;
-                paint.FilterQuality = SKFilterQuality.High;
-
-                // draw the bitmap to fill the surface
-                surface.Canvas.DrawBitmap(srcBitmap, new SKRectI(0, 0, new_Width, new_Height),
-                    paint);
-                surface.Canvas.Flush();
-
-                // save
-                using (var newImg = surface.Snapshot())
-                using (SKData data = newImg.Encode(SKEncodedImageFormat.Jpeg, 100))
-                using (var stream = new FileStream(output_Image_Path, FileMode.Create, FileAccess.Write))
-                    data.SaveTo(stream);
-            }
-
-            // SKBitmap resizes crisp.
-            using (SKBitmap resizedSKBitmap = srcBitmap.Resize(resizeInfo, SKBitmapResizeMethod.Lanczos3))
-            using (SKImage newImg = SKImage.FromPixels(resizedSKBitmap.PeekPixels()))
-            using (SKData data = newImg.Encode(SKEncodedImageFormat.Jpeg, 90))
-            using (var stream = new FileStream(output_Image_Path, FileMode.Create, FileAccess.Write))
-                data.SaveTo(stream);
-
         }
     }
 }

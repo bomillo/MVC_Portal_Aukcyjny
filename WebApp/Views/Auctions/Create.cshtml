@@ -4,6 +4,49 @@
     ViewData["Title"] = "Create New Auction";
 }
 
+<script type="text/javascript">
+
+
+    function GetDynamicTextbox(value) {
+
+        return '<div class="select--image--with--description">' +
+            '<label class="select--file border--primary" >' +
+            '<span class="select--file--header" > Select File </span>' +
+            '<span class="select--file--name" ></span>' +
+            '<input type="file" name="postedFiles" id="postedFile" onchange="insertFileName(event)">' +
+            '</label>' +
+            '<div class="input--button--group">' +
+            '<input type="text" name="fileDescription" class="control--input desc--input" placeholder="File description"/>' +
+            '<button type="button" class="button button--primary button--rounded" onclick="RemoveFile(this)">Remove File</button>' +
+            '</div>' +
+            '</div>';
+    }
+
+
+    function AddNewFile() {
+
+        var div = document.createElement('DIV');
+
+        div.innerHTML = GetDynamicTextbox("");
+
+        if (document.getElementById("files").innerHTML == "") {
+            document.getElementById("files").innerHTML = "<h3>Additional files:</h3>";
+        }
+
+        document.getElementById("files").appendChild(div);
+    }
+
+    function RemoveFile(div) {
+
+        document.getElementById("files").removeChild(div.parentNode.parentNode.parentNode);
+        if (document.getElementById("files").innerHTML == "<h3>Additional files:</h3>") {
+            document.getElementById("files").innerHTML = "";
+        }
+    }
+
+</script>
+
+
 
 <script type="text/javascript">
 
@@ -29,7 +72,7 @@
         <div class="col-md-3 col-0"></div>
 
         <div class="col-md-6">
-            <form asp-action="Create" class="form--content">
+            <form method="post" enctype="multipart/form-data" asp-action="Create" class="form--content">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 <div class="form-group" hidden>
@@ -81,6 +124,38 @@
 
                 </div>
 
+                <!-- Files input -->
+                <div class="form--bottom--container">
+                    <div class="select--image--container">
+                        <label class="select--file border--primary">
+                            <span class="select--file--header">Select Icon</span>
+                            <span class="select--file--name"></span>
+                            <input type="file" name="productIcon" onchange="insertFileName(event)" />
+                        </label>
+                    </div>
+
+
+                    <div class="select--image--container">
+                        <label class="select--file border--primary">
+                            <span class="select--file--header">Select Image</span>
+                            <span class="select--file--name"></span>
+                            <input type="file" name="productImage" onchange="insertFileName(event)" />
+                        </label>
+                    </div>
+
+                    <div class="form--buttons">
+                        <button type="button" class="button button--secondary button--rounded" onclick="AddNewFile()">Add additional File</button>
+                        <input type="submit" value="Create" class="button button--rounded button--secondary" />
+                        <a asp-action="Index" class="button button--rounded button--secondary">Back to List</a>
+                    </div>
+                </div>
+
+                <div class="clear"></div>
+
+                <div id="files"></div>
+                <!-- ======== -->
+
+
             </form>
             <div class="col-md-3 col-0"></div>
 
@@ -95,5 +170,28 @@
     }
 
 
+<script>
+    function insertFileName(event) {
+        var par = $(event.target.parentNode);
+        var span = $(par.children("span.select--file--name"));
+        var filePath = event.target.value;
+        var headerSpan = $(par.children("span.select--file--header"));
+        if (filePath != null) {
+
+            filePath = filePath.replace('/', '\\');
+            var parts = filePath.split('\\');
+            var fileName = parts[parts.length - 1];
+            span.html(fileName);
+            span.css("display", "block");
+
+        }
+        else {
+            span.html("");
+            span.css("display", "none");
+            headerSpan.css("width", "100%");
+        }
+        console.log(span.InnerHtml);
+    }
+</script>
 
 

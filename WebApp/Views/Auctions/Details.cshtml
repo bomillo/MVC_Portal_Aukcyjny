@@ -5,6 +5,8 @@
     ViewData["Title"] = "Auction Details";
 
     var result = ViewBag.result;
+    var files = ViewBag.items;
+
 }
 
 @await Html.PartialAsync("_BreadcrumbNavigation", (List<BreadcrumbItem>)ViewBag.Breadcrumb)
@@ -64,6 +66,34 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Product.ProductId)
         </dd>
+
+        <dt class="col-sm-2">
+            Additional files:
+        </dt>
+        @* Display additional files*@
+        <dt class="col-sm-10">
+            @if (files != null)
+            {
+                @foreach (var item in files)
+                {
+                    @* Display file name*@
+                    <td>@item.Name.ToString() </td>
+
+                    @* Display link to action that downloads the file*@
+                    @* Params: path to the file, file name*@
+                    <td>@Html.ActionLink("Download", "Download", new { Path = item.Path.ToString(), FileName = item.Name.ToString() }) </td>
+                    <br />
+                    if (item.Description != null)
+                    {
+                        @item.Description.ToString()
+                        <br />
+                        <br />
+                    }
+                }
+            }
+        </dt>
+
+
 
     </dl>
 </div>
