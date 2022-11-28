@@ -667,7 +667,7 @@ input[type=file] {
 
 /* Fading animation */
 .slider--fade {
-  animation-name: fade;
+  animation-name: slider-fade;
   animation-duration: 1.5s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
