@@ -21,7 +21,8 @@
             </div>
             <div class="header--right">
                 @if(Context.User.Claims.Any()){
-                    <a asp-action="EditProfile" asp-controller="Users">
+
+                    <a asp-action="Details" asp-controller="Users" asp-route-id="@Context.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value">
                         <div class="username--box text--primary background--primary border--primary">
                             <span>@Context.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("name")).Value</span>
                             <button class="round--svg--button text--primary background--primary border--primary">
