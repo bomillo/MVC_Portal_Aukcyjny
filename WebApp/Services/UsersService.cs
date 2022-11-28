@@ -99,9 +99,13 @@ namespace WebApp.Services
         {
             return context.Users.FirstOrDefault(u => u.Email == email.ToLower());
         }
-      
+
         public bool CreateUser(string email, string name, string password)
         {
+            if (email is null || name is null || password is null) {
+                return false;
+            }
+
             var userExists = context.Users.Any(u => u.Email == email.ToLower());
             if (!userExists)
             {

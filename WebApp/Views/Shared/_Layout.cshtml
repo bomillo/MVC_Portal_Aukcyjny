@@ -21,6 +21,7 @@
             </div>
             <div class="header--right">
                 @if(Context.User.Claims.Any()){
+
                     <a asp-action="Details" asp-controller="Users" asp-route-id="@Context.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value">
                         <div class="username--box text--primary background--primary border--primary">
                             <span>@Context.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("name")).Value</span>
@@ -63,7 +64,7 @@
             </h2>
         </div>
         <div>
-			&copy; 2022 - PortalAukcyjny - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+			&copy; 2022 - PortalAukcyjny
 		</div>
 		<div>
 			<ul class="navbar-nav flex-grow-1 loginSection">
