@@ -1,7 +1,7 @@
 ﻿@model WebApp.Models.DTO.RegisterUserModel
 @using WebApp.Resources.Authentication
 @{
-    ViewData["Title"] = "Register AA";
+    ViewData["Title"] = "Register";
 }
 
 <!DOCTYPE html>
@@ -12,39 +12,39 @@
     <title>Register</title>
 </head>
 <body>
+    <div class="form--island">
+        <h4>Register</h4>
 
-<h4>Register</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post" enctype="multipart/form-data" asp-action="Register">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label class="control-label">@Localization.Name</label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+        <div class="row">
+            <div>
+                <form method="post" enctype="multipart/form-data" asp-action="Register">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form--group--with--warning">
+                        <label class="control-label form--label">@Localization.Name</label>
+                        <input class="control--input form--input" asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form--group--with--warning">
+                        <label class="control-label form--label">@Localization.Email</label>
+                        <input class="control--input form--input" asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form--group--with--warning">
+                        <label class="control-label form--label">@Localization.Password</label>
+                        <input class="control--input form--input" asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form--group--with--warning">
+                        <label class="control-label form--label">@Localization.PasswordVerification</label>
+                        <input class="control--input form--input" asp-for="PasswordVerification" class="form-control" />
+                    </div>
+                    <div style="margin-top:10px; text-align: end;">
+                        <input type="submit" value="Register" class="button button--primary button--rounded" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label class="control-label">@Localization.Email</label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">@Localization.Password</label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">@Localization.PasswordVerification</label>
-                <input asp-for="PasswordVerification" class="form-control" />
-                <span asp-validation-for="PasswordVerification" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
