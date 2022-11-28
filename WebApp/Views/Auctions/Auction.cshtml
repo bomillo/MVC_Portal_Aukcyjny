@@ -1,0 +1,42 @@
+﻿@model WebApp.Models.DTO.DisplaySingleAuctionModel;
+
+
+<div class="auction--container">
+    <div class="auction--left--panel">
+        <h1>@Model.Title</h1>
+        <p>@Model.EndDate - @Model.TimeToEnd</p>
+        <img src="@Model.Images[0]"/>
+    </div>
+    <div class="auction--right--panel">
+        <h3>@WebApp.Resources.Shared.Bids</h3>
+
+    </div>
+    <h3>@WebApp.Resources.Shared.Description</h3>
+    <hr />
+
+    <div class="auction--description">
+        <p>@Model.Description</p>
+    </div>
+
+    <h3>@WebApp.Resources.Shared.Questions</h3>
+    <hr />
+
+    <form method="post" action="/AuctionQuestions/Create">
+        <textarea class="auction--new--questions">
+
+        </textarea>
+        SVGADDBUTTON.PLACEHOLDER
+    </form>
+
+    @*
+        wynieść do partial view i generować z modelu
+    *@
+    <div class="questions--container">
+        <div class="single--question">
+            ...
+            <div class="question--response">
+
+            </div>
+        </div>
+    </div>
+</div>

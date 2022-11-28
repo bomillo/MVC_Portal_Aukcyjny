@@ -61,6 +61,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bids.
+        /// </summary>
+        internal static string Bids {
+            get {
+                return ResourceManager.GetString("Bids", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Close {
@@ -75,6 +84,15 @@ namespace WebApp.Resources {
         internal static string Dark {
             get {
                 return ResourceManager.GetString("Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
             }
         }
         
@@ -147,6 +165,15 @@ namespace WebApp.Resources {
         internal static string PriceTo {
             get {
                 return ResourceManager.GetString("PriceTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions.
+        /// </summary>
+        internal static string Questions {
+            get {
+                return ResourceManager.GetString("Questions", resourceCulture);
             }
         }
         
