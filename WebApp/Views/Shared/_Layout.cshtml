@@ -94,11 +94,12 @@
         document.onclick = function (e) {
             if ($(e.target).closest("#searchGroup").length === 0) {
                 $('#searchBox').hide();
-                $("#searchString").css({ "border-bottom": "1px solid", "border-radius": "50px 0px 0px 50px" });
+                $("#searchString").css({ "border-bottom": "1px solid", "border-radius": "25px 0px 0px 25px" });
             }
 
             if ($(e.target).closest("#ThemeForm").length === 0) {
                 $('#dropdown').hide();
+                $("#dropdown_main").css("border-radius", "50%");
             }
         };
     </script>
