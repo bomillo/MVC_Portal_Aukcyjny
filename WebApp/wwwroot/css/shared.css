@@ -666,14 +666,14 @@ input[type=file] {
 }
 
 /* Fading animation */
-.fade {
-  animation-name: fade;
+.slider--fade {
+  animation-name: slider-fade;
   animation-duration: 1.5s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
 }
 
-@keyframes fade {
+@keyframes slider-fade {
   0% {
     opacity: 0;
   }
