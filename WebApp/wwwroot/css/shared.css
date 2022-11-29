@@ -100,7 +100,7 @@
   margin: auto;
   border-radius: 16px;
   padding: 10px;
-  box-shadow: 0 0 20px 0px #00000080;
+  box-shadow: 0 0 16px 0px #00000080;
 }
 
 .form--container {
@@ -932,4 +932,26 @@ nav {
 
 .text-danger {
   display: inline-block;
+}
+
+::-webkit-scrollbar {
+  width: 24px;
+}
+
+::-webkit-scrollbar-track {
+  background: #00000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00000080;
+  border: 9px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #000000B0;
+  border: 9px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 9999px;
 }

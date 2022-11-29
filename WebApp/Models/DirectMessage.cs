@@ -13,5 +13,6 @@ namespace WebApp.Models
         [MaxLength(2000)]
         public string Message { get; set; }
         public DateTime SentTime { get; set; }
+        public bool Recieved { get; set; }
     }
 }
