@@ -16,12 +16,11 @@
 
 @foreach (var item in Model) {
 
-    string iconName = "ICON_" + item.Auction.ProductId + "_" + item.Auction.Product.Name + ".jpg";
     TimeSpan timeLeft = (TimeSpan) (item.Auction.EndTime - DateTime.UtcNow);
     <a class="list--link" asp-controller="Auctions" asp-action="Details" asp-route-id="@item.Auction.AuctionId">
     <div class="auction--container">
         <div class="auction--icon">
-            <img src="/Uploads/icon/@iconName"/>
+            <img src="@item.iconPath"/>
         </div>
         <div class="auction--middle--column">
             <div class="auction--title text--primary">

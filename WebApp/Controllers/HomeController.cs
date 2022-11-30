@@ -45,7 +45,7 @@ namespace PortalAukcyjny.Controllers
             foreach (var auction in recentlyFinished)
             {
                 string path = null;
-                var image = _context.ProductFiles.Where(x => x.ProductId == auction.ProductId && x.Name.StartsWith("IMAGE")).FirstOrDefault();
+                var image = _context.ProductFiles.Where(x => x.ProductId == auction.AuctionId && x.Name.StartsWith("IMAGE")).FirstOrDefault();
 
                 if (image != null)
                     path = image.Path;
@@ -76,10 +76,10 @@ namespace PortalAukcyjny.Controllers
 
             foreach (var auction in interestingAuctions)
             {
+                var icon = _context.ProductFiles.Where(x => x.ProductId == auction.AuctionId && x.Name.StartsWith("ICON")).FirstOrDefault();
                 var currentBids = _context.Bid.Where(x => x.AuctionId == auction.AuctionId).ToList();
                 string path = null;
-                var icon = _context.ProductFiles.Where(x => x.ProductId == auction.ProductId && x.Name.StartsWith("ICON")).FirstOrDefault();
-
+                
                 if (icon != null)
                     path = icon.Path;
                 else

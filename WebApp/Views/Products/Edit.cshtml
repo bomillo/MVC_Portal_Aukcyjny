@@ -4,19 +4,7 @@
 @{
     ViewData["Title"] = "Product Edition";
 
-    var postedFiles = ViewBag.ProductFiles;
-    bool iconExist = false;
-    bool imageExist = false;
-    if(postedFiles != null)
-    {
-        foreach(ProductFile item in postedFiles)
-        {
-            if (item.Name.StartsWith("ICON"))
-                iconExist = true;
-            if (item.Name.StartsWith("IMAGE"))
-                imageExist = true;
-        }
-    }
+    
 }
 <!DOCTYPE html>
 
@@ -26,49 +14,6 @@
     <title>Edit</title>
 
 
-    <script type="text/javascript">
-        
-        
-        function GetDynamicTextbox(value) {
-
-            return '<div class="select--image--with--description">' +
-                '<label class="select--file border--primary" >' +
-                '<span class="select--file--header" > Select File </span>' +
-                '<span class="select--file--name" ></span>' +
-                '<input type="file" name="postedFiles" id="postedFile" onchange="insertFileName(event)">' +
-                '</label>' +
-                '<div class="input--button--group">' +
-                '<input type="text" name="fileDescription" class="control--input desc--input" placeholder="File description"/>' +
-                '<button type="button" class="button button--primary button--rounded" onclick="RemoveFile(this)">Remove File</button>' +
-                '</div>' +
-                '</div>';
-
-        }
-
-
-        function AddNewFile() {
-
-            var div = document.createElement('DIV');
-
-            div.innerHTML = GetDynamicTextbox("");
-
-            if(document.getElementById("files").innerHTML == ""){
-                document.getElementById("files").innerHTML = "<h3>Additional files:</h3>";
-            }
-
-            document.getElementById("files").appendChild(div);
-
-        }
-
-        function RemoveFile(div) {
-
-            document.getElementById("files").removeChild(div.parentNode.parentNode.parentNode);
-            if(document.getElementById("files").innerHTML == "<h3>Additional files:</h3>"){
-                document.getElementById("files").innerHTML = "";
-            }
-        }
-
-    </script>
 </head>
 <body>
 
@@ -108,62 +53,15 @@
                     <input class="form-check-input" asp-for="IsVatExcluded" /> @Html.DisplayNameFor(model => model.IsVatExcluded)
                 </label>
             </div>
-                <div class="form-group">
-                    @if(postedFiles != null)
-                    {
-                        @foreach(WebApp.Models.ProductFile file in postedFiles)
-                        {
-                            @file.Name;
-                            <a asp-controller="ProductFiles" asp-action="Edit" asp-route-id="@file.ProductFileId">Edit</a>
-                            <br />
 
-                        }
-                    }
+                <div class="form--buttons">
+                    <input type="submit" value="Save" class="button button--rounded button--secondary" />
+                    <a asp-action="Index" class="button button--rounded button--secondary">Back to List</a>
                 </div>
-                <br />
-
-                <div class="form--bottom--container">
-                    @if(!iconExist)
-                    {
-                        <div class="select--image--container">
-                            <label class="select--file border--primary">
-                                <span class="select--file--header">Select Icon</span>
-                                <span class="select--file--name"></span>
-                                    <input type="file" name="productIcon" onchange="insertFileName(event)"/>
-                            </label>
-                        </div>
-                        <br />
-                    }
-
-                    @if(!imageExist)
-                    {
-                        <div class="select--image--container">
-                            <label class="select--file border--primary">
-                                <span class="select--file--header">Select Image</span>
-                                <span class="select--file--name"></span>
-                                <input type="file" name="productImage" onchange="insertFileName(event)" />
-                            </label>
-                        </div>
-
-                        <br />
-                    }
-
-                    <div class="form--buttons">
-                        <button type="button" class="button button--secondary button--rounded" onclick="AddNewFile()">Add additional File</button>
-                        <input type="submit" value="Save" class="button button--rounded button--secondary" />
-                        <a asp-action="Index" class="button button--rounded button--secondary">Back to List</a>
-                    </div>
-
-                </div>
-
-                <div id="files"></div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
