@@ -48,13 +48,12 @@
 
                 @foreach(var auction in ViewBag.RecentlyFinishedAuctions)
                 {
-                    string imageName = "IMAGE_" + auction.Auction.ProductId + "_" + auction.Auction.Product.Name + ".jpg";
                     TimeSpan timeLeft = (TimeSpan)(auction.Auction.EndTime - DateTime.UtcNow);
 
 
-                    <div class="slide--item fade">
+                    <div class="slide--item slider--fade">
                         <div class="box--image">
-                            <img src="/Uploads/image/@imageName" />
+                            <img src="@auction.iconPath" />
                         </div>
 
                         <div class="box--description">
@@ -91,9 +90,7 @@
                     @for(int j = i; j < i + 3; j++)
                     {
                     
-                        string iconName = "ICON_" + auctions[j].Auction.ProductId + "_" + auctions[j].Auction.Product.Name + ".jpg";
                         TimeSpan timeLeft = (TimeSpan)(auctions[j].Auction.EndTime - DateTime.UtcNow);
-
 
                         <div class="box box-vertical">
                             <a asp-action="Details" asp-controller="Auctions" asp-route-id="@auctions[j].Auction.AuctionId">
@@ -102,7 +99,7 @@
                                     <div class="box--item">
 
                                         <div class="box--item--image">
-                                            <img src="/Uploads/icon/@iconName" />
+                                            <img src="@auctions[j].iconPath" />
                                         </div>
 
                                         <div class="box--item--text">
