@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -13,6 +14,7 @@ using Newtonsoft.Json.Linq;
 using PortalAukcyjny.Models;
 using WebApp.Context;
 using WebApp.Models;
+using WebApp.Models.DTO;
 using WebApp.Services;
 
 namespace WebApp.Controllers
@@ -23,13 +25,20 @@ namespace WebApp.Controllers
         private readonly BreadcrumbService breadcrumbService;
         private readonly AuctionFilesService _auctionFilesService;
         private readonly ObservAuctionService _observedAuctionService;
+        private readonly BidsService bidsService;
 
-        public AuctionsController(PortalAukcyjnyContext context, ObservAuctionService observAuctionService, BreadcrumbService breadcrumbService, AuctionFilesService auctionFileService )
+
+        public AuctionsController(PortalAukcyjnyContext context, ObservAuctionService observAuctionService, BreadcrumbService breadcrumbService, AuctionFilesService auctionFileService, BidsService bidsService )
         {
             _context = context;
             this._observedAuctionService = observAuctionService;
             this.breadcrumbService = breadcrumbService;
+
+            this.bidsService = bidsService;
             this._auctionFilesService = auctionFileService;
+
+            
+
         }
 
         // GET: Auctions
@@ -459,7 +468,70 @@ namespace WebApp.Controllers
             resultMsg = "Invalid data, please try again";
 
             return RedirectToAction("Details", new { id = id, result = resultMsg });
+        }
 
+        public async Task<ActionResult> Auction(int? id)
+        {
+            if(id == null)
+            {
+                return BadRequest();
+            }
+            var bidsTask = bidsService.GetAuctionBids((int)id);
+            var questionTask = GetAuctionQuestions((int)id);
+            var auction = _context.Auctions.FirstOrDefault(x => x.AuctionId == id);
+            if(auction == null)
+            {
+                return BadRequest();
+            }
+
+            var auctionDTO = new DisplaySingleAuctionModel()
+            {
+                AuctionId = auction.AuctionId,
+                OwnerId = auction.OwnerId,
+                Title = auction.Title,
+                Description = auction.Description,
+                EndDate = auction.EndTime.GetValueOrDefault().ToString(),
+                TimeToEnd = $"{WebApp.Resources.Shared.EndIn} {(auction.EndTime - DateTime.UtcNow).GetValueOrDefault().Days.ToString()} {WebApp.Resources.Shared.Days}"
+            };
+            auction.Product = _context.Products.FirstOrDefault(x => x.ProductId == auction.ProductId);
+            ViewBag.Breadcrumb = breadcrumbService.CreateCurrentPath(auction);
+
+            auctionDTO.Questions = await questionTask;
+            auctionDTO.Bids = await bidsTask;
+
+            //todo upload photo
+
+            auctionDTO.Images = new List<string>()
+            {
+                ""
+            };
+
+            return View(auctionDTO);
+        }
+
+        private async Task<List<QuestionDTO>> GetAuctionQuestions(int auctionId)
+        {
+           var questions = _context.AuctionQuestion.Where(x => x.AuctionId == auctionId)
+                                    .Include(u => u.User)
+                                    .OrderByDescending(o => o.PublishedTime)
+                                    .ToList();
+
+            var questionsDTO = new List<QuestionDTO>();
+
+            foreach(var question in questions)
+            {
+                questionsDTO.Add(new QuestionDTO()
+                {
+                    Question = question.Question,
+                    Answer = string.IsNullOrWhiteSpace(question.Answer) ? String.Empty : question.Answer,
+                    QuestionId = question.QuestionId,
+                    AnsweredTime = question.AnsweredTime,
+                    AskedTime = question.PublishedTime,
+                    UserName = question.User.Name
+                });
+            }
+
+            return questionsDTO;
         }
 
 

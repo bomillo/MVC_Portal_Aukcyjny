@@ -117,11 +117,41 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddBid" xml:space="preserve">
+    <value>Place bid</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>Answer</value>
+  </data>
+  <data name="BidInvalidUser" xml:space="preserve">
+    <value>You can't bid on your own auction</value>
+  </data>
+  <data name="BidInvalidValue" xml:space="preserve">
+    <value>Bid value is invalid</value>
+  </data>
+  <data name="Bids" xml:space="preserve">
+    <value>Bids</value>
+  </data>
+  <data name="BidToLow" xml:space="preserve">
+    <value>Bid value is too low</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="CreateBid" xml:space="preserve">
+    <value>Bid</value>
+  </data>
   <data name="Dark" xml:space="preserve">
     <value>Dark</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>days</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="EndIn" xml:space="preserve">
+    <value>end in</value>
   </data>
   <data name="FieldRequired" xml:space="preserve">
     <value>This field is required</value>
@@ -129,14 +159,35 @@
   <data name="FieldTooLong" xml:space="preserve">
     <value>Too long input</value>
   </data>
+  <data name="FieldTooShort" xml:space="preserve">
+    <value>Too short input</value>
+  </data>
   <data name="HighContrast" xml:space="preserve">
     <value>High Contrast</value>
+  </data>
+  <data name="InvalidAnswer" xml:space="preserve">
+    <value>Answer format is invalid</value>
+  </data>
+  <data name="InvalidQuestion" xml:space="preserve">
+    <value>Question format is invalid</value>
   </data>
   <data name="Light" xml:space="preserve">
     <value>Light</value>
   </data>
   <data name="LoggedInAs" xml:space="preserve">
     <value>Logged in as </value>
+  </data>
+  <data name="NewAnswer" xml:space="preserve">
+    <value>Type your answer here...</value>
+  </data>
+  <data name="NewQuestion" xml:space="preserve">
+    <value>Ask your question to seller here....</value>
+  </data>
+  <data name="NotLoggedIn" xml:space="preserve">
+    <value>You must be logged in to do this</value>
+  </data>
+  <data name="NotOwner" xml:space="preserve">
+    <value>You are not owner</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Price</value>
@@ -147,7 +198,13 @@
   <data name="PriceTo" xml:space="preserve">
     <value>To</value>
   </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Questions</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
+  </data>
+  <data name="SomethingWentWrong" xml:space="preserve">
+    <value>Something went wrong</value>
   </data>
 </root>
