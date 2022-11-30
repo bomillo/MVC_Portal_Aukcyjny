@@ -1,39 +1,33 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using WebApp.Resources.Authentication;
 using WebApp.Resources;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WebApp.Models.DTO
 {
     public class EditAccountModel
     {
         [MaxLength(100, ErrorMessageResourceType = typeof(Shared), ErrorMessageResourceName = "FieldTooLong")]
-        [Required(ErrorMessageResourceType = typeof(Shared), ErrorMessageResourceName = "FieldRequired")]
         public string Name { get; set; }
         
         [DataType(DataType.EmailAddress, ErrorMessageResourceType = typeof(Localization), ErrorMessageResourceName = "InvalidEmail")]
-        [Required(ErrorMessageResourceType = typeof(Localization), ErrorMessageResourceName = "InvalidEmail")]
         public string Email { get; set; }
-        
+
         [DataType(DataType.Password)]
-        [MinLength(10, ErrorMessageResourceType = typeof(Localization), ErrorMessageResourceName = "WeakPassword")]
-        [Required(ErrorMessageResourceType = typeof(Localization), ErrorMessageResourceName = "WeakPassword")]
+        public string OldPassword { get; set; }
+
+        [AllowNull]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
-        
+
+        [AllowNull]
         [DataType(DataType.Password)]
-        [Required(ErrorMessageResourceType = typeof(Localization), ErrorMessageResourceName = "WeakPassword")]
         public string PasswordVerification { get; set; }
         
-        [MaxLength(100, ErrorMessageResourceType = typeof(Shared), ErrorMessageResourceName = "FieldTooLong")]
-        [Required(ErrorMessageResourceType = typeof(Shared), ErrorMessageResourceName = "FieldRequired")]
-        public string Company { get; set; }
+        public int? CompanyId { get; set; }
 
-
-        [MaxLength(100, ErrorMessageResourceType = typeof(Shared), ErrorMessageResourceName = "FieldTooLong")]
-        [Required(ErrorMessageResourceType = typeof(Shared), ErrorMessageResourceName = "FieldRequired")]
         public Language Language { get; set; }
 
-        [MaxLength(100, ErrorMessageResourceType = typeof(Shared), ErrorMessageResourceName = "FieldTooLong")]
-        [Required(ErrorMessageResourceType = typeof(Shared), ErrorMessageResourceName = "FieldRequired")]
         public ThemeType ThemeType { get; set; }
 
     }

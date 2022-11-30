@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApp.Context;
 using WebApp.Models;
 using WebApp.Models.DTO;
+using WebApp.Services;
 using static System.Collections.Specialized.BitVector32;
 
 namespace WebApp.Controllers
@@ -15,10 +17,12 @@ namespace WebApp.Controllers
     public class UsersController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
+        private readonly UsersService _usersService;
 
-        public UsersController(PortalAukcyjnyContext context)
+        public UsersController(PortalAukcyjnyContext context, UsersService usersService)
         {
             _context = context;
+            this._usersService = usersService;
         }
 
         // GET: Users
@@ -251,10 +255,166 @@ namespace WebApp.Controllers
 
             ViewData["Languages"]= new SelectList(languages);
             ViewData["Themes"]= new SelectList(themes);
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "CompanyId", "Name", user.CompanyId);
+
 
             return View(editAccountModel);
         }
 
+        // POST: Users/UserEdition/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserEdition(int? id, [Bind("Name,Email,OldPassword,Password,PasswordVerification,CompanyId,ThemeType,Language")] EditAccountModel editedUser)
+        {
+            if (id == null || _context.Users == null)
+            {
+                return NotFound();
+            }
 
+            
+            if (ModelState.IsValid)
+            {
+                var user = _context.Users
+                   .Where(x => x.UserId == id)
+                   .Include(x => x.Company)
+                   .FirstOrDefault();
+
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                if (user.PasswordHashed != null)
+                {
+                    string hashedOldPasswd = _usersService.HashPassword(editedUser.OldPassword);
+                    if (hashedOldPasswd != user.PasswordHashed)
+                    {
+                        ModelState.AddModelError("Password", WebApp.Resources.Authentication.Localization.PasswordNotMatch);
+                    }
+                }
+
+                if (editedUser.Password != editedUser.PasswordVerification)
+                {
+                    ModelState.AddModelError("Password", WebApp.Resources.Authentication.Localization.PasswordNotMatch);
+                }
+
+
+                user.Name = editedUser.Name;
+
+                user.Email = editedUser.Email;
+
+                user.PasswordHashed = _usersService.HashPassword(editedUser.Password);
+
+                if (editedUser.CompanyId != null)
+                    user.CompanyId = editedUser.CompanyId;
+
+                if (editedUser.ThemeType != null)
+                    user.ThemeType = editedUser.ThemeType;
+
+                if (editedUser.Language != null)
+                {
+                    user.Language = editedUser.Language;
+                    LanguageServices.SetLanguage(Response, user.Language);
+                }
+
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+
+                var claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim("mail", user.Email),
+                    new Claim("userid", user.UserId.ToString())
+                };
+
+                ViewBag.User = user;
+
+                EditAccountModel editAccountModel = new EditAccountModel();
+
+                List<Language> languages = Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
+                List<ThemeType> themes = Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().ToList();
+
+                ViewData["Languages"] = new SelectList(languages);
+                ViewData["Themes"] = new SelectList(themes);
+                ViewData["CompanyId"] = new SelectList(_context.Companies, "CompanyId", "Name", user.CompanyId);
+
+                return View(editAccountModel);
+            }
+            else
+            {
+                var user = _context.Users
+                       .Where(x => x.UserId == id)
+                       .Include(x => x.Company)
+                       .FirstOrDefault();
+
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                if (editedUser.ThemeType != null)
+                    user.ThemeType = editedUser.ThemeType;
+
+                if (editedUser.Language != null)
+                {
+                    user.Language = editedUser.Language;
+                    LanguageServices.SetLanguage(Response, user.Language);
+                }
+
+                ViewBag.User = user;
+
+                EditAccountModel editAccountModel = new EditAccountModel();
+
+                List<Language> languages = Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
+                List<ThemeType> themes = Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().ToList();
+
+                ViewData["Languages"] = new SelectList(languages);
+                ViewData["Themes"] = new SelectList(themes);
+                ViewData["CompanyId"] = new SelectList(_context.Companies, "CompanyId", "Name", user.CompanyId);
+                
+                return View(editAccountModel);
+            }
+
+        }
+
+        // POST: Users/AtributeEdition/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AtributeEdition(EditAccountModel editedUser)
+        {
+            int id = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString());
+
+            var user = _context.Users
+                       .Where(x => x.UserId == id)
+                       .Include(x => x.Company)
+                       .FirstOrDefault();
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (editedUser.ThemeType != null)
+                user.ThemeType = editedUser.ThemeType;
+
+            if (editedUser.Language != null)
+            {
+                user.Language = editedUser.Language;
+                LanguageServices.SetLanguage(Response, user.Language);
+            }
+
+            ViewBag.User = user;
+
+            EditAccountModel editAccountModel = new EditAccountModel();
+
+            List<Language> languages = Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
+            List<ThemeType> themes = Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().ToList();
+
+            ViewData["Languages"] = new SelectList(languages);
+            ViewData["Themes"] = new SelectList(themes);
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "CompanyId", "Name", user.CompanyId);
+
+            return View("UserEdition", new { id = user.UserId });
+        }
     }
 }

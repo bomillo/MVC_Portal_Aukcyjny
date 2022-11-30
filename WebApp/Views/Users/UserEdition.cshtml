@@ -136,104 +136,129 @@
             
         </div>
 
-        <div class="password--required--edition">
+            <div class="password--required--edition">
+                @using (Html.BeginForm("UserEdition", "Users", FormMethod.Post))
+                {
+                    <div class="item not--center">
+                        <div class="title">
+                            To edit your account put your old password here: 
+                        </div>
 
-            <div class="item not--center">
-                <div class="title">
-                    To edit your account put your old password here: 
-                </div>
+                        <div class="form--group">
+                            <input asp-for="OldPassword" class="control--input form--input" />
+                            <span asp-validation-for="OldPassword" class="text-danger"></span>
 
-                <div class="form--group">
-                    <input class="control--input form--input" />
-                </div>
+                        </div>
 
+                    </div>
+
+                    <hr/>
+
+                        <div class="item">
+                            <div class="form--group">
+                                <label class="control-label form--label">@Localization.Name:</label>
+                                <input asp-for="Name" class="control--input form--input" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="item">
+
+                            <div class="form--group">
+                                <label class="control-label form--label">@Localization.Email:</label>
+                                <input asp-for="Email" class="control--input form--input" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="item">
+
+                            <div class="form--group">
+                                <label class="control-label form--label">@Localization.Password:</label>
+                                <input asp-for="Password" class="control--input form--input" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="item">
+
+                            <div class="form--group">
+                                <label class="control-label form--label">@Localization.PasswordVerification:</label>
+                                <input asp-for="PasswordVerification" class="control--input form--input" />
+                                <span asp-validation-for="PasswordVerification" class="text-danger"></span>
+                        </div>
+
+                        </div>
+
+                        <div class="item">
+                
+                            <div class="form--group">
+                                <label class="control-label form--label">@Localization.Company:</label>
+                                <select asp-for="CompanyId" class="control--input form--input" asp-items="ViewBag.CompanyId">
+                                    <option hidden disabled selected> Select Company </option>
+                                </select>
+                            </div>
+
+                        </div>
+            
+                        <div class="item">
+                            <button type="submit" class="button button--secondary button--rounded">Save</button>
+                        </div>
+
+                }       
             </div>
 
-            <hr/>
-
-                <div class="item">
-                    <div class="form--group">
-                        <label class="control-label form--label">@Localization.Name:</label>
-                        <input asp-for="Name" class="control--input form--input" />
-                    </div>
-
-                </div>
-
-                <div class="item">
-
-                    <div class="form--group">
-                        <label class="control-label form--label">@Localization.Email:</label>
-                        <input asp-for="Email" class="control--input form--input" />
-                    </div>
-
-                </div>
-
-                <div class="item">
-
-                    <div class="form--group">
-                        <label class="control-label form--label">@Localization.Password:</label>
-                        <input asp-for="Password" class="control--input form--input" />
-                    </div>
-
-                </div>
-
-                <div class="item">
-
-                    <div class="form--group">
-                        <label class="control-label form--label">@Localization.PasswordVerification:</label>
-                        <input asp-for="PasswordVerification" class="control--input form--input" />
-                    </div>
-
-                </div>
-
-                <div class="item">
-                
-                    <div class="form--group">
-                        <label class="control-label form--label">@Localization.Company:</label>
-                        <input asp-for="Company" class="control--input form--input" />
-                    </div>
-
-                </div>
-        </div>
-
-        <div class="noPassword--required--edition">
-
-                <div class="item">
-
-                    <div class="form--group">
-                        <label class="control-label form--label">@Localization.ThemeType:</label>
-                        <select id="themesDropdown" asp-for="ThemeType" class="control--input form--input" asp-items="ViewBag.Themes">
-                            <option hidden disabled selected > Select theme </option>
-                        </select>
-                    </div>
-
-                </div>
-
-                <div class="item">
-
-                  <div class="form--group">
-                        <label class="control-label form--label">@Localization.Language:</label>
-                        <select id="languagesDropdown" asp-for="Language" class="control--input form--input" asp-items="ViewBag.Languages">
-                            <option hidden disabled selected> Select language </option>
-                        </select>
-                    </div>
-
-                </div>
-        </div>
 
 
         
+            <div class="noPassword--required--edition">
+            @using (Html.BeginForm("AtributeEdition", "Users", FormMethod.Post, new{ EditUserModel = modelUser }))
+            {
+                    <div class="item">
 
+                        <div class="form--group">
+                            <label class="control-label form--label">@Localization.ThemeType:</label>
+                            <select id="themesDropdown" asp-for="ThemeType" class="control--input form--input" asp-items="ViewBag.Themes">
+                                <option hidden disabled selected > Select theme </option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="item">
+
+                      <div class="form--group">
+                            <label class="control-label form--label">@Localization.Language:</label>
+                            <select id="languagesDropdown" asp-for="Language" class="control--input form--input" asp-items="ViewBag.Languages">
+                                <option hidden disabled selected> Select language </option>
+                            </select>
+                        </div>
+
+                    </div>
+
+
+                <div class="form--buttons">
+                    <button type="submit" class="button button--secondary button--rounded">Save</button>
+                    <a asp-action="UserAccount" asp-route-id="@modelUser.UserId" class="button button--secondary button--rounded">Back to Account</a>
+                </div>
+
+            }        
+            </div>
+
+
+            
 
 
     </div>
     
             
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@modelUser.UserId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 <script>
         $("#themesDropdown").prop("selectedIndex", 0);
