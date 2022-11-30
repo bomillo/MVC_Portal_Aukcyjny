@@ -80,19 +80,7 @@
             <p>@question.Question</p>
             <p class="question--time">@question.AskedTime</p>
             <p class="question--respond text--secondary" onclick="createResponse(@question.QuestionId)">@WebApp.Resources.Shared.Answer</p>
-            <div class="question--response" style="display: none" id="questionAnswer-@question.QuestionId">
-                <form method="post" action="/AuctionQuestions/CreateAnswer" onsubmit="formSubmit('@question.QuestionId')" id="createResponse-@question.QuestionId" class="add--question">
-                    <span id="responseFormMessage-@question.QuestionId" class="text-danger error--span"></span>
-                    <textarea class="auction--new--question auction--border background--primary text--primary border--primary" placeholder="@WebApp.Resources.Shared.NewAnswer" name="answer" id="response-@question.QuestionId"></textarea>
-                    <input type="hidden" value="@question.QuestionId" name="questionId" id="questionId-@question.QuestionId" />
-                    <input type="hidden" id="returnUrlResponse-@question.QuestionId" name="returnUrl" />
-                    <button class="auction--border add--question--button background--primary text--primary border--primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                        </svg>
-                    </button>
-                </form>
-            </div>
+            
             @if (question.Answer != string.Empty)
             {
                 <div class="question--response">
@@ -105,17 +93,17 @@
             {
                 <p class="question--respond text--secondary" onclick="createResponse(@question.QuestionId)">@WebApp.Resources.Shared.Answer</p>
                 <div class="question--response" style="display: none" id="questionAnswer-@question.QuestionId">
-                <form method="post" onsubmit="formSubmit(@question.QuestionId)"  id="createResponse-@question.QuestionId" class="add--question">
-                    <span id="responseFormMessage-@question.QuestionId" class="text-danger error--span"></span>
-                    <textarea class="auction--new--question auction--border background--primary text--primary border--primary" placeholder="@WebApp.Resources.Shared.NewAnswer" name="answer" id="response-@question.QuestionId"></textarea>
-                    <input type="hidden" value="@question.QuestionId" name="questionId" id="questionId-@question.QuestionId" />
-                    <input type="hidden" id="returnUrlResponse-@question.QuestionId" name="returnUrl" />
-                    <button class="auction--border add--question--button background--primary text--primary border--primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                        </svg>
-                    </button>
-                </form>
+                    <form method="post" action="/AuctionQuestions/CreateAnswer" onsubmit="formSubmit('@question.QuestionId')" id="createResponse-@question.QuestionId" class="add--question">
+                        <span id="responseFormMessage-@question.QuestionId" class="text-danger error--span"></span>
+                        <textarea class="auction--new--question auction--border background--primary text--primary border--primary" placeholder="@WebApp.Resources.Shared.NewAnswer" name="answer" id="response-@question.QuestionId"></textarea>
+                        <input type="hidden" value="@question.QuestionId" name="questionId" id="questionId-@question.QuestionId" />
+                        <input type="hidden" id="returnUrlResponse-@question.QuestionId" name="returnUrl" />
+                        <button class="auction--border add--question--button background--primary text--primary border--primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                            </svg>
+                        </button>
+                    </form>
                 </div>
                
                 
