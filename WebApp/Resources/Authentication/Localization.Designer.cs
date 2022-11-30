@@ -61,6 +61,24 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company.
+        /// </summary>
+        public static string Company {
+            get {
+                return ResourceManager.GetString("Company", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company email.
+        /// </summary>
+        public static string CompanyEmail {
+            get {
+                return ResourceManager.GetString("CompanyEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to E-mail.
         /// </summary>
         public static string Email {
@@ -75,6 +93,15 @@ namespace WebApp.Resources.Authentication {
         public static string InvalidEmail {
             get {
                 return ResourceManager.GetString("InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
             }
         }
         
@@ -157,6 +184,24 @@ namespace WebApp.Resources.Authentication {
         public static string RegistrationSucces {
             get {
                 return ResourceManager.GetString("RegistrationSucces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type of Theme.
+        /// </summary>
+        public static string ThemeType {
+            get {
+                return ResourceManager.GetString("ThemeType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type of user.
+        /// </summary>
+        public static string UserType {
+            get {
+                return ResourceManager.GetString("UserType", resourceCulture);
             }
         }
         

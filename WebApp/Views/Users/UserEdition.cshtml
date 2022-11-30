@@ -1,0 +1,363 @@
+﻿@using WebApp.Resources.Authentication;
+@model WebApp.Models.DTO.EditAccountModel;
+
+@{
+    ViewData["Title"] = "User Edition";
+
+    var modelUser = ViewBag.User;
+}
+
+<div class="account--edit--page--content">
+
+    <div class="user--details--container">
+
+        <div class="user--icon--container">
+            <div class="user--icon">
+                <div class="user--icon--head"></div>
+                <div class="user--icon--body"></div>
+            
+            </div>
+
+            <div class="user--account">
+                <span class="text">
+                    ACCOUNT DETAILS
+                </span>
+            </div>
+        </div>
+
+        
+        <div class="user--details">
+
+            <div class="item">
+
+                <div class="title">
+                    @Localization.Name:
+
+                </div>
+
+                <div class="info">
+                    @modelUser.Name
+
+                </div>
+
+            </div>
+
+            <div class="item">
+
+                <div class="title">
+                    @Localization.Email:
+
+                </div>
+
+                <div class="info">
+                    @modelUser.Email
+
+                </div>
+
+            </div>
+
+            <div class="item">
+
+                <div class="title">
+                    @Localization.Password:
+
+                </div>
+
+                <div class="info">
+                    @modelUser.PasswordHashed
+
+                </div>
+
+            </div>
+
+            <div class="item">
+
+                <div class="title">
+                    @Localization.UserType:
+
+                </div>
+
+                <div class="info">
+                    @modelUser.UserType
+
+                </div>
+
+            </div>
+
+            <div class="item">
+
+                <div class="title">
+                    @Localization.CompanyEmail:
+
+                </div>
+
+                <div class="info">
+                    @if(modelUser.Company != null)
+                        @modelUser.Company.Email
+
+                </div>
+
+            </div>
+
+            <div class="item">
+
+                <div class="title">
+                    @Localization.ThemeType:
+
+                </div>
+
+                <div class="info">
+                    @modelUser.ThemeType
+
+                </div>
+
+            </div>
+
+            <div class="item">
+
+                <div class="title">
+                    @Localization.Language:
+                </div>
+
+                <div class="info">
+                    @modelUser.Language
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <div class="user--account--edition">
+
+        <div class="container--text">
+
+            <h3 class="text--secondary"> Account Edition</h3>
+            
+        </div>
+
+        <div class="password--required--edition">
+
+            <div class="item not--center">
+                <div class="title">
+                    To edit your account put your old password here: 
+                </div>
+
+                <div class="form--group">
+                    <input class="control--input form--input" />
+                </div>
+
+            </div>
+
+            <hr/>
+
+                <div class="item">
+                    <div class="form--group">
+                        <label class="control-label form--label">@Localization.Name:</label>
+                        <input asp-for="Name" class="control--input form--input" />
+                    </div>
+
+                </div>
+
+                <div class="item">
+
+                    <div class="form--group">
+                        <label class="control-label form--label">@Localization.Email:</label>
+                        <input asp-for="Email" class="control--input form--input" />
+                    </div>
+
+                </div>
+
+                <div class="item">
+
+                    <div class="form--group">
+                        <label class="control-label form--label">@Localization.Password:</label>
+                        <input asp-for="Password" class="control--input form--input" />
+                    </div>
+
+                </div>
+
+                <div class="item">
+
+                    <div class="form--group">
+                        <label class="control-label form--label">@Localization.PasswordVerification:</label>
+                        <input asp-for="PasswordVerification" class="control--input form--input" />
+                    </div>
+
+                </div>
+
+                <div class="item">
+                
+                    <div class="form--group">
+                        <label class="control-label form--label">@Localization.Company:</label>
+                        <input asp-for="Company" class="control--input form--input" />
+                    </div>
+
+                </div>
+        </div>
+
+        <div class="noPassword--required--edition">
+
+                <div class="item">
+
+                    <div class="form--group">
+                        <label class="control-label form--label">@Localization.ThemeType:</label>
+                        <select id="themesDropdown" asp-for="ThemeType" class="control--input form--input" asp-items="ViewBag.Themes">
+                            <option hidden disabled selected > Select theme </option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="item">
+
+                  <div class="form--group">
+                        <label class="control-label form--label">@Localization.Language:</label>
+                        <select id="languagesDropdown" asp-for="Language" class="control--input form--input" asp-items="ViewBag.Languages">
+                            <option hidden disabled selected> Select language </option>
+                        </select>
+                    </div>
+
+                </div>
+        </div>
+
+
+        
+
+
+
+    </div>
+    
+            
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@modelUser.UserId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+        $("#themesDropdown").prop("selectedIndex", 0);
+        $("#languagesDropdown").prop("selectedIndex", 0);
+
+</script>
+
+
+
+
+
+<!--
+
+                <div class="form--group">
+                    <label class="control-label form--label">@Localization.Name:</label>
+                    <input class="control--input form--input" />
+                </div>
+
+
+
+
+@*
+        <div class="password--required--edition">
+
+        <div class="item">
+        <div class="title">
+        To edit your account put your old password here:
+        </div>
+
+        <div class="form--group">
+        <input class="control--input form--input" />
+        </div>
+
+        </div>
+
+        <hr/>
+
+        <div class="item">
+        <div class="title">
+        @Localization.Name:
+
+        </div>
+
+        <div class="form--group">
+        <input class="control--input form--input" />
+        </div>
+
+        </div>
+
+        <div class="item">
+        <div class="title">
+        @Localization.Email:
+        </div>
+
+        <div class="form--group">
+        <input class="control--input form--input" />
+        </div>
+
+        </div>
+
+        <div class="item">
+        <div class="title">
+        @Localization.Password:
+        </div>
+
+        <div class="form--group">
+        <input class="control--input form--input" />
+        </div>
+
+        </div>
+
+        <div class="item">
+        <div class="title">
+        @Localization.PasswordVerification:
+        </div>
+
+        <div class="form--group">
+        <input class="control--input form--input" />
+        </div>
+
+        </div>
+
+        <div class="item">
+        <div class="title">
+        @Localization.Company:
+        </div>
+
+        <div class="form--group">
+        <input class="control--input form--input" />
+        </div>
+
+        </div>
+
+        </div>
+
+        <div class="noPassword--required--edition">
+
+        <div class="item">
+        <div class="title">
+        @Localization.ThemeType:
+        </div>
+
+        <div class="form--group">
+        <input class="control--input form--input" />
+        </div>
+
+        </div>
+
+        <div class="item">
+        <div class="title">
+        @Localization.Language:
+        </div>
+
+        <div class="form--group">
+        <input class="control--input form--input" />
+        </div>
+
+        </div>
+
+
+        </div>
+
+
+
+        *@
+
+-->

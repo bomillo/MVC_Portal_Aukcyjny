@@ -7,11 +7,12 @@
 
         <div class="box box--horizontal">
             <div class="box box--content">
-                <h1 class="box--text">Welcome, @ViewBag.User</h1>
+                <h1 class="box--text">Welcome, @ViewBag.User.Name</h1>
             </div>
 
             <div class="box box--content box--center">
                 <a asp-action="Create" asp-controller="Auctions" class="button button--secondary button--rounded"> New Auction  + </a>
+                <a asp-action="UserEdition" asp-route-id="@ViewBag.User.UserId" class="button button--secondary button--rounded"> Edit Account </a>
             </div>
 
         </div>

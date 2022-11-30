@@ -180,7 +180,7 @@ namespace WebApp.Controllers
                 .Include(u => u.Company)
                 .FirstOrDefaultAsync(m => m.UserId == id);
 
-            ViewBag.User = user.Name;
+            ViewBag.User = user;
 
             var myAuctions = (from a in _context.Auctions
                              .Where(au => au.OwnerId == user.UserId &&
@@ -221,5 +221,40 @@ namespace WebApp.Controllers
             return View();
 
         }
+ 
+    
+        // GET: Users/UserEdition/{id}
+        public async Task<IActionResult> UserEdition(int? id)
+        {
+            if (id == null || _context.Users == null)
+            {
+                return NotFound();
+            }
+
+            var user = _context.Users
+                .Where(x => x.UserId == id)
+                .Include(x => x.Company)
+                .FirstOrDefault();
+
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            EditAccountModel editAccountModel = new EditAccountModel();
+
+            ViewBag.User = user;
+
+            List<Language> languages = Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
+            List<ThemeType> themes = Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().ToList();
+
+            ViewData["Languages"]= new SelectList(languages);
+            ViewData["Themes"]= new SelectList(themes);
+
+            return View(editAccountModel);
+        }
+
+
     }
 }

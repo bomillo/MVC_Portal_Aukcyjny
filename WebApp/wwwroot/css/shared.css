@@ -909,3 +909,121 @@ nav {
   min-height: 75vh;
   padding-top: 3vh;
 }
+
+.account--edit--page--content {
+  display: flex;
+  flex-direction: row;
+}
+.account--edit--page--content .user--details--container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 25vw;
+}
+.account--edit--page--content .user--details--container .user--icon--container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.account--edit--page--content .user--details--container .user--icon--container .user--icon {
+  width: max-content;
+  display: flex;
+  float: left;
+  flex-direction: column;
+  align-items: center;
+}
+.account--edit--page--content .user--details--container .user--icon--container .user--icon .user--icon--head {
+  width: 3.5vw;
+  height: 5vh;
+  background: #111111;
+  border-radius: 100%;
+}
+.account--edit--page--content .user--details--container .user--icon--container .user--icon .user--icon--body {
+  width: 7.5vw;
+  height: 9vh;
+  background: #111111;
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+  border-top-left-radius: 100px;
+  border-top-right-radius: 100px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+.account--edit--page--content .user--details--container .user--icon--container .user--icon .user--account {
+  width: 100%;
+  text-align: center;
+  background: #a1a1a1;
+  margin: 0pt 10pt;
+}
+.account--edit--page--content .user--details--container .user--details {
+  display: block;
+  padding: 10pt;
+  width: 25vw;
+}
+.account--edit--page--content .user--details--container .user--details .item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  overflow-wrap: break-word;
+  margin: 10pt;
+  padding: 10pt;
+  background: #a1a1a1;
+  overflow: hidden;
+}
+.account--edit--page--content .user--details--container .user--details .item .title {
+  font-weight: bold;
+  width: 40%;
+  margin: 1pt;
+  padding: 5pt;
+}
+.account--edit--page--content .user--details--container .user--details .item .info {
+  overflow-wrap: break-word;
+  overflow: hidden;
+}
+.account--edit--page--content .user--account--edition {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70vw;
+}
+.account--edit--page--content .user--account--edition .password--required--edition {
+  margin-left: 5vw;
+  width: 100%;
+  min-height: 20vh;
+  padding: 20pt;
+  border-width: 3px;
+  border-style: solid;
+  border-color: #f1f1f1;
+  border-image: initial;
+  border-radius: 50pt;
+}
+.account--edit--page--content .user--account--edition .password--required--edition .item {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+.account--edit--page--content .user--account--edition .password--required--edition .item .title {
+  font-weight: bold;
+  margin: 1pt;
+  padding: 5pt;
+}
+.account--edit--page--content .user--account--edition .password--required--edition .not--center {
+  flex-direction: row !important;
+  width: 100% !important;
+}
+.account--edit--page--content .user--account--edition .noPassword--required--edition {
+  margin-left: 5vw;
+  width: 100%;
+  padding: 20pt;
+}
+.account--edit--page--content .user--account--edition .noPassword--required--edition .item {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}

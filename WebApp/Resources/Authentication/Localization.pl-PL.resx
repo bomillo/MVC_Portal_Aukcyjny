@@ -117,11 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Company" xml:space="preserve">
+    <value>Firma</value>
+  </data>
+  <data name="CompanyEmail" xml:space="preserve">
+    <value>Email firmy</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>E-mail</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Format e-maila jest niepoprawny.</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Język</value>
   </data>
   <data name="LinkExpired" xml:space="preserve">
     <value>Link wygasł</value>
@@ -150,6 +159,12 @@
   <data name="RegistrationSucces" xml:space="preserve">
     <value>Rejestracja się udała!
 Można się teraz zalogować na nowe konto.</value>
+  </data>
+  <data name="ThemeType" xml:space="preserve">
+    <value>Typ motywu</value>
+  </data>
+  <data name="UserType" xml:space="preserve">
+    <value>Typ użytkownika</value>
   </data>
   <data name="WeakPassword" xml:space="preserve">
     <value>Hasło jest za słabe</value>
