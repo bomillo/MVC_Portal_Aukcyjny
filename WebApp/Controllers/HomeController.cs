@@ -79,7 +79,7 @@ namespace PortalAukcyjny.Controllers
                 var icon = _context.ProductFiles.Where(x => x.ProductId == auction.AuctionId && x.Name.StartsWith("ICON")).FirstOrDefault();
                 var currentBids = _context.Bid.Where(x => x.AuctionId == auction.AuctionId).ToList();
                 string path = null;
-
+                
                 if (icon != null)
                     path = icon.Path;
                 else

@@ -1,0 +1,41 @@
+﻿.highcontrast-mode {
+  background-color: hotpink;
+}
+.highcontrast-mode .button--primary {
+  background-color: blue;
+  border-color: chocolate;
+  color: chocolate;
+}
+.highcontrast-mode .button--primary:hover {
+  background-color: chocolate;
+  border-color: blue;
+  color: blue;
+}
+.highcontrast-mode .button--secondary {
+  background-color: gold;
+  border-color: brown;
+  color: brown;
+}
+.highcontrast-mode .button--secondary:hover {
+  background-color: brown;
+  border-color: gold;
+  color: gold;
+}
+.highcontrast-mode .text--primary {
+  color: orangered;
+}
+.highcontrast-mode .text--secondary {
+  color: coral;
+}
+.highcontrast-mode .text--error {
+  color: red;
+}
+.highcontrast-mode .background--primary {
+  background-color: salmon;
+}
+.highcontrast-mode .background--secondary {
+  background-color: darkviolet;
+}
+.highcontrast-mode .background--error {
+  background-color: deeppink;
+}
