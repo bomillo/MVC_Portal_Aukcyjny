@@ -924,6 +924,24 @@ nav {
     order: 2;
     justify-content: flex-end;
   }
+
+  .auction--single {
+    display: unset !important;
+    margin-bottom: 3vh !important;
+  }
+  .auction--left--panel {
+    margin-right: 2vw;
+  }
+  .auction--right--panel {
+    margin-left: 2vw;
+  }
+
+  .add--bid--button {
+    width: 100%;
+    height: 50%;
+    font-size: x-large;
+    padding-top: 0;
+  }
 }
 .page--content {
   min-height: 75vh;
@@ -932,4 +950,138 @@ nav {
 
 .text-danger {
   display: inline-block;
+}
+
+.auction--single {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5vh;
+}
+.auction--left--panel {
+  flex: 3;
+  margin-right: 2vw;
+}
+.auction--right--panel {
+  flex: 2;
+  margin-left: 2vw;
+}
+.auction--description {
+  text-align: justify;
+  padding: 0 1.5vw;
+}
+.auction--border {
+  border: 1px solid;
+  border-radius: 15px;
+}
+.auction--new--question {
+  width: 50%;
+  aspect-ratio: 15/4;
+  resize: none;
+  border-radius: 15px 0px 0px 15px;
+}
+.auction--new--question:focus-visible {
+  outline-offset: unset;
+  outline: unset;
+}
+.auction--add--bid {
+  width: 100%;
+  aspect-ratio: 4/1;
+  margin-top: 5vh;
+}
+.auction--bid {
+  padding-left: 1.5vw;
+  padding-right: 1.5vw;
+  display: flex;
+  flex-wrap: wrap;
+}
+.auction--bid h5 {
+  flex: 3;
+  padding-right: 1.5vw;
+}
+.auction--bid h3 {
+  flex: 1;
+  text-align: end;
+}
+.auction--bid p {
+  flex: 0 0 100%;
+  margin-bottom: 0;
+  margin-top: 1rem;
+}
+.auction--bid hr {
+  margin-top: 0;
+  flex: 0 0 100%;
+}
+.auction--bid--popup {
+  display: none;
+  border: 1px solid;
+  border-top: 0px;
+  border-radius: 0px 0px 15px 15px;
+  padding: 2.5vh 1.5vw;
+}
+.auction--bids--list {
+  min-height: 60vh;
+  max-height: 60vh;
+  overflow-y: scroll;
+}
+
+.subsection--title {
+  padding-left: 2vw;
+}
+
+.add--question {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.add--question--button {
+  width: 7%;
+  border-radius: 0px 15px 15px 0px;
+  border-left: 0px;
+}
+.add--question--button svg {
+  width: 100%;
+  aspect-ratio: 1/1;
+}
+.add--bid--button {
+  width: 100%;
+  height: 50%;
+  font-size: x-large;
+}
+.add--bid--button svg {
+  height: 100%;
+  aspect-ratio: 1/1;
+}
+
+.questions--container {
+  margin-top: 5vh;
+  margin-left: 2vw;
+  margin-right: 2vw;
+}
+.questions--container .question--single h5 {
+  margin-bottom: 1.5vh;
+}
+.questions--container .question--single p {
+  text-align: justify;
+}
+.questions--container .question--time {
+  display: inline;
+}
+.questions--container .question--respond {
+  display: inline;
+  margin-left: 0.5vw;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.questions--container .question--respond:hover {
+  opacity: 70%;
+}
+.questions--container .question--response {
+  padding-left: 2.5vw;
+  padding-right: 2.5vw;
+}
+
+.error--span {
+  flex: 0 0 100%;
+  text-align: center;
+  padding-bottom: 1.5vh;
 }

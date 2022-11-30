@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Context;
 using WebApp.Models;
+using WebApp.Services;
 
 namespace WebApp.Controllers
 {
     public class BidsController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
+        private readonly BidsService bidService;
 
-        public BidsController(PortalAukcyjnyContext context)
+        public BidsController(PortalAukcyjnyContext context, BidsService bidService)
         {
             _context = context;
+            this.bidService = bidService;
         }
 
         // GET: Bids
@@ -170,6 +174,73 @@ namespace WebApp.Controllers
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ValidateBid(string bidString, int auctionId)
+        {
+            
+            if (!User.Claims.Any())
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.NotLoggedIn });
+            }
+
+            double bid;
+            try {
+                bidString = bidString.Replace('.', ',');
+                bid = double.Parse(bidString);
+            }
+            catch
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.BidInvalidValue });
+            }
+
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
+            var auction = await _context.Bid.FindAsync(auctionId);
+            var currentBids = _context.Bid.Where(x => x.AuctionId == auctionId).ToList();
+            var maxBid = currentBids.Select(x => x.Price).DefaultIfEmpty(0).Max();
+
+            if(auction.UserId == userId)
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.BidInvalidUser });
+            }
+            if(maxBid >= bid)
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.BidToLow });
+            }
+
+                return new JsonResult(new { valid = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddBid(string bidString, int auctionId, string returnUrl)
+        {
+
+            double bid;
+            try
+            {
+                bidString = bidString.Replace('.', ',');
+                bid = double.Parse(bidString);
+            }
+            catch
+            {
+                bidString = bidString.Replace(',', '.');
+                bid = double.Parse(bidString);
+            }
+
+
+            var newBid = new Bid()
+            {
+                AuctionId = auctionId,
+                BidTime = DateTime.UtcNow,
+                Price = Math.Round(bid, 2),
+                UserId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value)
+                
+            };
+            _context.Bid.Add(newBid);
+            _context.SaveChanges();
+
+            return Redirect(returnUrl);
         }
 
         private bool BidExists(int id)

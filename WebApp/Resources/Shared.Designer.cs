@@ -61,11 +61,56 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place bid.
+        /// </summary>
+        internal static string AddBid {
+            get {
+                return ResourceManager.GetString("AddBid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answer.
+        /// </summary>
+        internal static string Answer {
+            get {
+                return ResourceManager.GetString("Answer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can&apos;t bid on your own auction.
+        /// </summary>
+        internal static string BidInvalidUser {
+            get {
+                return ResourceManager.GetString("BidInvalidUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bid value is invalid.
+        /// </summary>
+        internal static string BidInvalidValue {
+            get {
+                return ResourceManager.GetString("BidInvalidValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bids.
         /// </summary>
         internal static string Bids {
             get {
                 return ResourceManager.GetString("Bids", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bid value is too low.
+        /// </summary>
+        internal static string BidToLow {
+            get {
+                return ResourceManager.GetString("BidToLow", resourceCulture);
             }
         }
         
@@ -79,6 +124,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bid.
+        /// </summary>
+        internal static string CreateBid {
+            get {
+                return ResourceManager.GetString("CreateBid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dark.
         /// </summary>
         internal static string Dark {
@@ -88,11 +142,29 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to days.
+        /// </summary>
+        internal static string Days {
+            get {
+                return ResourceManager.GetString("Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         internal static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to end in.
+        /// </summary>
+        internal static string EndIn {
+            get {
+                return ResourceManager.GetString("EndIn", resourceCulture);
             }
         }
         
@@ -115,11 +187,38 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Too short input.
+        /// </summary>
+        internal static string FieldTooShort {
+            get {
+                return ResourceManager.GetString("FieldTooShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to High Contrast.
         /// </summary>
         internal static string HighContrast {
             get {
                 return ResourceManager.GetString("HighContrast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answer format is invalid.
+        /// </summary>
+        internal static string InvalidAnswer {
+            get {
+                return ResourceManager.GetString("InvalidAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question format is invalid.
+        /// </summary>
+        internal static string InvalidQuestion {
+            get {
+                return ResourceManager.GetString("InvalidQuestion", resourceCulture);
             }
         }
         
@@ -138,6 +237,42 @@ namespace WebApp.Resources {
         internal static string LoggedInAs {
             get {
                 return ResourceManager.GetString("LoggedInAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type your answer here....
+        /// </summary>
+        internal static string NewAnswer {
+            get {
+                return ResourceManager.GetString("NewAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ask your question to seller here.....
+        /// </summary>
+        internal static string NewQuestion {
+            get {
+                return ResourceManager.GetString("NewQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must be logged in to do this.
+        /// </summary>
+        internal static string NotLoggedIn {
+            get {
+                return ResourceManager.GetString("NotLoggedIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not owner.
+        /// </summary>
+        internal static string NotOwner {
+            get {
+                return ResourceManager.GetString("NotOwner", resourceCulture);
             }
         }
         
@@ -183,6 +318,15 @@ namespace WebApp.Resources {
         internal static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong.
+        /// </summary>
+        internal static string SomethingWentWrong {
+            get {
+                return ResourceManager.GetString("SomethingWentWrong", resourceCulture);
             }
         }
     }

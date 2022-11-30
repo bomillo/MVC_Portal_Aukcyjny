@@ -7,6 +7,7 @@ namespace WebApp.Models.DTO
     public class RegisterUserModel
     {
         [MaxLength(100, ErrorMessageResourceType = typeof(Shared), ErrorMessageResourceName = "FieldTooLong")]
+        [MinLength(5, ErrorMessageResourceType = typeof(Shared), ErrorMessageResourceName = "FieldTooShort")]
         [Required(ErrorMessageResourceType = typeof(Shared), ErrorMessageResourceName = "FieldRequired")]
         public string Name { get; set; }
         [DataType(DataType.EmailAddress, ErrorMessageResourceType = typeof(Localization), ErrorMessageResourceName = "InvalidEmail")]

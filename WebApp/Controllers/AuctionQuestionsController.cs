@@ -166,6 +166,110 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<ActionResult> ValidateQuestion(string question, string auctionId)
+        {
+
+            if (!HttpContext.User.Claims.Any())
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.NotLoggedIn });
+            }
+
+            if (string.IsNullOrWhiteSpace(question))
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.InvalidQuestion });
+            }
+
+            if(question.Length > 1499)
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.FieldTooLong });
+            }
+
+            int auction = int.Parse(auctionId);
+
+            if (!_context.Auctions.Any(i => i.AuctionId == auction))
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.SomethingWentWrong });
+            }
+
+            return new JsonResult(new { valid = true });
+        }
+
+
+        public async Task<ActionResult> ValidateQuestionAnswer(string answer, string questionId)
+        {
+
+            if (!HttpContext.User.Claims.Any())
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.NotLoggedIn });
+            }
+
+
+            if (string.IsNullOrWhiteSpace(answer))
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.InvalidAnswer });
+            }
+
+            int qId = int.Parse(questionId);
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
+
+            if (!_context.AuctionQuestion.Any(a => a.QuestionId == qId))
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.SomethingWentWrong });
+            }
+
+            var auction = _context.AuctionQuestion.FirstOrDefault(a => a.QuestionId == qId);
+
+
+            /*
+            if(!_context.Auctions.Any(a => a.AuctionId == auction.AuctionId && a.OwnerId == userId))
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.NotOwner });
+            }
+            */
+            if (answer.Length > 1499)
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.FieldTooLong });
+            }
+
+            return new JsonResult(new { valid = true });
+
+
+        }
+
+        public async Task<ActionResult> CreateQuestion(string question, string auctionId, string returnUrl)
+        {
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
+            var auction = int.Parse(auctionId);
+
+            _context.AuctionQuestion.Add(new AuctionQuestion()
+            {
+                UserId = userId,
+                Question = question,
+                AuctionId = auction,
+                PublishedTime = DateTime.UtcNow
+            });
+            _context.SaveChanges();
+
+
+            return Redirect(returnUrl);
+        }
+
+        public async Task<ActionResult> CreateAnswer(string answer, string questionId, string returnUrl)
+        {
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
+            var questionIdParsed = int.Parse(questionId);
+
+            var question = _context.AuctionQuestion.Find(questionIdParsed);
+
+            question.Answer = answer;
+            question.AnsweredTime = DateTime.UtcNow;
+            _context.Update(question);
+
+            _context.SaveChanges();
+
+
+            return Redirect(returnUrl);
+        }
         private bool AuctionQuestionExists(int id)
         {
           return _context.AuctionQuestion.Any(e => e.QuestionId == id);

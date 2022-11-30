@@ -117,17 +117,41 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddBid" xml:space="preserve">
+    <value>Dodaj ofertę</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>Odpowiedz</value>
+  </data>
+  <data name="BidInvalidUser" xml:space="preserve">
+    <value>Nie możesz tworzyć ofert do swojej aukcji</value>
+  </data>
+  <data name="BidInvalidValue" xml:space="preserve">
+    <value>Wartość oferty nieprawidłowa</value>
+  </data>
   <data name="Bids" xml:space="preserve">
-    <value>Bids (PL) ? </value>
+    <value>Oferty</value>
+  </data>
+  <data name="BidToLow" xml:space="preserve">
+    <value>Wartość oferty za niska</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Zamknij</value>
   </data>
+  <data name="CreateBid" xml:space="preserve">
+    <value>Oferta</value>
+  </data>
   <data name="Dark" xml:space="preserve">
     <value>Ciemny</value>
   </data>
+  <data name="Days" xml:space="preserve">
+    <value>dni</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Szczegóły</value>
+  </data>
+  <data name="EndIn" xml:space="preserve">
+    <value>kończy się za</value>
   </data>
   <data name="FieldRequired" xml:space="preserve">
     <value>Pole jest wymagane</value>
@@ -135,14 +159,35 @@
   <data name="FieldTooLong" xml:space="preserve">
     <value>Wprowadzone dane są za długie </value>
   </data>
+  <data name="FieldTooShort" xml:space="preserve">
+    <value>Wprowadzone dane są za krótkie</value>
+  </data>
   <data name="HighContrast" xml:space="preserve">
     <value>Wysoki kontrast</value>
+  </data>
+  <data name="InvalidAnswer" xml:space="preserve">
+    <value>Format odpowiedzi jest niepoprawny</value>
+  </data>
+  <data name="InvalidQuestion" xml:space="preserve">
+    <value>Wprowadzone pytanie ma niepoprawny format</value>
   </data>
   <data name="Light" xml:space="preserve">
     <value>Jasny</value>
   </data>
   <data name="LoggedInAs" xml:space="preserve">
     <value>Zalogowano jako </value>
+  </data>
+  <data name="NewAnswer" xml:space="preserve">
+    <value>Odpowiedz na pytanie...</value>
+  </data>
+  <data name="NewQuestion" xml:space="preserve">
+    <value>Zadaj pytanie dla sprzedawcy...</value>
+  </data>
+  <data name="NotLoggedIn" xml:space="preserve">
+    <value>Musisz być zalogowany aby to wykonać</value>
+  </data>
+  <data name="NotOwner" xml:space="preserve">
+    <value>Nie jesteś właścicielem</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Cena</value>
@@ -158,5 +203,8 @@
   </data>
   <data name="Search" xml:space="preserve">
     <value>Szukaj</value>
+  </data>
+  <data name="SomethingWentWrong" xml:space="preserve">
+    <value>Coś poszło nie tak, spróbuj ponownie</value>
   </data>
 </root>
