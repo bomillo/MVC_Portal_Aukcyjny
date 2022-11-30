@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
+using PortalAukcyjny.Models;
 using WebApp.Context;
 using WebApp.Models;
 using WebApp.Services;
@@ -20,14 +21,15 @@ namespace WebApp.Controllers
     {
         private readonly PortalAukcyjnyContext _context;
         private readonly BreadcrumbService breadcrumbService;
+        private readonly AuctionFilesService _auctionFilesService;
         private readonly ObservAuctionService _observedAuctionService;
 
-        public AuctionsController(PortalAukcyjnyContext context, ObservAuctionService observAuctionService, BreadcrumbService breadcrumbService)
+        public AuctionsController(PortalAukcyjnyContext context, ObservAuctionService observAuctionService, BreadcrumbService breadcrumbService, AuctionFilesService auctionFileService )
         {
             _context = context;
             this._observedAuctionService = observAuctionService;
             this.breadcrumbService = breadcrumbService;
-
+            this._auctionFilesService = auctionFileService;
         }
 
         // GET: Auctions
@@ -71,6 +73,15 @@ namespace WebApp.Controllers
                 .Include(a => a.Owner)
                 .Include(a => a.Product)
                 .FirstOrDefaultAsync(m => m.AuctionId == id);
+
+            /* Get all files that refers to actual product*/
+            var productFiles = (from file in _context.ProductFiles
+                               .Where(x => x.ProductId == id)
+                                select file).ToList();
+
+            ViewBag.Items = productFiles;
+
+
             if (auction == null)
             {
                 return NotFound();
@@ -97,22 +108,26 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AuctionId,Description,Title,IsDraft,OwnerId,CreationTime,PublishedTime,EndTime,ProductId")] Auction auction)
+        public async Task<IActionResult> Create([Bind("AuctionId,Description,Title,IsDraft,OwnerId,CreationTime,PublishedTime,EndTime,ProductId")] Auction auction, IFormCollection postedFiles, IFormFile productIcon, IFormFile productImage)
         {
+            string[] descriptions = postedFiles["fileDescription"].ToString().Split(',');
+
             ModelState["Owner"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
             ModelState["Product"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
-            
-            if(auction.IsDraft)
+            ModelState["productIcon"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+            ModelState["productImage"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+
+            if (auction.IsDraft)
             {
                 auction.PublishedTime = null;
                 auction.EndTime = null;
             }
             else
             {
-                if (auction.PublishedTime > auction.EndTime)
+                if ((auction.PublishedTime > auction.EndTime) || (auction.PublishedTime == null || auction.EndTime == null))
                 {
                     /*ViewBag.DatesMsg = WebApp.Resources.Shared.;*/
-                    ViewBag.DatesMsg = "Dates are not valid - end time is before publishing!";
+                    ViewBag.DatesMsg = "Dates are not valid!";
                     ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
                     ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "Name", auction.ProductId);
                     return View(auction);
@@ -129,6 +144,71 @@ namespace WebApp.Controllers
 
                 _context.Add(auction);
                 await _context.SaveChangesAsync();
+
+                //var product = _context.Products.Where(p => p.AuctionId == auction.AuctionId).FirstOrDefault();
+                int filesToSkip = 0;
+
+                if (productIcon != null || productImage != null)
+                {
+                    if (productIcon == null && productImage != null)
+                    {
+                        productIcon = productImage;
+                        filesToSkip--;
+                    }
+
+                    filesToSkip++;
+
+                    string result = _auctionFilesService.AddIcon(productIcon, auction).ToString();
+
+                    if (result == null)
+                    {
+                        ViewBag.ErrorMessage = "Uneable to add productIcon file, please try again!";
+                        ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
+                        ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "Name", auction.ProductId);
+                        return View(auction);
+                    }
+
+                }
+
+                if (productImage != null)
+                {
+                    filesToSkip++;
+
+                    string result = _auctionFilesService.AddImage(productImage, auction).ToString();
+
+                    if (result == null)
+                    {
+                        ViewBag.ErrorMessage = "Uneable to add productImage file, please try again!";
+                        ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
+                        ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "Name", auction.ProductId);
+                        return View(auction);
+                    }
+
+                }
+
+                if (postedFiles != null)
+                {
+                    int i = 0;
+                    foreach (IFormFile file in postedFiles.Files)
+                    {
+
+                        if (filesToSkip-- > 0)
+                            continue;
+
+                        string result = _auctionFilesService.AddOrdinaryFile(file, auction, descriptions[i++]).ToString();
+
+                        if (result == null)
+                        {
+                            ViewBag.ErrorMessage = "Uneable to add productImage file, please try again!";
+                            ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
+                            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "Name", auction.ProductId);
+                            return View(auction);
+                        }
+
+                    }
+
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString());
@@ -147,6 +227,12 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
+            /* Get all files connected with auction*/
+            var productFiles = from file in _context.ProductFiles
+                               .Where(prod => prod.ProductId == id)
+                               select file;
+
+
             var auction = await _context.Auctions.FindAsync(id);
             if (auction == null)
             {
@@ -154,6 +240,7 @@ namespace WebApp.Controllers
             }
             ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
             ViewData["ProductId"] = new SelectList(_context.Products.OrderBy(p => p.Name), "ProductId", "Name", auction.ProductId);
+            ViewData["ProductFiles"] = productFiles;
             return View(auction);
         }
 
@@ -162,10 +249,14 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AuctionId,Description,Title,IsDraft,OwnerId,CreationTime,PublishedTime,EndTime,ProductId")] Auction auction)
+        public async Task<IActionResult> Edit(int id, [Bind("AuctionId,Description,Title,IsDraft,OwnerId,CreationTime,PublishedTime,EndTime,ProductId")] Auction auction, IFormCollection postedFiles, IFormFile productIcon, IFormFile productImage)
         {
+            string[] descriptions = postedFiles["fileDescription"].ToString().Split(',');
+
             ModelState["Owner"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
             ModelState["Product"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+            ModelState["productIcon"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+            ModelState["productImage"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
 
 
             if (id != auction.AuctionId)
@@ -211,10 +302,75 @@ namespace WebApp.Controllers
 
                     auction.CreationTime = DateTime.SpecifyKind(auction.CreationTime, DateTimeKind.Utc);
 
+
+                    int filesToSkip = 0;
+
+                    if (productIcon != null || productImage != null)
+                    {
+                        if (productIcon == null && productImage != null && !_auctionFilesService.IconExist(auction))
+                        {
+                            productIcon = productImage;
+                            filesToSkip--;
+                        }
+
+                        filesToSkip++;
+
+                        string result = _auctionFilesService.AddIcon(productIcon, auction).ToString();
+
+                        if (result == null)
+                        {
+                            ViewBag.ErrorMessage = "Uneable to add productIcon file, please try again!";
+                            ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
+                            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "Name", auction.ProductId);
+                            return View(auction);
+                        }
+
+                    }
+
+                    if (productImage != null)
+                    {
+                        filesToSkip++;
+
+                        string result = _auctionFilesService.AddImage(productImage, auction).ToString();
+
+                        if (result == null)
+                        {
+                            ViewBag.ErrorMessage = "Uneable to add productImage file, please try again!";
+                            ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
+                            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "Name", auction.ProductId);
+                            return View(auction);
+                        }
+
+                    }
+
+                    if (postedFiles != null)
+                    {
+                        int i = 0;
+                        foreach (IFormFile file in postedFiles.Files)
+                        {
+
+                            if (filesToSkip-- > 0)
+                                continue;
+
+                            string result = _auctionFilesService.AddOrdinaryFile(file, auction, descriptions[i++]).ToString();
+
+                            if (result == null)
+                            {
+                                ViewBag.ErrorMessage = "Uneable to add productImage file, please try again!";
+                                ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
+                                ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "Name", auction.ProductId);
+                                return View(auction);
+                            }
+
+                        }
+
+                    }
+                    
                     _context.Auctions.Update(auction);
                     await _context.SaveChangesAsync();
+
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException e)
                 {
                     if (!AuctionExists(auction.AuctionId))
                     {
@@ -222,7 +378,8 @@ namespace WebApp.Controllers
                     }
                     else
                     {
-                        throw;
+                        var NotFoundViewModel = new ErrorViewModel { RequestId = new string("Error occured, refresh page and try again!") };
+                        return View("Error", NotFoundViewModel);
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -304,5 +461,36 @@ namespace WebApp.Controllers
             return RedirectToAction("Details", new { id = id, result = resultMsg });
 
         }
+
+
+        /* Downloads the file (fileName) from pointed path (path)*/
+        public ActionResult Download(string path, string fileName)
+        {
+            /* If file not found throw an exception witch message - No file found*/
+            var procesPath = Environment.ProcessPath.Replace('\\', '/');
+            var length = procesPath.LastIndexOf('/');
+            var folderPath = Environment.ProcessPath.Remove(length);
+            folderPath += path;
+
+            try
+            {
+                if (!Directory.Exists(folderPath))
+                {
+                    byte[] fileBytes = System.IO.File.ReadAllBytes(folderPath);
+                    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+                }
+                else
+                {
+                    var NotFoundViewModel = new ErrorViewModel { RequestId = new string("No file found") };
+                    return View("Error", NotFoundViewModel);
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                var NotFoundViewModel = new ErrorViewModel { RequestId = new string("No file found") };
+                return View("Error", NotFoundViewModel);
+            }
+        }
+
     }
 }

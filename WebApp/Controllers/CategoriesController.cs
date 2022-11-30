@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using NuGet.Packaging.Signing;
 using WebApp.Context;
 using WebApp.Models;
@@ -19,11 +20,13 @@ namespace WebApp.Controllers
     {
         private readonly PortalAukcyjnyContext _context;
         private readonly BreadcrumbService breadcrumbService;
+        private string iconPathError;
 
         public CategoriesController(PortalAukcyjnyContext context, BreadcrumbService breadcrumbService)
         {
             _context = context;
             this.breadcrumbService = breadcrumbService;
+            iconPathError = "/image/noIcon.jpg";
         }
 
         // GET: Categories
@@ -198,12 +201,24 @@ namespace WebApp.Controllers
 
             var displayAuctions = new List<DisplayAuctionsModel>();
             
+
+
             foreach(var auction in auctions)
             {
+                string path = null;
+                var icon = _context.ProductFiles.Where(x => x.ProductId == auction.AuctionId && x.Name.StartsWith("ICON")).FirstOrDefault();
+
+                if (icon != null)
+                    path = icon.Path;
+                else
+                    path = iconPathError;
+
+
                 var currentBids = _context.Bid.Where(x => x.AuctionId == auction.AuctionId).ToList();
                 displayAuctions.Add(new DisplayAuctionsModel()
                 {
                     Auction = auction,
+                    iconPath = path,
                     Bid = currentBids.Select(x => x.Price).DefaultIfEmpty(0).Max()
                 });
                 

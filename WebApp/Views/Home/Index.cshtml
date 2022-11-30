@@ -89,7 +89,10 @@
 
                     @for(int j = i; j < i + 3; j++)
                     {
-                    
+
+                        if (j >= auctions.Count)
+                            break;
+
                         TimeSpan timeLeft = (TimeSpan)(auctions[j].Auction.EndTime - DateTime.UtcNow);
 
                         <div class="box box-vertical">
