@@ -44,11 +44,17 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <br/>
-            <div>
-                <span>Select new file:</span>
-                <input type="file" name="newFile" />
-                <br />
+
+
+            <div class="select--image--with--description">
+                <label class="select--file border--primary">
+                    <span class="select--file--header"> Select File </span>
+                    <span class="select--file--name"></span>
+                    <input type="file" name="newFile" id="newFile" onchange="insertFileName(event)">
+                </label>
             </div>
+
+
 
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -58,9 +64,33 @@
 </div>
 
 <div>
-    <a asp-action="Index" asp-controller="Products">Back to List</a>
+    <a asp-action="Index" asp-controller="Auctions">Back to List</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script>
+    function insertFileName(event) {
+        var par = $(event.target.parentNode);
+        var span = $(par.children("span.select--file--name"));
+        var filePath = event.target.value;
+        var headerSpan = $(par.children("span.select--file--header"));
+        if (filePath != null) {
+
+            filePath = filePath.replace('/', '\\');
+            var parts = filePath.split('\\');
+            var fileName = parts[parts.length - 1];
+            span.html(fileName);
+            span.css("display", "block");
+
+        }
+        else {
+            span.html("");
+            span.css("display", "none");
+            headerSpan.css("width", "100%");
+        }
+        console.log(span.InnerHtml);
+    }
+</script>

@@ -112,7 +112,7 @@ footer {
     margin: auto;
     border-radius: 16px;
     padding: 10px;
-    box-shadow: 0 0 20px 0px #00000080;
+    box-shadow: 0 0 16px 0px #00000080;
 }
 
 .form--container{
@@ -750,14 +750,14 @@ input[type=file] {
 }
 
 /* Fading animation */
-.fade {
-    animation-name: fade;
+.slider--fade {
+    animation-name: slider-fade;
     animation-duration: 1.5s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
-@keyframes fade {
+@keyframes slider-fade {
     0% {
         opacity: 0
     }
@@ -1079,6 +1079,7 @@ nav {
 }
 
 
+
 .auction {
     &--single {
         display: flex;
@@ -1248,3 +1249,27 @@ nav {
     text-align: center;
     padding-bottom: 1.5vh;
 }
+
+::-webkit-scrollbar {
+    width: 24px;
+}
+
+::-webkit-scrollbar-track {
+    background: #00000000;
+}
+
+::-webkit-scrollbar-thumb {
+
+    background: #00000080;
+    border: 9px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #000000B0;
+    border: 9px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    border-radius: 9999px;
+}
+

@@ -11,11 +11,16 @@ namespace PortalAukcyjny.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly PortalAukcyjnyContext _context;
+        private string iconErrorPath;
+        private string imageErrorPath;
 
         public HomeController(ILogger<HomeController> logger, PortalAukcyjnyContext context)
         {
             _logger = logger;
             _context = context;
+
+            iconErrorPath = "/image/noIcon.jpg";
+            imageErrorPath = "/image/NoImage.png";
         }
 
         public IActionResult Index()   
@@ -39,10 +44,19 @@ namespace PortalAukcyjny.Controllers
 
             foreach (var auction in recentlyFinished)
             {
+                string path = null;
+                var image = _context.ProductFiles.Where(x => x.ProductId == auction.AuctionId && x.Name.StartsWith("IMAGE")).FirstOrDefault();
+
+                if (image != null)
+                    path = image.Path;
+                else
+                    path = imageErrorPath;
+
                 var Bid = _context.Bid.Where(x => x.AuctionId == auction.AuctionId).ToList();
                 recentlyFinishedAuctions.Add(new DisplayAuctionsModel()
                 {
                     Auction = auction,
+                    iconPath = path,
                     Bid = Bid.Select(x => x.Price).DefaultIfEmpty(0).Max()
                 });
             }
@@ -62,10 +76,19 @@ namespace PortalAukcyjny.Controllers
 
             foreach (var auction in interestingAuctions)
             {
+                var icon = _context.ProductFiles.Where(x => x.ProductId == auction.AuctionId && x.Name.StartsWith("ICON")).FirstOrDefault();
                 var currentBids = _context.Bid.Where(x => x.AuctionId == auction.AuctionId).ToList();
+                string path = null;
+                
+                if (icon != null)
+                    path = icon.Path;
+                else
+                    path = iconErrorPath;
+
                 displayAuctions.Add(new DisplayAuctionsModel()
                 {
                     Auction = auction,
+                    iconPath = path,
                     Bid = currentBids.Select(x => x.Price).DefaultIfEmpty(0).Max()
                 });
 
