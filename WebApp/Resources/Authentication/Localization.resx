@@ -117,11 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccountDetails" xml:space="preserve">
+    <value>Account details</value>
+  </data>
   <data name="Company" xml:space="preserve">
     <value>Company</value>
   </data>
   <data name="CompanyEmail" xml:space="preserve">
     <value>Company email</value>
+  </data>
+  <data name="EditionSuccess" xml:space="preserve">
+    <value>Edition succeded!</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>E-mail</value>
@@ -159,6 +165,15 @@
   <data name="RegistrationSucces" xml:space="preserve">
     <value>Registration succesful!
 You can now login into your accont.</value>
+  </data>
+  <data name="SelectCompany" xml:space="preserve">
+    <value>Select Company</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Select Language</value>
+  </data>
+  <data name="SelectTheme" xml:space="preserve">
+    <value>Select Theme</value>
   </data>
   <data name="ThemeType" xml:space="preserve">
     <value>Type of Theme</value>

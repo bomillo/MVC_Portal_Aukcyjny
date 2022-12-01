@@ -1042,6 +1042,8 @@ nav {
             display: flex;
             flex-direction: row;
             align-items: center;
+            justify-content: space-evenly;
+            padding: 20pt;
 
             .user--icon {
                 width: max-content;
@@ -1053,28 +1055,25 @@ nav {
                 .user--icon--head {
                     width: 3.5vw;
                     height: 5vh;
-                    background: #111111;
                     border-radius: 100%;
                 }
 
                 .user--icon--body {
                     width: 7.5vw;
                     height: 9vh;
-                    background: #111111;
                     clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
                     border-top-left-radius: 100px;
                     border-top-right-radius: 100px;
                     border-bottom-right-radius: 20px;
                     border-bottom-left-radius: 20px;
                 }
+            }
 
-
-                .user--account {
-                    width: 100%;
-                    text-align: center;
-                    background: rgb(161, 161, 161);
-                    margin: 0pt 10pt;
-                }
+            .user--account {
+                width: 100%;
+                text-align: center;
+                margin: 0pt 10pt;
+                font-weight: bold;
             }
         }
 
@@ -1091,7 +1090,6 @@ nav {
                 overflow-wrap: break-word;
                 margin: 10pt;
                 padding: 10pt;
-                background: rgb(161, 161, 161);
                 overflow: hidden;
 
 
@@ -1128,6 +1126,10 @@ nav {
             border-image: initial;
             border-radius: 50pt;
 
+            .text--message {
+                width: 100%;
+                min-height: fit-content;
+            }
 
             .item {
                 width: 50%;

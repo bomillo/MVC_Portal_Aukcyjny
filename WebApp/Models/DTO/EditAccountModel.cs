@@ -7,28 +7,29 @@ namespace WebApp.Models.DTO
 {
     public class EditAccountModel
     {
-        [MaxLength(100, ErrorMessageResourceType = typeof(Shared), ErrorMessageResourceName = "FieldTooLong")]
-        public string Name { get; set; }
-        
+        public string? Name { get; set; }
+
         [DataType(DataType.EmailAddress, ErrorMessageResourceType = typeof(Localization), ErrorMessageResourceName = "InvalidEmail")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
+
 
         [DataType(DataType.Password)]
-        public string OldPassword { get; set; }
+        [MinLength(10, ErrorMessageResourceType = typeof(Localization), ErrorMessageResourceName = "PasswordNotMatch")]
+        public string? OldPassword { get; set; }
 
-        [AllowNull]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        [MinLength(10, ErrorMessageResourceType = typeof(Localization), ErrorMessageResourceName = "PasswordNotMatch")]
+        public string? Password { get; set; }
 
-        [AllowNull]
         [DataType(DataType.Password)]
-        public string PasswordVerification { get; set; }
+        [MinLength(10, ErrorMessageResourceType = typeof(Localization), ErrorMessageResourceName = "PasswordNotMatch")]
+        public string? PasswordVerification { get; set; }
         
         public int? CompanyId { get; set; }
 
-        public Language Language { get; set; }
+        public Language? newLanguage { get; set; }
 
-        public ThemeType ThemeType { get; set; }
+        public ThemeType? newThemeType { get; set; }
 
     }
 }

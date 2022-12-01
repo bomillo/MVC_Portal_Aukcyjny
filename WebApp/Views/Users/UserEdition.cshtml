@@ -7,6 +7,11 @@
     var modelUser = ViewBag.User;
 }
 
+
+
+
+
+
 <div class="account--edit--page--content">
 
     <div class="user--details--container">
@@ -20,7 +25,7 @@
 
             <div class="user--account">
                 <span class="text">
-                    ACCOUNT DETAILS
+                    @Localization.AccountDetails
                 </span>
             </div>
         </div>
@@ -56,15 +61,15 @@
 
             </div>
 
-            <div class="item">
+            <div class="item" hidden>
 
                 <div class="title">
                     @Localization.Password:
 
                 </div>
 
-                <div class="info">
-                    @modelUser.PasswordHashed
+                <div class="info" >
+                    <label id="correctPwd">@modelUser.PasswordHashed</label> 
 
                 </div>
 
@@ -135,17 +140,17 @@
             <h3 class="text--secondary"> Account Edition</h3>
             
         </div>
-
+        @using (Html.BeginForm("UserEdition", "Users", FormMethod.Post, new { id = modelUser.UserId, EditUserModel = modelUser }))
+        {
             <div class="password--required--edition">
-                @using (Html.BeginForm("UserEdition", "Users", FormMethod.Post))
-                {
+                
                     <div class="item not--center">
                         <div class="title">
                             To edit your account put your old password here: 
                         </div>
 
                         <div class="form--group">
-                            <input asp-for="OldPassword" class="control--input form--input" />
+                            <input asp-for="OldPassword" class="control--input form--input" id="password"/>
                             <span asp-validation-for="OldPassword" class="text-danger"></span>
 
                         </div>
@@ -153,6 +158,14 @@
                     </div>
 
                     <hr/>
+
+                    <div class="text--message">
+
+                        <span class="text--secondary" id="message"> @ViewBag.Message </span>
+
+                    </div>
+
+                    <div id="show_hide">
 
                         <div class="item">
                             <div class="form--group">
@@ -199,8 +212,8 @@
                 
                             <div class="form--group">
                                 <label class="control-label form--label">@Localization.Company:</label>
-                                <select asp-for="CompanyId" class="control--input form--input" asp-items="ViewBag.CompanyId">
-                                    <option hidden disabled selected> Select Company </option>
+                                <select id="companiesDropdown" asp-for="CompanyId" class="control--input form--input" asp-items="ViewBag.CompanyId">
+                                    <option hidden disabled selected> @Localization.SelectCompany </option>
                                 </select>
                             </div>
 
@@ -210,21 +223,19 @@
                             <button type="submit" class="button button--secondary button--rounded">Save</button>
                         </div>
 
-                }       
+                    </div>
             </div>
 
 
 
         
             <div class="noPassword--required--edition">
-            @using (Html.BeginForm("AtributeEdition", "Users", FormMethod.Post, new{ EditUserModel = modelUser }))
-            {
                     <div class="item">
 
                         <div class="form--group">
                             <label class="control-label form--label">@Localization.ThemeType:</label>
-                            <select id="themesDropdown" asp-for="ThemeType" class="control--input form--input" asp-items="ViewBag.Themes">
-                                <option hidden disabled selected > Select theme </option>
+                            <select id="themesDropdown" asp-for="newThemeType" class="control--input form--input" asp-items="ViewBag.Themes">
+                                <option selected="selected" value="@null"> @Localization.SelectTheme </option>
                             </select>
                         </div>
 
@@ -234,8 +245,8 @@
 
                       <div class="form--group">
                             <label class="control-label form--label">@Localization.Language:</label>
-                            <select id="languagesDropdown" asp-for="Language" class="control--input form--input" asp-items="ViewBag.Languages">
-                                <option hidden disabled selected> Select language </option>
+                            <select id="languagesDropdown" asp-for="newLanguage" class="control--input form--input" asp-items="ViewBag.Languages">
+                                <option selected="selected" value="@null"> @Localization.SelectLanguage </option>
                             </select>
                         </div>
 
@@ -247,23 +258,49 @@
                     <a asp-action="UserAccount" asp-route-id="@modelUser.UserId" class="button button--secondary button--rounded">Back to Account</a>
                 </div>
 
-            }        
             </div>
-
-
-            
-
-
+        }        
     </div>
-    
-            
 </div>
+
+<script>
+    $("#themesDropdown").prop("selectedIndex", 0);
+    $("#languagesDropdown").prop("selectedIndex", 0);
+    $("#companiesDropdown").prop("selectedIndex", 0);
+</script>
 
 
 <script>
-        $("#themesDropdown").prop("selectedIndex", 0);
-        $("#languagesDropdown").prop("selectedIndex", 0);
+    var correctPwd = $("#correctPwd").text();
 
+    $("#password").keyup(function () {
+        var input = $("#password").val();
+        Hash(input);
+    }).keyup(); 
+    
+    function Hash(_password) {
+        $.ajax(
+        {
+            type: "POST",
+            page: 1,
+            rp: 6,
+            url: '@Url.Action("HashPassword", "Users")' + "?password=" + _password ,
+            success: function (result) {
+                if (result === correctPwd) {
+                    $("#show_hide").show();
+                    $("#message").hide();
+                } 
+                else {
+                    $("#show_hide").hide();
+                }
+            },
+            error: function (x, e) {
+                alert(e);
+
+            }
+        });
+    }
+    
 </script>
 
 
@@ -278,7 +315,12 @@
                 </div>
 
 
+$(function Hash() {
 
+        $.post("@Url.Action("HashPassword","Users")", { password = $("#password").val() }, function (data) {
+            alert(data);
+        });
+    });
 
 @*
         <div class="password--required--edition">

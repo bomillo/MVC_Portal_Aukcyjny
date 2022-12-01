@@ -61,6 +61,15 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account details.
+        /// </summary>
+        public static string AccountDetails {
+            get {
+                return ResourceManager.GetString("AccountDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company.
         /// </summary>
         public static string Company {
@@ -75,6 +84,15 @@ namespace WebApp.Resources.Authentication {
         public static string CompanyEmail {
             get {
                 return ResourceManager.GetString("CompanyEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edition succeded!.
+        /// </summary>
+        public static string EditionSuccess {
+            get {
+                return ResourceManager.GetString("EditionSuccess", resourceCulture);
             }
         }
         
@@ -184,6 +202,33 @@ namespace WebApp.Resources.Authentication {
         public static string RegistrationSucces {
             get {
                 return ResourceManager.GetString("RegistrationSucces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Company.
+        /// </summary>
+        public static string SelectCompany {
+            get {
+                return ResourceManager.GetString("SelectCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Language.
+        /// </summary>
+        public static string SelectLanguage {
+            get {
+                return ResourceManager.GetString("SelectLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Theme.
+        /// </summary>
+        public static string SelectTheme {
+            get {
+                return ResourceManager.GetString("SelectTheme", resourceCulture);
             }
         }
         

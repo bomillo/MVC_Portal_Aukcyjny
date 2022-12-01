@@ -33,3 +33,12 @@
 .light-mode .background--secondary {
   background-color: aquamarine;
 }
+.light-mode .user--icon--head {
+  background-color: gray;
+}
+.light-mode .user--icon--body {
+  background-color: gray;
+}
+.light-mode .user--details .item {
+  background: aliceblue;
+}
