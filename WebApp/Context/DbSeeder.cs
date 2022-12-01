@@ -381,12 +381,48 @@ namespace WebApp.Context
             var messages = new List<DirectMessage>();
             var users = _dbContext.Users.ToList();
             
-            int howMany = random.Next(1000, 1400);
+            int howMany = random.Next(3000, 5400);
 
-            for(int i = 0; i < howMany; i++)
+            for (int i = 0; i < howMany; i++)
             {
                 var sender = users.ElementAt(random.Next(users.Count - 1));
                 var receiver = users.ElementAt(random.Next(users.Count - 1));
+
+                var message = new DirectMessage()
+                {
+                    Sender = sender,
+                    SenderId = sender.UserId,
+                    Receiver = receiver,
+                    ReceiverId = receiver.UserId,
+                    Message = rndText(50, 1900),
+                    SentTime = DateTime.UtcNow.AddDays(random.Next(-200, 200)).AddHours(random.Next(24)).AddMinutes(random.Next(60))
+                };
+
+                messages.Add(message);
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                var sender = users.ElementAt(users.Count - 1);
+                var receiver = users.ElementAt(random.Next(users.Count - 1));
+
+                var message = new DirectMessage()
+                {
+                    Sender = sender,
+                    SenderId = sender.UserId,
+                    Receiver = receiver,
+                    ReceiverId = receiver.UserId,
+                    Message = rndText(50, 1900),
+                    SentTime = DateTime.UtcNow.AddDays(random.Next(-200, 200)).AddHours(random.Next(24)).AddMinutes(random.Next(60))
+                };
+
+                messages.Add(message);
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                var receiver = users.ElementAt(users.Count - 1);
+                var sender = users.ElementAt(random.Next(users.Count - 1));
 
                 var message = new DirectMessage()
                 {

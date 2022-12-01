@@ -1,0 +1,199 @@
+﻿@using WebApp.Models
+@model WebApp.Models.DTO.DisplaySingleAuctionModel
+
+@{
+    var isOwner = Context.User.Claims.Any() ? int.Parse(Context.User.Claims.First(c => c.Type.ToLower().Equals("userid")).Value) == Model.OwnerId : false;
+}
+
+@await Html.PartialAsync("_BreadcrumbNavigation", (List<BreadcrumbItem>) ViewBag.Breadcrumb)
+
+<div class="auction--single">
+    <div class="auction--left--panel">
+        <h1>@Model.Title</h1>
+        <p>@Model.EndDate - @Model.TimeToEnd</p>
+        <img src="@Model.Images[0]"/>
+
+        <h3 class="subsection--title">@WebApp.Resources.Shared.Description</h3>
+        <hr />
+        <div class="auction--description">
+            <p>@Model.Description</p>
+        </div>
+        </div>
+    <div class="auction--right--panel">
+        <h3>@WebApp.Resources.Shared.Bids</h3>
+        <div class="auction--bids--list auction--border background--primary text--primary border--primary ">
+            @foreach(var bid in Model.Bids){
+                <div class="auction--bid">
+                    <h5>@bid.UserName</h5>
+                    <h3>@bid.Price</h3>
+                    <p>@bid.BidTime</p>
+                    <hr />
+                </div>
+            }
+        </div>
+        <form method="post" id="createBid" action="/Bids/AddBid" class="auction--add--bid">
+            <button type="button" class="add--bid--button auction--border background--primary text--primary border--primary" id="popupToggler" onclick="togglePopup()">
+                @WebApp.Resources.Shared.AddBid
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                </svg>
+            </button>
+
+            <div class="auction--bid--popup" id="bidPopup">
+                <div class="form--group--with--warning">
+                    <input type="number" step="0.01" placeholder="@WebApp.Resources.Shared.CreateBid" class="control--input form--input" id="bid" name="bidString"/>
+                    <input type="hidden" value="@Model.AuctionId" name="auctionId"/>
+                    <input type="hidden" id="returnUrl" name="returnUrl" />
+                    <span id="bidFormMessage" class="text-danger">
+                    </span>
+                    <div style="display: flex; justify-content: flex-end;">
+                        <button class="button button--primary button--rounded button--thin" type="submit">@WebApp.Resources.Shared.CreateBid</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <h3 class="subsection--title">@WebApp.Resources.Shared.Questions</h3>
+    <hr />
+
+    <form method="post" action="/AuctionQuestions/CreateQuestion" id="createQuestion" class="add--question">
+    <span id="questionFormMessage" class="text-danger error--span"></span>
+        <textarea class="auction--new--question auction--border background--primary text--primary border--primary" placeholder="@WebApp.Resources.Shared.NewQuestion" name="question" id="question" ></textarea>
+        <input type="hidden" value="@Model.AuctionId" name="auctionId" />
+        <input type="hidden" id="returnUrlQuestion" name="returnUrl" />
+        <button class="auction--border add--question--button background--primary text--primary border--primary">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+        </svg>
+        </button>
+    </form>
+
+
+<div class="questions--container">
+    @foreach (var question in Model.Questions)
+    {
+
+        <div class="question--single">
+            <h5>@question.UserName</h5>
+            <p>@question.Question</p>
+            <p class="question--time">@question.AskedTime</p>
+            <p class="question--respond text--secondary" onclick="createResponse(@question.QuestionId)">@WebApp.Resources.Shared.Answer</p>
+            
+            @if (question.Answer != string.Empty)
+            {
+                <div class="question--response">
+                    <hr />
+                    <p>@question.Answer</p>
+                    <p>@question.AnsweredTime</p>
+                </div>
+            }
+            else if (isOwner)
+            {
+                <p class="question--respond text--secondary" onclick="createResponse(@question.QuestionId)">@WebApp.Resources.Shared.Answer</p>
+                <div class="question--response" style="display: none" id="questionAnswer-@question.QuestionId">
+                    <form method="post" action="/AuctionQuestions/CreateAnswer" onsubmit="formSubmit('@question.QuestionId')" id="createResponse-@question.QuestionId" class="add--question">
+                        <span id="responseFormMessage-@question.QuestionId" class="text-danger error--span"></span>
+                        <textarea class="auction--new--question auction--border background--primary text--primary border--primary" placeholder="@WebApp.Resources.Shared.NewAnswer" name="answer" id="response-@question.QuestionId"></textarea>
+                        <input type="hidden" value="@question.QuestionId" name="questionId" id="questionId-@question.QuestionId" />
+                        <input type="hidden" id="returnUrlResponse-@question.QuestionId" name="returnUrl" />
+                        <button class="auction--border add--question--button background--primary text--primary border--primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+               
+                
+            }
+            <hr />
+        </div>
+        
+
+    }
+
+</div>
+
+
+
+
+
+<script>
+    $("#createBid").submit(function(event){
+        event.preventDefault();
+        $("#returnUrl").val(window.location.toString());
+        $("#bidFormMessage").text("");
+        $.post("@Url.Action("ValidateBid","Bids")",
+            {
+                bidString: $("#bid").val(),
+                auctionId: @Model.AuctionId,
+            },
+            function (data) {
+                if (!data.valid) {
+                    $("#bidFormMessage").text(data.message);
+                } else {
+                    $("#createBid").unbind('submit').submit()
+                }
+            }
+            );
+    });
+
+    $("#createQuestion").submit(function (event) {
+        event.preventDefault();
+        $("#returnUrlQuestion").val(window.location.toString());
+        $("#questionFormMessage").text("");
+        $.post("@Url.Action("ValidateQuestion","AuctionQuestions")",
+            {
+                question: $("#question").val(),
+                auctionId: @Model.AuctionId,
+            },
+            function (data) {
+                if (!data.valid) {
+                    $("#questionFormMessage").text(data.message);
+                } else {
+                    $("#createQuestion").unbind('submit').submit()
+                }
+            }
+        );
+    });
+
+
+    function formSubmit(id){
+        
+
+
+        event.preventDefault();
+            $("#returnUrlResponse-" + id).val(window.location.toString());
+            $("#responseFormMessage-" + id).text("");
+
+            
+            
+            $.post("@Url.Action("ValidateQuestionAnswer","AuctionQuestions")",
+                {
+                    answer: $("#response-" + id).val(),
+                    questionId: $("#questionId-" + id).val(),
+                },
+                function (data) {
+                    if (!data.valid) {
+                        $("#responseFormMessage-" + id).text(data.message);
+                    } else {
+                        $("#createResponse-" + id).removeAttr('onsubmit').submit();
+                        
+                    }
+                }
+            );
+            
+        };
+
+        function createResponse(id){
+            $("#questionAnswer-" + id).show();
+        }
+
+        function togglePopup(){
+        $("#bidPopup").toggle();
+        var item = $("#popupToggler");
+        item.css("border-radius") === "15px 15px 0 0" ? item.css({ "border-radius": "15px 15px 15px 15px", "border-bottom": "1px solid" }) : item.css({"border-radius": "15px 15px 0 0", "border-bottom": "0px"});
+    };
+</script>

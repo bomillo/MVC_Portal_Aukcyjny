@@ -52,6 +52,8 @@
     
     function showDropdown(){
         $("#dropdown").toggle();
+        var item = $("#dropdown_main");
+        item.css("border-radius") === "50%" ? item.css("border-radius", "50% 50% 0% 0%") : item.css("border-radius", "50%");
         
     };
     
