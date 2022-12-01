@@ -1044,6 +1044,7 @@ nav {
             align-items: center;
             justify-content: space-evenly;
             padding: 20pt;
+            max-width: 500px;
 
             .user--icon {
                 width: max-content;
@@ -1054,13 +1055,17 @@ nav {
 
                 .user--icon--head {
                     width: 3.5vw;
+                    max-width: 100px;
                     height: 5vh;
+                    max-height: 100px;
                     border-radius: 100%;
                 }
 
                 .user--icon--body {
                     width: 7.5vw;
+                    max-width: 200px;
                     height: 9vh;
+                    max-height: 170px;
                     clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
                     border-top-left-radius: 100px;
                     border-top-right-radius: 100px;
@@ -1089,7 +1094,7 @@ nav {
                 align-items: center;
                 overflow-wrap: break-word;
                 margin: 10pt;
-                padding: 10pt;
+                padding: 10pt 0;
                 overflow: hidden;
 
 
@@ -1112,7 +1117,7 @@ nav {
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 70vw;
+        width: 45vw;
 
 
         .password--required--edition {
