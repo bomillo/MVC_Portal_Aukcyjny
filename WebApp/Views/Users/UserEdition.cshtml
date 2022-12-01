@@ -7,11 +7,6 @@
     var modelUser = ViewBag.User;
 }
 
-
-
-
-
-
 <div class="account--edit--page--content">
 
     <div class="user--details--container">
@@ -34,101 +29,74 @@
         <div class="user--details">
 
             <div class="item">
-
                 <div class="title">
                     @Localization.Name:
-
                 </div>
 
                 <div class="info">
                     @modelUser.Name
-
                 </div>
-
             </div>
 
             <div class="item">
-
                 <div class="title">
                     @Localization.Email:
-
                 </div>
 
                 <div class="info">
                     @modelUser.Email
-
                 </div>
-
             </div>
 
             <div class="item" hidden>
-
                 <div class="title">
                     @Localization.Password:
-
                 </div>
 
                 <div class="info" >
                     <label id="correctPwd">@modelUser.PasswordHashed</label> 
-
                 </div>
-
             </div>
 
             <div class="item">
-
                 <div class="title">
                     @Localization.UserType:
-
                 </div>
 
                 <div class="info">
                     @modelUser.UserType
-
                 </div>
-
             </div>
 
             <div class="item">
-
                 <div class="title">
                     @Localization.CompanyEmail:
-
                 </div>
 
                 <div class="info">
                     @if(modelUser.Company != null)
                         @modelUser.Company.Email
-
                 </div>
-
             </div>
 
             <div class="item">
-
                 <div class="title">
                     @Localization.ThemeType:
-
                 </div>
 
                 <div class="info">
                     @modelUser.ThemeType
-
                 </div>
-
             </div>
 
             <div class="item">
-
                 <div class="title">
                     @Localization.Language:
                 </div>
 
                 <div class="info">
                     @modelUser.Language
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -152,112 +120,86 @@
                         <div class="form--group">
                             <input asp-for="OldPassword" class="control--input form--input" id="password"/>
                             <span asp-validation-for="OldPassword" class="text-danger"></span>
-
                         </div>
-
                     </div>
 
                     <hr/>
 
                     <div class="text--message">
-
                         <span class="text--secondary" id="message"> @ViewBag.Message </span>
-
                     </div>
 
                     <div id="show_hide">
-
                         <div class="item">
                             <div class="form--group">
                                 <label class="control-label form--label">@Localization.Name:</label>
                                 <input asp-for="Name" class="control--input form--input" />
                                 <span asp-validation-for="Name" class="text-danger"></span>
-
                             </div>
-
                         </div>
 
                         <div class="item">
-
                             <div class="form--group">
                                 <label class="control-label form--label">@Localization.Email:</label>
                                 <input asp-for="Email" class="control--input form--input" />
                                 <span asp-validation-for="Email" class="text-danger"></span>
-
                             </div>
-
                         </div>
 
                         <div class="item">
-
                             <div class="form--group">
                                 <label class="control-label form--label">@Localization.Password:</label>
                                 <input asp-for="Password" class="control--input form--input" />
                                 <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
-
                         </div>
 
                         <div class="item">
-
                             <div class="form--group">
                                 <label class="control-label form--label">@Localization.PasswordVerification:</label>
                                 <input asp-for="PasswordVerification" class="control--input form--input" />
                                 <span asp-validation-for="PasswordVerification" class="text-danger"></span>
-                        </div>
-
+                            </div>
                         </div>
 
                         <div class="item">
-                
                             <div class="form--group">
                                 <label class="control-label form--label">@Localization.Company:</label>
                                 <select id="companiesDropdown" asp-for="CompanyId" class="control--input form--input" asp-items="ViewBag.CompanyId">
                                     <option hidden disabled selected> @Localization.SelectCompany </option>
                                 </select>
                             </div>
-
                         </div>
             
                         <div class="item">
                             <button type="submit" class="button button--secondary button--rounded">Save</button>
                         </div>
-
                     </div>
             </div>
 
-
-
-        
             <div class="noPassword--required--edition">
                     <div class="item">
-
                         <div class="form--group">
                             <label class="control-label form--label">@Localization.ThemeType:</label>
                             <select id="themesDropdown" asp-for="newThemeType" class="control--input form--input" asp-items="ViewBag.Themes">
                                 <option selected="selected" value="@null"> @Localization.SelectTheme </option>
                             </select>
                         </div>
-
                     </div>
 
                     <div class="item">
-
                       <div class="form--group">
                             <label class="control-label form--label">@Localization.Language:</label>
                             <select id="languagesDropdown" asp-for="newLanguage" class="control--input form--input" asp-items="ViewBag.Languages">
                                 <option selected="selected" value="@null"> @Localization.SelectLanguage </option>
                             </select>
                         </div>
-
                     </div>
-
 
                 <div class="form--buttons">
                     <button type="submit" class="button button--secondary button--rounded">Save</button>
                     <a asp-action="UserAccount" asp-route-id="@modelUser.UserId" class="button button--secondary button--rounded">Back to Account</a>
                 </div>
-
             </div>
         }        
     </div>
@@ -300,131 +242,4 @@
             }
         });
     }
-    
 </script>
-
-
-
-
-
-<!--
-
-                <div class="form--group">
-                    <label class="control-label form--label">@Localization.Name:</label>
-                    <input class="control--input form--input" />
-                </div>
-
-
-$(function Hash() {
-
-        $.post("@Url.Action("HashPassword","Users")", { password = $("#password").val() }, function (data) {
-            alert(data);
-        });
-    });
-
-@*
-        <div class="password--required--edition">
-
-        <div class="item">
-        <div class="title">
-        To edit your account put your old password here:
-        </div>
-
-        <div class="form--group">
-        <input class="control--input form--input" />
-        </div>
-
-        </div>
-
-        <hr/>
-
-        <div class="item">
-        <div class="title">
-        @Localization.Name:
-
-        </div>
-
-        <div class="form--group">
-        <input class="control--input form--input" />
-        </div>
-
-        </div>
-
-        <div class="item">
-        <div class="title">
-        @Localization.Email:
-        </div>
-
-        <div class="form--group">
-        <input class="control--input form--input" />
-        </div>
-
-        </div>
-
-        <div class="item">
-        <div class="title">
-        @Localization.Password:
-        </div>
-
-        <div class="form--group">
-        <input class="control--input form--input" />
-        </div>
-
-        </div>
-
-        <div class="item">
-        <div class="title">
-        @Localization.PasswordVerification:
-        </div>
-
-        <div class="form--group">
-        <input class="control--input form--input" />
-        </div>
-
-        </div>
-
-        <div class="item">
-        <div class="title">
-        @Localization.Company:
-        </div>
-
-        <div class="form--group">
-        <input class="control--input form--input" />
-        </div>
-
-        </div>
-
-        </div>
-
-        <div class="noPassword--required--edition">
-
-        <div class="item">
-        <div class="title">
-        @Localization.ThemeType:
-        </div>
-
-        <div class="form--group">
-        <input class="control--input form--input" />
-        </div>
-
-        </div>
-
-        <div class="item">
-        <div class="title">
-        @Localization.Language:
-        </div>
-
-        <div class="form--group">
-        <input class="control--input form--input" />
-        </div>
-
-        </div>
-
-
-        </div>
-
-
-
-        *@
-
--->
