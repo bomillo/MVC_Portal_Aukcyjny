@@ -1,7 +1,4 @@
-﻿
-using Google.Api.Gax.ResourceNames;
-using Google.Cloud.RecaptchaEnterprise.V1;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WebApp.Models;
