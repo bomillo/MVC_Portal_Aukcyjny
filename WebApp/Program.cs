@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using WebApp.Services.Emails;
+using WebApp.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,6 +79,9 @@ builder.Services.AddTransient<BreadcrumbService>();
 
 builder.Services.AddTransient<BidsService>();
 builder.Services.AddTransient<AuctionFilesService>();
+
+builder.Services.Configure<GoogleRecaptchaModel>(builder.Configuration.GetSection("reCaptcha"));
+builder.Services.AddTransient<GoogleRecaptchaService>();
 
 builder.Services.AddMemoryCache();
 

@@ -1,8 +1,11 @@
 ﻿@{
 }
+@using WebApp.Models
+@using Microsoft.Extensions.Options
+@inject IOptions<GoogleRecaptchaModel> GoogleCaptchaConfig
 
-
-<form method="post" action="/ElasticSearch/Search" class="header--searchbar--form">
+<form method="post" action="/ElasticSearch/Search" id="searchForm" class="header--searchbar--form">
+    <input type="hidden" id="recaptcha-response" name="token"/>
 <div class="header--searchbar--group" id="searchGroup">
     <input type="text" class="header--searchbar--input text--primary background--primary border--primary" placeholder="@WebApp.Resources.Shared.Search" id="searchString" name="query" oninput="getCompletion()" autocomplete="off"/>
     <div class="header--searchbar--box text--primary background--primary border--primary" id="searchBox">
@@ -30,7 +33,9 @@
         <option>Option4.4</option>
     </optgroup>
 </select>
-<button class="header--searchbar--button text--primary background--primary border--primary" type="submit">
+    <button class="header--searchbar--button text--primary background--primary border--primary" type="submit" onsubmit="validateUser()"
+            onclick="onClick()"
+    >
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
     </svg>
@@ -74,3 +79,15 @@
     }
 </script>
 
+
+<script src="https://www.google.com/recaptcha/api.js?render=@GoogleCaptchaConfig.Value.SiteKey"></script>
+<script>
+        $(function(){
+
+        grecaptcha.ready(function () {
+            grecaptcha.execute('@GoogleCaptchaConfig.Value.SiteKey', { action: 'submit' }).then(function (token) {
+                document.getElementById("recaptcha-response").value = token;
+            });
+        });
+        });
+</script>
