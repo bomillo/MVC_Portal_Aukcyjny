@@ -1074,6 +1074,158 @@ nav {
     padding-top: 3vh;
 }
 
+
+.account--edit--page--content {
+    display: flex;
+    flex-direction: row;
+
+
+    .user--details--container {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 25vw;
+
+        .user--icon--container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: 20pt;
+            max-width: 500px;
+
+            .user--icon {
+                width: max-content;
+                display: flex;
+                float: left;
+                flex-direction: column;
+                align-items: center;
+
+                .user--icon--head {
+                    width: 3.5vw;
+                    max-width: 100px;
+                    height: 5vh;
+                    max-height: 100px;
+                    border-radius: 100%;
+                }
+
+                .user--icon--body {
+                    width: 7.5vw;
+                    max-width: 200px;
+                    height: 9vh;
+                    max-height: 170px;
+                    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+                    border-top-left-radius: 100px;
+                    border-top-right-radius: 100px;
+                    border-bottom-right-radius: 20px;
+                    border-bottom-left-radius: 20px;
+                }
+            }
+
+            .user--account {
+                width: 100%;
+                text-align: center;
+                margin: 0pt 10pt;
+                font-weight: bold;
+            }
+        }
+
+        .user--details {
+            display: block;
+            padding: 10pt;
+            width: 25vw;
+
+            .item {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                overflow-wrap: break-word;
+                margin: 10pt;
+                padding: 10pt 0;
+                overflow: hidden;
+
+
+                .title {
+                    font-weight: bold;
+                    width: 40%;
+                    margin: 1pt;
+                    padding: 5pt;
+                }
+
+                .info {
+                    overflow-wrap: break-word;
+                    overflow: hidden;
+                }
+            }
+        }
+    }
+
+    .user--account--edition {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 45vw;
+
+
+        .password--required--edition {
+            margin-left: 5vw;
+            width: 100%;
+            min-height: 20vh;
+            padding: 20pt;
+            border-width: 3px;
+            border-style: solid;
+            border-color: rgb(241, 241, 241);
+            border-image: initial;
+            border-radius: 50pt;
+
+            .text--message {
+                width: 100%;
+                min-height: fit-content;
+            }
+
+            .item {
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin: auto;
+
+
+                .title {
+                    font-weight: bold;
+                    margin: 1pt;
+                    padding: 5pt;
+                }
+            }
+
+            .not--center {
+                flex-direction: row !important;
+                width: 100% !important;
+            }
+        }
+
+
+
+        .noPassword--required--edition {
+            margin-left: 5vw;
+            width: 100%;
+            padding: 20pt;
+
+
+            .item {
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin: auto;
+            }
+        }
+    }
+}
+=======
 .text-danger{
     display: inline-block;
 }
@@ -1272,4 +1424,5 @@ nav {
     background-clip: padding-box;
     border-radius: 9999px;
 }
+
 

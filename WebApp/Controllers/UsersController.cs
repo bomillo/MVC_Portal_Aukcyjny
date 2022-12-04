@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Context;
 using WebApp.Models;
 using WebApp.Models.DTO;
+using WebApp.Resources.Authentication;
+using WebApp.Services;
 using static System.Collections.Specialized.BitVector32;
 
 namespace WebApp.Controllers
@@ -15,10 +19,12 @@ namespace WebApp.Controllers
     public class UsersController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
+        private readonly UsersService _usersService;
 
-        public UsersController(PortalAukcyjnyContext context)
+        public UsersController(PortalAukcyjnyContext context, UsersService usersService)
         {
             _context = context;
+            this._usersService = usersService;
         }
 
         // GET: Users
@@ -180,7 +186,7 @@ namespace WebApp.Controllers
                 .Include(u => u.Company)
                 .FirstOrDefaultAsync(m => m.UserId == id);
 
-            ViewBag.User = user.Name;
+            ViewBag.User = user;
 
             var myAuctions = (from a in _context.Auctions
                              .Where(au => au.OwnerId == user.UserId &&
@@ -220,6 +226,158 @@ namespace WebApp.Controllers
 
             return View();
 
+        }
+ 
+    
+        // GET: Users/UserEdition/{id}
+        public async Task<IActionResult> UserEdition(int? id, string? result)
+        {
+            if (id == null || _context.Users == null)
+            {
+                return NotFound();
+            }
+
+            var user = _context.Users
+                .Where(x => x.UserId == id)
+                .Include(x => x.Company)
+                .FirstOrDefault();
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            EditAccountModel editAccountModel = new EditAccountModel();
+
+            ViewBag.User = user;
+            ViewBag.Message = result;
+
+            List<Language> languages = Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
+            List<ThemeType> themes = Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().ToList();
+
+            ViewData["Themes"]= new SelectList(themes, null, null, themes[user.ThemeType.GetHashCode()]);
+            ViewData["Languages"]= new SelectList(languages, null, null, languages[user.Language.GetHashCode()]);
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "CompanyId", "Name", user.CompanyId);
+
+            return View(editAccountModel);
+        }
+
+        // POST: Users/UserEdition/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserEdition(int? id, [Bind("Name,Email,OldPassword,Password,PasswordVerification,CompanyId,newThemeType,newLanguage")] EditAccountModel editedUser)
+        {
+            if (id == null || _context.Users == null)
+            {
+                return NotFound();
+            }
+
+            var user = _context.Users
+               .Where(x => x.UserId == id)
+               .Include(x => x.Company)
+               .FirstOrDefault();
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (user.PasswordHashed != null)
+            {
+                if (editedUser.OldPassword != null)
+                {
+                    string hashedOldPasswd = _usersService.HashPassword(editedUser.OldPassword);
+
+                    if (hashedOldPasswd != user.PasswordHashed)
+                    {
+                        ModelState.AddModelError("Password", WebApp.Resources.Authentication.Localization.PasswordNotMatch);
+
+                        ViewBag.User = user;
+
+                        List<Language> languages = Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
+                        List<ThemeType> themes = Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().ToList();
+
+                        ViewData["Languages"] = new SelectList(languages, null);
+                        ViewData["Themes"] = new SelectList(themes, null);
+                        ViewData["CompanyId"] = new SelectList(_context.Companies, "CompanyId", "Name", user.CompanyId);
+
+                        return View(editedUser);
+                    }
+
+                    if (editedUser.Password != editedUser.PasswordVerification)
+                    {
+                        ModelState.AddModelError("Password", WebApp.Resources.Authentication.Localization.PasswordNotMatch);
+
+                        ViewBag.User = user;
+
+                        List<Language> languages = Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
+                        List<ThemeType> themes = Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().ToList();
+
+                        ViewData["Languages"] = new SelectList(languages, null);
+                        ViewData["Themes"] = new SelectList(themes, null);
+                        ViewData["CompanyId"] = new SelectList(_context.Companies, "CompanyId", "Name", user.CompanyId);
+
+                        return View(editedUser);
+                    }
+
+                    if (editedUser.Name != null)
+                        user.Name = editedUser.Name;
+
+                    if (editedUser.Email != null)
+                        user.Email = editedUser.Email;
+
+                    if (editedUser.Password != null)
+                        user.PasswordHashed = _usersService.HashPassword(editedUser.Password);
+
+                    if (editedUser.CompanyId != null)
+                        user.CompanyId = editedUser.CompanyId;
+
+                    var claims = new List<Claim>()
+                    {
+                        new Claim(ClaimTypes.Name, user.Name),
+                        new Claim("mail", user.Email),
+                        new Claim("userid", user.UserId.ToString())
+                    };
+
+                    HttpContext.Response.Cookies.Append("CookieAuthentication", null, new CookieOptions { Expires = DateTime.Now.AddDays(-1) });
+                    var claimsIdentity = new ClaimsIdentity(claims, "CookieAuthentication");
+                    await HttpContext.SignInAsync("CookieAuthentication", new ClaimsPrincipal(claimsIdentity));
+                }
+            }
+
+            if (editedUser.newThemeType != null)
+            {
+                if (Request.Cookies["THEME_COOKIE"] != null)
+                {
+                    Response.Cookies.Delete("THEME_COOKIE");
+                }
+
+                user.ThemeType = (ThemeType)editedUser.newThemeType;
+
+                var newTheme = (ThemeType)Enum.Parse(typeof(ThemeType), editedUser.newThemeType.ToString());
+
+                HttpContext.Response.Cookies.Append("THEME_COOKIE", newTheme.ToString().ToLower(), new CookieOptions { Expires = DateTimeOffset.Now.AddYears(1), IsEssential = true });
+
+            }
+
+            if (editedUser.newLanguage != null)
+            {
+                user.Language = (Language)editedUser.newLanguage;
+                LanguageServices.SetLanguage(Response, user.Language);
+            }
+
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("UserEdition", new { id = user.UserId, result = Localization.EditionSuccess});
+        }
+
+        public string HashPassword(string password)
+        {
+            if (password != null)
+                return _usersService.HashPassword(password);
+            else 
+                return password;
         }
     }
 }

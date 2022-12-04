@@ -6,7 +6,7 @@ namespace WebApp.Models
 {
     public class User
     {
-        [Key] 
+        [Key]
         public int UserId { get; set; }
         [MaxLength(100)]
         public string Name { get; set; }
