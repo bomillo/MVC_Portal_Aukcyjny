@@ -236,13 +236,25 @@
 
 <script>
     var correctPwd = $("#correctPwd").text();
-
-    $("#password").keyup(function () {
-        var input = $("#password").val();
-        Hash(input);
-    }).keyup(); 
     
+    if(correctPwd)
+    {
+        $("#show_hide").hide();
+        $("#password").keyup(function () {
+            var input = $("#password").val();
+            if(input.length > 0)
+                Hash(input);
+        }).keyup(); 
+    }
+    else 
+    {
+        $("#show_hide").show();
+        $("#password").prop("disabled", true);
+    }
+
     function Hash(_password) {
+        var el = document.getElementById("password");
+
         $.ajax(
         {
             type: "POST",
@@ -250,12 +262,15 @@
             rp: 6,
             url: '@Url.Action("HashPassword", "Users")' + "?password=" + _password ,
             success: function (result) {
+                $("#message").hide();
                 if (result === correctPwd) {
                     $("#show_hide").show();
-                    $("#message").hide();
+                        el.style.borderBlockColor = "green";
+                        el.style.backgroundColor = "lightgreen";
                 } 
                 else {
                     $("#show_hide").hide();
+                        el.style.backgroundColor = "lightcoral";
                 }
             },
             error: function (x, e) {

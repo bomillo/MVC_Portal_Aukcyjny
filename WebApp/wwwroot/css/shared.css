@@ -1042,6 +1042,7 @@ nav {
 .account--edit--page--content .user--account--edition .password--required--edition .text--message {
   width: 100%;
   min-height: fit-content;
+  text-align: center;
 }
 .account--edit--page--content .user--account--edition .password--required--edition .item {
   width: 50%;
