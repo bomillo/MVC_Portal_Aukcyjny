@@ -98,6 +98,17 @@
                     @modelUser.Language
                 </div>
             </div>
+
+            <div class="item">
+                <div class="title">
+                    @Localization.ItemsOnPage:
+                </div>
+
+                <div class="info">
+                    @modelUser.itemsOnPage
+                </div>
+            </div>
+
         </div>
     </div>
     
@@ -193,6 +204,17 @@
                             <select id="languagesDropdown" asp-for="newLanguage" class="control--input form--input" asp-items="ViewBag.Languages">
                                 <option selected="selected" value="@null"> @Localization.SelectLanguage </option>
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <div class="form--group">
+                            <label class="control-label form--label">@Localization.ItemsOnPage:</label>
+                            @Html.DropDownListFor(m => m.itemsOnPage, 
+                                Enumerable.Range(20, 120).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }), 
+                                @Localization.SelectNumber,
+                                new { @class = "control--input form--input" })
+
                         </div>
                     </div>
 

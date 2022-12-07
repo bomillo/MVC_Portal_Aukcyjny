@@ -78,6 +78,7 @@ builder.Services.AddSingleton<EmailService>();
 builder.Services.AddTransient<BreadcrumbService>();
 
 builder.Services.AddTransient<BidsService>();
+builder.Services.AddTransient<SetPagerService>();
 builder.Services.AddTransient<AuctionFilesService>();
 
 builder.Services.Configure<GoogleRecaptchaModel>(builder.Configuration.GetSection("reCaptcha"));

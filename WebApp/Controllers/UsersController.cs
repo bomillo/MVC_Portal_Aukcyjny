@@ -265,7 +265,7 @@ namespace WebApp.Controllers
         // POST: Users/UserEdition/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UserEdition(int? id, [Bind("Name,Email,OldPassword,Password,PasswordVerification,CompanyId,newThemeType,newLanguage")] EditAccountModel editedUser)
+        public async Task<IActionResult> UserEdition(int? id, [Bind("Name,Email,OldPassword,Password,PasswordVerification,CompanyId,newThemeType,newLanguage,itemsOnPage")] EditAccountModel editedUser)
         {
             if (id == null || _context.Users == null)
             {
@@ -364,6 +364,11 @@ namespace WebApp.Controllers
             {
                 user.Language = (Language)editedUser.newLanguage;
                 LanguageServices.SetLanguage(Response, user.Language);
+            }
+
+            if (editedUser.itemsOnPage != null)
+            {
+                user.itemsOnPage = editedUser.itemsOnPage;
             }
 
             _context.Update(user);

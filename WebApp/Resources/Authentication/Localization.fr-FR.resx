@@ -135,6 +135,9 @@
   <data name="InvalidEmail" xml:space="preserve">
     <value>InvalidEmial FR</value>
   </data>
+  <data name="ItemsOnPage" xml:space="preserve">
+    <value>ItemsOnPage FR</value>
+  </data>
   <data name="Language" xml:space="preserve">
     <value>Language FR</value>
   </data>
@@ -170,6 +173,9 @@
   </data>
   <data name="SelectLanguage" xml:space="preserve">
     <value>SelectLanguage FR</value>
+  </data>
+  <data name="SelectNumber" xml:space="preserve">
+    <value>SelectNumber FR</value>
   </data>
   <data name="SelectTheme" xml:space="preserve">
     <value>SelectTheme FR</value>
