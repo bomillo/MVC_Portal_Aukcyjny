@@ -1,5 +1,5 @@
 ﻿@using WebApp.Models
-@model IEnumerable<WebApp.Models.Auction>
+@model IEnumerable<WebApp.Models.DTO.DisplayAuctionsModel>
 
 @{
     ViewData["Title"] = "Auctions";
@@ -24,76 +24,204 @@
 
 <partial name="_pager" model="@pager" />
 
-<table class="table">
+
+<div class="table">
+    <div class="table">
+
+
+    </div>
+
+
+
+</div>
+
+
+
+
+
+<table class="table" id="auctionTable">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @*icon*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Auction.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsDraft)
+                @Html.DisplayNameFor(model => model.Auction.IsDraft)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Owner)
+                @Html.DisplayNameFor(model => model.Auction.Owner)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreationTime)
+                @Html.DisplayNameFor(model => model.Auction.PublishedTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PublishedTime)
+                @Html.DisplayNameFor(model => model.Auction.EndTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndTime)
+                @Html.DisplayNameFor(model => model.Auction.Product)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product)
-            </th>
-            <th></th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-                       
-                <td style=" overflow: hidden; 
-                            text-overflow: ellipsis; 
-                            white-space: nowrap;
-                            max-width: 300px;">
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDraft)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Owner.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PublishedTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AuctionId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AuctionId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AuctionId">Delete</a>
-            </td>
-        </tr>
-}
+    <tbody >
     </tbody>
 </table>
+@foreach (var item in Model) {
+        
+    <a class="list--link" asp-controller="Auctions" asp-action="Auction" asp-route-id="@item.Auction.AuctionId">
+        <div class="auction--container">
+            <div class="auction--icon">
+                <img src="@item.iconPath"/>
+            </div>
+            <div class="auction--middle--column">
+                <div class="auction--title text--primary">
+                    @Html.DisplayFor(model => item.Auction.Title)
+                </div>
+                @if(!item.Auction.IsDraft)
+                {
+                    <div class="auction--time text--primary">
+                        Started: @item.Auction.PublishedTime 
+                    </div>
+                    <div class="auction--time text--primary">
+                        Ends: @item.Auction.EndTime
+                    </div>
+                }
+                <div class="auction--time text--primary">
+                    @item.Auction.Owner.Name
+                </div>
+            </div>
+            <div class="auction--price text--primary">
+                @string.Format("{0:0.00} zł", item.Bid)           
+            </div>
+        </div>
+        </a>
+        <hr class="auction--bottom--line"/>
+}
+
+<partial name="_pager" model="@pager" />
+
+
+<script>
+
+    function addRowHandlers() {
+        var table = document.getElementById("auctionTable");
+        var rows = table.getElementsByTagName("tr");
+        for (i = 0; i < rows.length; i++) {
+            var currentRow = table.rows[i];
+            var createClickHandler = function(row) {
+                return function() {
+                    var cell = row.getElementsByTagName("td")[0];
+                    var _id = cell.innerHTML;
+                    
+                    $.ajax({
+                        url: '/Auction/Auctions',
+                        data: { id: _id }
+                    }).done(function () {
+                        alert('Added');
+                    });
+
+                };
+            };
+            currentRow.onclick = createClickHandler(currentRow);
+        }
+    }
+    window.onload = addRowHandlers();
+    
+
+</script>
+
+
+
+                    @*
+
+                    @using WebApp.Models
+@model IEnumerable<WebApp.Models.DTO.DisplayAuctionsModel>
+
+@{
+    ViewData["Title"] = "Auctions";
+
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if(ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+   
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<partial name="_pager" model="@pager" />
+
+<div class="div--table" id="auctionTable">
+     
+    <div class="table--head">
+            <item>
+                
+            </item>
+        <item>
+                @Html.DisplayNameFor(model => model.Auction.Title)
+            </item>
+        <item>
+                @Html.DisplayNameFor(model => model.Auction.IsDraft)
+            </item>
+        <item>
+                @Html.DisplayNameFor(model => model.Auction.Owner)
+            </item>
+        <item>
+                @Html.DisplayNameFor(model => model.Auction.PublishedTime)
+            </item>
+        <item>
+                @Html.DisplayNameFor(model => model.Auction.EndTime)
+            </item>
+        <item>
+                @Html.DisplayNameFor(model => model.Auction.Product)
+            </item>
+    </div>
+@foreach (var item in Model) {
+        
+    <div class="table--row">
+        <a asp-action="Auction" asp-controller="Auctions" asp-route-id="@item.Auction.AuctionId">
+
+            <item>
+                <img src="@item.iconPath" />
+                </item>
+            <item>
+                    @Html.DisplayFor(x => item.Auction.Title)
+                </item>
+            <item>
+                    @Html.DisplayFor(x => item.Auction.IsDraft)
+                </item>
+            <item>
+                    @Html.DisplayFor(x => item.Auction.Owner.Name)
+                </item>
+            <item>
+                    @Html.DisplayFor(x => item.Auction.PublishedTime)
+                </item>
+            <item>
+                    @Html.DisplayFor(x => item.Auction.EndTime)
+                </item>
+            <item>
+                    @Html.DisplayFor(x => item.Auction.Product.Name)
+                </item>
+
+        </a>
+    </div>
+
+}
+</div>
 
 
 <partial name="_pager" model="@pager" />
+
+
+                    *@

@@ -70,7 +70,30 @@ namespace WebApp.Controllers
 
             ViewBag.Pager = pager;
 
-            return View(auctions);  // for displaying paged auctions
+
+            List<DisplayAuctionsModel> auctionList = new List<DisplayAuctionsModel>();
+
+            foreach (var auction in auctions)
+            {
+                string path = null;
+                var icon = _context.ProductFiles.Where(x => x.ProductId == auction.AuctionId && x.Name.StartsWith("ICON")).FirstOrDefault();
+
+                if (icon != null)
+                    path = icon.Path;
+                else
+                    path = _auctionFilesService.GetErrorIconPath();
+
+                var Bid = _context.Bid.Where(x => x.AuctionId == auction.AuctionId).ToList();
+                auctionList.Add(new DisplayAuctionsModel()
+                {
+                    Auction = auction,
+                    iconPath = path,
+                    Bid = Bid.Select(x => x.Price).DefaultIfEmpty(0).Max()
+                });
+            }
+
+
+            return View(auctionList);  // for displaying paged auctions
             
             //return View(await portalAukcyjnyContext.ToListAsync());   // for displaying all auctions
         }

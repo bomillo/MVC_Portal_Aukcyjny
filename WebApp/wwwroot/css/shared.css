@@ -1234,3 +1234,29 @@ nav {
   background-clip: padding-box;
   border-radius: 9999px;
 }
+
+#auctionTable thead th {
+  text-align: center;
+  font-weight: bold;
+}
+#auctionTable tbody a {
+  display: block;
+}
+#auctionTable tbody tr {
+  height: 8vh;
+}
+
+.div--table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.div--table .table--head {
+  display: table-header-group;
+  text-align: center;
+  font-weight: bold;
+}
+
+.table--head .item {
+    width: 10%;
+}
