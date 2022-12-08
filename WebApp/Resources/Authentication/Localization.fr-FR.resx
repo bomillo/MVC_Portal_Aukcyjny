@@ -159,6 +159,9 @@
   <data name="Name" xml:space="preserve">
     <value>Name FR</value>
   </data>
+  <data name="Observe" xml:space="preserve">
+    <value>Observe FR</value>
+  </data>
   <data name="Owner" xml:space="preserve">
     <value>Owner FR</value>
   </data>
@@ -197,6 +200,9 @@
   </data>
   <data name="ThemeType" xml:space="preserve">
     <value>ThemeType FR</value>
+  </data>
+  <data name="UnObserve" xml:space="preserve">
+    <value>UnObserve FR</value>
   </data>
   <data name="UserType" xml:space="preserve">
     <value>UserType FR</value>

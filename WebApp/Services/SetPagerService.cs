@@ -17,7 +17,7 @@ namespace WebApp.Services
 
         public async Task<int> SetPager(int userId)
         {
-            if (userId != -1)
+            if (userId > 0)
             {
                 var usr = await _context.Users.Where(x => x.UserId == userId).FirstOrDefaultAsync();
 

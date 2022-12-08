@@ -58,9 +58,8 @@ namespace WebApp.Controllers
                 .Include(a => a.Owner)
                 .Include(a => a.Product).OrderBy(a => a.AuctionId);
 
-            int userId = -1;
-            if(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")) != null)
-                int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value, out userId);
+            int userId = 0;
+            int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value, out userId);
 
             int pageSize = await pagerService.SetPager(userId);
             int rowsCount = portalAukcyjnyContext.Count();
@@ -121,6 +120,9 @@ namespace WebApp.Controllers
 
             ViewBag.Items = productFiles;
 
+            int userId;
+            int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value, out userId);
+            ViewBag.IsObserved = _observedAuctionService.IsAuctionObserved((int)id, userId);
 
             if (auction == null)
             {
@@ -136,7 +138,7 @@ namespace WebApp.Controllers
         public IActionResult Create()
         {
             //var userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.ValueType == "userid").Value.ToString());
-            var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
+            var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value);
 
             ViewBag.OwnerId = userId;
             ViewData["ProductId"] = new SelectList(_context.Products.OrderBy(p => p.Name), "ProductId", "Name");
@@ -251,7 +253,7 @@ namespace WebApp.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString());
+            var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
             
             ViewBag.OwnerId = userId;
             ViewData["ProductId"] = new SelectList(_context.Products.OrderBy(p => p.Name), "ProductId", "Name", auction.ProductId);
@@ -480,7 +482,7 @@ namespace WebApp.Controllers
             string resultMsg = "";
             if(id > 0)
             {
-                int userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString());
+                int userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
 
                 if(userId > 0)
                 {
@@ -499,6 +501,29 @@ namespace WebApp.Controllers
             resultMsg = "Invalid data, please try again";
 
             return RedirectToAction("Details", new { id = id, result = resultMsg });
+        }
+
+        public ActionResult UnObservAuction(int? id)
+        {
+            string resultMsg = "";
+            int userId;
+            int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value, out userId);
+
+            if (userId > 0)
+            {
+                bool result = _observedAuctionService.UnObserve((int)id, userId);
+                if (result)
+                {
+                    resultMsg = "Auction is no longer being observed";
+
+                    return RedirectToAction("Details", new { id = id, result = resultMsg });
+                }
+                resultMsg = "Something went wrong, please try again!";
+
+                return RedirectToAction("Details", new { id = id, result = resultMsg });
+            }
+
+            return View();
         }
 
         public async Task<ActionResult> Auction(int? id)

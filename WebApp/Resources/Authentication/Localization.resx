@@ -159,6 +159,9 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="Observe" xml:space="preserve">
+    <value>Observe</value>
+  </data>
   <data name="Owner" xml:space="preserve">
     <value>Auction owner</value>
   </data>
@@ -198,6 +201,9 @@ You can now login into your accont.</value>
   </data>
   <data name="ThemeType" xml:space="preserve">
     <value>Type of Theme</value>
+  </data>
+  <data name="UnObserve" xml:space="preserve">
+    <value>Unobserve</value>
   </data>
   <data name="UserType" xml:space="preserve">
     <value>Type of user</value>

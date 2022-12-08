@@ -187,6 +187,15 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Observe.
+        /// </summary>
+        public static string Observe {
+            get {
+                return ResourceManager.GetString("Observe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auction owner.
         /// </summary>
         public static string Owner {
@@ -301,6 +310,15 @@ namespace WebApp.Resources.Authentication {
         public static string ThemeType {
             get {
                 return ResourceManager.GetString("ThemeType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unobserve.
+        /// </summary>
+        public static string UnObserve {
+            get {
+                return ResourceManager.GetString("UnObserve", resourceCulture);
             }
         }
         

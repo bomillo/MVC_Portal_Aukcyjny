@@ -159,6 +159,9 @@
   <data name="Name" xml:space="preserve">
     <value>Imię</value>
   </data>
+  <data name="Observe" xml:space="preserve">
+    <value>Obserwuj</value>
+  </data>
   <data name="Owner" xml:space="preserve">
     <value>Wystawiający</value>
   </data>
@@ -198,6 +201,9 @@ Można się teraz zalogować na nowe konto.</value>
   </data>
   <data name="ThemeType" xml:space="preserve">
     <value>Typ motywu</value>
+  </data>
+  <data name="UnObserve" xml:space="preserve">
+    <value>Nie obserwuj</value>
   </data>
   <data name="UserType" xml:space="preserve">
     <value>Typ użytkownika</value>
