@@ -1428,41 +1428,58 @@ nav {
 
 
 //
-#auctionTable {
+.list--header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 
-    thead {
-        th {
-            text-align: center;
-            font-weight: bold;
-        }
+    .add--auction--button {
+        text-decoration: none;
+        padding: 10pt;
     }
-
-    tbody {
-        
-        a {
-            display: block;
-
-        }
-        
-        tr {
-            height: 8vh;
-
-        }
-    }
-
 }
 
 
-.div--table {
+
+.auctions--column--container {
     width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
 
-    .table--head {
-        display: table-header-group;
-        flex-direction: row;
-        text-align: center;
-        font-weight: bold;
+    .auction--icon {
+
+        .icon {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: fill;
+            border-radius: 10pt;
+        }
     }
 
+    .auction--middle--column {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        width: 70%;
+    }
+
+    .auction--title {
+        font-size: x-large;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .auction--owner {
+        float: right;
+    }
+
+    .auction--price {
+        width: 10%;
+        font-size: x-large;
+    }
 }

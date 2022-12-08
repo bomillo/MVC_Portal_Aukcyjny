@@ -8,7 +8,7 @@ namespace WebApp.Services
     public class AuctionFilesService
     {
         private readonly PortalAukcyjnyContext _context;
-        private readonly string iconErrorPath = "/image/noIcon.jpg";
+        private readonly string iconErrorPath = "/image/noIcon.png";
         private readonly string imageErrorPath = "/image/NoImage.png";
 
         public AuctionFilesService(PortalAukcyjnyContext context)

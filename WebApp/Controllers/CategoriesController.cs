@@ -21,16 +21,19 @@ namespace WebApp.Controllers
         private readonly PortalAukcyjnyContext _context;
         private readonly BreadcrumbService breadcrumbService;
         private readonly SetPagerService pagerService;
+        private readonly AuctionFilesService fileService;
         private string iconPathError;
 
         public CategoriesController(PortalAukcyjnyContext context, 
             BreadcrumbService breadcrumbService,
-            SetPagerService pagerService)
+            SetPagerService pagerService,
+            AuctionFilesService fileService)
         {
             _context = context;
             this.breadcrumbService = breadcrumbService;
             this.pagerService = pagerService;
-            iconPathError = "/image/noIcon.jpg";
+            this.fileService = fileService;
+            iconPathError = fileService.GetErrorIconPath();
         }
 
         // GET: Categories

@@ -120,6 +120,9 @@
   <data name="AccountDetails" xml:space="preserve">
     <value>Account details</value>
   </data>
+  <data name="AuctionsIndex" xml:space="preserve">
+    <value>Available auctions</value>
+  </data>
   <data name="Company" xml:space="preserve">
     <value>Company</value>
   </data>
@@ -131,6 +134,9 @@
   </data>
   <data name="Email" xml:space="preserve">
     <value>E-mail</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End date</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>E-mail format is invalid</value>
@@ -153,6 +159,9 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Auction owner</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
@@ -164,6 +173,9 @@
   </data>
   <data name="PasswordVerification" xml:space="preserve">
     <value>Repeat password</value>
+  </data>
+  <data name="PublishDate" xml:space="preserve">
+    <value>Publish date</value>
   </data>
   <data name="RegistrationSucces" xml:space="preserve">
     <value>Registration succesful!
@@ -180,6 +192,9 @@ You can now login into your accont.</value>
   </data>
   <data name="SelectTheme" xml:space="preserve">
     <value>Select Theme</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start date</value>
   </data>
   <data name="ThemeType" xml:space="preserve">
     <value>Type of Theme</value>

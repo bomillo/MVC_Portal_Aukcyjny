@@ -70,6 +70,15 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available auctions.
+        /// </summary>
+        public static string AuctionsIndex {
+            get {
+                return ResourceManager.GetString("AuctionsIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company.
         /// </summary>
         public static string Company {
@@ -102,6 +111,15 @@ namespace WebApp.Resources.Authentication {
         public static string Email {
             get {
                 return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End date.
+        /// </summary>
+        public static string EndDate {
+            get {
+                return ResourceManager.GetString("EndDate", resourceCulture);
             }
         }
         
@@ -169,6 +187,15 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auction owner.
+        /// </summary>
+        public static string Owner {
+            get {
+                return ResourceManager.GetString("Owner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {
@@ -201,6 +228,15 @@ namespace WebApp.Resources.Authentication {
         public static string PasswordVerification {
             get {
                 return ResourceManager.GetString("PasswordVerification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Publish date.
+        /// </summary>
+        public static string PublishDate {
+            get {
+                return ResourceManager.GetString("PublishDate", resourceCulture);
             }
         }
         
@@ -247,6 +283,15 @@ namespace WebApp.Resources.Authentication {
         public static string SelectTheme {
             get {
                 return ResourceManager.GetString("SelectTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start date.
+        /// </summary>
+        public static string StartDate {
+            get {
+                return ResourceManager.GetString("StartDate", resourceCulture);
             }
         }
         

@@ -1235,28 +1235,47 @@ nav {
   border-radius: 9999px;
 }
 
-#auctionTable thead th {
-  text-align: center;
-  font-weight: bold;
+.list--header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
-#auctionTable tbody a {
-  display: block;
-}
-#auctionTable tbody tr {
-  height: 8vh;
+.list--header .add--auction--button {
+  text-decoration: none;
+  padding: 10pt;
 }
 
-.div--table {
+.auctions--column--container {
   width: 100%;
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.auctions--column--container .auction--icon .icon {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: fill;
+  border-radius: 10pt;
+}
+.auctions--column--container .auction--middle--column {
+  display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 70%;
 }
-.div--table .table--head {
-  display: table-header-group;
-  text-align: center;
-  font-weight: bold;
+.auctions--column--container .auction--title {
+  font-size: x-large;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
-.table--head .item {
-    width: 10%;
+.auctions--column--container .auction--owner {
+  float: right;
+}
+.auctions--column--container .auction--price {
+  width: 10%;
+  font-size: x-large;
 }

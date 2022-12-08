@@ -54,6 +54,7 @@ namespace WebApp.Controllers
                 page = 1;
             
             var portalAukcyjnyContext = _context.Auctions
+                .Where(x => x.IsDraft == false)
                 .Include(a => a.Owner)
                 .Include(a => a.Product).OrderBy(a => a.AuctionId);
 
