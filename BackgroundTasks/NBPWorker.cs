@@ -21,7 +21,7 @@ namespace BackgroundTasks
         public ILogger<NBPWorker> Logger;
         private readonly CurrencyDownloadService service;
         private readonly PortalAukcyjnyContext2 context;
-        private readonly TimeSpan downloadIdleDays = TimeSpan.FromDays(4);
+        private readonly TimeSpan downloadIdle = TimeSpan.FromDays(4);
 
         public NBPWorker(ILogger<NBPWorker> logger, CurrencyDownloadService service, IServiceScopeFactory factory)
         {
@@ -36,8 +36,8 @@ namespace BackgroundTasks
             {
                 Logger.LogInformation("NBP WORKER: Starting downloading at " + DateTime.Now.ToShortTimeString());
 
-                new Timer(UpdateCurrencyDatabase, null, TimeSpan.Zero, downloadIdleDays);
-                await Task.Delay(downloadIdleDays);
+                new Timer(UpdateCurrencyDatabase, null, TimeSpan.Zero, downloadIdle);
+                await Task.Delay(downloadIdle);
             }
         }
 
@@ -54,7 +54,7 @@ namespace BackgroundTasks
 
             context.SaveChanges();
 
-            Logger.LogInformation("NBP WORKER: Data downloaded - idle: " + downloadIdleDays + " days");
+            Logger.LogInformation("NBP WORKER: Data downloaded - idle: " + downloadIdle + " days");
         }
     }
 }

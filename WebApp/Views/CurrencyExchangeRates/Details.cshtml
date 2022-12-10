@@ -1,4 +1,4 @@
-﻿@model WebApp.Models.CurrencyExchangeRate
+﻿@model List<WebApp.Models.CurrencyExchangeRate>
 
 @{
     ViewData["Title"] = "";
@@ -13,33 +13,43 @@
 </head>
 <body>
 
-<div>
-    <h4>CurrencyExchangeRate</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CurrencyCode)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CurrencyCode)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ExchangeRate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ExchangeRate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastUpdatedTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastUpdatedTime)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.CurrencyId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <h4>@Model[0].CurrencyCode Currency Rate History</h4>
+        <hr />
+        <a asp-action="Index">Back to List</a>
+
+        <table class="table" style="text-align: center">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model[0].CurrencyCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model[0].ExchangeRate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model[0].LastUpdatedTime)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CurrencyCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ExchangeRate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastUpdatedTime)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
 </body>
 </html>
