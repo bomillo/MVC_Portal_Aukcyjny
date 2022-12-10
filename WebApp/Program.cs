@@ -13,14 +13,23 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using WebApp.Services.Emails;
 using WebApp.Models;
+using BackgroundTasks;
+using BackgroundTasks.Services;
+using BackgroundTasks.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
+    builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
 
+// BG task services
+    builder.Services.AddDbContext<PortalAukcyjnyContext2>(options => 
+                options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
+    builder.Services.AddHostedService<NBPWorker>();
+    builder.Services.AddSingleton<CurrencyDownloadService>();
+// 
 builder.Services.AddControllersWithViews();
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
