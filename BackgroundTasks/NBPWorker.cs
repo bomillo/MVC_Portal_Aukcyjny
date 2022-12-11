@@ -45,8 +45,11 @@ namespace BackgroundTasks
         {
             var currList = service.GetAll();
 
-            foreach (var item in currList[0].rates)
+            IRateIterator<Rate> rateIterator = currList[0].getIterator();
+
+            while(rateIterator.hasNext())
             {
+                var item = rateIterator.next();
                 CurrencyExchangeRate rate = new CurrencyExchangeRate(item.code, item.mid, DateTime.Now.ToUniversalTime());
 
                 context.CurrencyExchangeRates.Add(rate);
