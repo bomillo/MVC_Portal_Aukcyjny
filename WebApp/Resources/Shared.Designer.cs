@@ -79,6 +79,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your account has assigned api key.
+        /// </summary>
+        internal static string ApiKeyExist {
+            get {
+                return ResourceManager.GetString("ApiKeyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can&apos;t bid on your own auction.
         /// </summary>
         internal static string BidInvalidUser {
@@ -196,6 +205,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create new api key.
+        /// </summary>
+        internal static string GenerateApiKey {
+            get {
+                return ResourceManager.GetString("GenerateApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to High Contrast.
         /// </summary>
         internal static string HighContrast {
@@ -246,6 +264,15 @@ namespace WebApp.Resources {
         internal static string NewAnswer {
             get {
                 return ResourceManager.GetString("NewAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save it in safe place. Your api key is.
+        /// </summary>
+        internal static string NewApiKey {
+            get {
+                return ResourceManager.GetString("NewApiKey", resourceCulture);
             }
         }
         

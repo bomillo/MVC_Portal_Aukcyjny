@@ -123,6 +123,9 @@
   <data name="Answer" xml:space="preserve">
     <value>Answer</value>
   </data>
+  <data name="ApiKeyExist" xml:space="preserve">
+    <value>Your account has assigned api key</value>
+  </data>
   <data name="BidInvalidUser" xml:space="preserve">
     <value>You can't bid on your own auction</value>
   </data>
@@ -162,6 +165,9 @@
   <data name="FieldTooShort" xml:space="preserve">
     <value>Too short input</value>
   </data>
+  <data name="GenerateApiKey" xml:space="preserve">
+    <value>Create new api key</value>
+  </data>
   <data name="HighContrast" xml:space="preserve">
     <value>High Contrast</value>
   </data>
@@ -179,6 +185,9 @@
   </data>
   <data name="NewAnswer" xml:space="preserve">
     <value>Type your answer here...</value>
+  </data>
+  <data name="NewApiKey" xml:space="preserve">
+    <value>Save it in safe place. Your api key is</value>
   </data>
   <data name="NewQuestion" xml:space="preserve">
     <value>Ask your question to seller here....</value>

@@ -512,7 +512,6 @@ input[type=file] {
 .box--horizontal .box--center {
     text-align: center;
     display: flex;
-    width: 15vw;
 }
 
 .box--horizontal .box--center .button {
@@ -1425,3 +1424,15 @@ nav {
 }
 
 
+.button--group{
+    border: 1px solid;
+    border-radius: 0px;
+    border-collapse: collapse;
+    &--first{
+        border-radius: 0.4rem 0 0 0.4rem;
+    }
+
+    &--last{
+        border-radius: 0 0.4rem 0.4rem 0;
+    }
+}
