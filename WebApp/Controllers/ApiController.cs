@@ -28,6 +28,11 @@ namespace WebApp.Controllers
         [Route("/api/Auctions/Bids")]
         public async Task<ActionResult> ListAuctionBids(AuctionBidsRequest auctionBidsRequest)
         {
+            if (auctionBidsRequest.AuctionId == 0)
+            {
+                return new BadRequestObjectResult(new JsonResult(new { message = WebApp.Resources.Shared.InvalidRequestData }));
+            }
+
             HttpContext.Items.Add("auctionBidsRequest", auctionBidsRequest);
             return await proxy.GetAuctionBids(HttpContext);
         }
@@ -43,6 +48,10 @@ namespace WebApp.Controllers
         [Route("/api/Bid/Add")]
         public ActionResult Bid(AddBidRequset addBidRequset)
         {
+            if (addBidRequset.Bid == 0 || addBidRequset.AuctionId == 0)
+            {
+                return new BadRequestObjectResult(new JsonResult(new { message = WebApp.Resources.Shared.InvalidRequestData }));
+            }
             HttpContext.Items.Add("addBidRequest", addBidRequset);
             return proxy.Bid(HttpContext);
         }
@@ -53,15 +62,24 @@ namespace WebApp.Controllers
         [Route("/api/User/ObservedAuctions/Observe")]
         public ActionResult StartObservingAuction(int auctionId)
         {
+            if (auctionId == 0)
+            {
+                return new BadRequestObjectResult(new JsonResult(new { message = WebApp.Resources.Shared.InvalidRequestData }));
+            }
             HttpContext.Items.Add("auctionId", auctionId);
             return proxy.StartObservingAuction(HttpContext);
         }
 
         [HttpPost]
-        [Route("/api/Bid")]
-        public ActionResult DirectMessage(int id)
+        [Route("/api/user/directmessage/new")]
+        public ActionResult DirectMessage(CreateDMRequest request)
         {
-            return proxy.SendDirectMessageToAuctionOwnerWhenAuctionNotDraftAndAuctionNotEndedAndHigherBidNotPlaced(id, HttpContext);
+            if(string.IsNullOrEmpty(request.Message) || string.IsNullOrWhiteSpace(request.Title) || request.AuctionId == 0)
+            {
+                return new BadRequestObjectResult(new JsonResult(new { message = WebApp.Resources.Shared.InvalidRequestData }));
+            }
+            HttpContext.Items.Add("createDMRequest", request);
+            return proxy.SendDirectMessageToAuctionOwnerWhenAuctionNotDraftAndAuctionNotEndedAndHigherBidNotPlaced(HttpContext);
         }
     }
 }

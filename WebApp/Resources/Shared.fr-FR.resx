@@ -198,6 +198,9 @@
   <data name="LoggedInAs" xml:space="preserve">
     <value>Logged in as (FR) </value>
   </data>
+  <data name="MessageSent" xml:space="preserve">
+    <value>Message has been sent (FR)</value>
+  </data>
   <data name="NewAnswer" xml:space="preserve">
     <value>Type your answer here (FR)</value>
   </data>

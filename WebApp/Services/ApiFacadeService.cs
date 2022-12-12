@@ -14,13 +14,15 @@ namespace WebApp.Services
         private readonly AuctionsService auctionsService;
         private readonly UsersService usersService;
         private readonly ObservAuctionService observedAuctionService;
+        private readonly DMService dmService;
 
-        public ApiFacadeService(BidsService bidsService, AuctionsService auctionsService, UsersService usersService, ObservAuctionService observedAuctionService)
+        public ApiFacadeService(BidsService bidsService, AuctionsService auctionsService, UsersService usersService, ObservAuctionService observedAuctionService, DMService dmService)
         {
             this.bidsService = bidsService;
             this.auctionsService = auctionsService;
             this.usersService = usersService;
             this.observedAuctionService = observedAuctionService;
+            this.dmService = dmService;
         }
         public ActionResult Bid(HttpContext httpContext)
         {
@@ -143,9 +145,30 @@ namespace WebApp.Services
             return new OkObjectResult(response);
         }
 
-        public ActionResult SendDirectMessageToAuctionOwnerWhenAuctionNotDraftAndAuctionNotEndedAndHigherBidNotPlaced(int id, HttpContext httpContext)
+        public ActionResult SendDirectMessageToAuctionOwnerWhenAuctionNotDraftAndAuctionNotEndedAndHigherBidNotPlaced(HttpContext httpContext)
         {
-            throw new NotImplementedException();
+            httpContext.Items.TryGetValue("userid", out var userIdObj);
+            httpContext.Items.TryGetValue("createDMRequest", out var requestObj);
+            if(userIdObj == null || requestObj == null)
+            {
+                return new BadRequestObjectResult(new JsonResult(new { message = WebApp.Resources.Shared.InvalidRequestData }));
+            }
+            var senderId = (int)userIdObj;
+            var request = (CreateDMRequest)requestObj;
+
+            var auction = auctionsService.GetAuction(request.AuctionId);
+
+            var dm = new DirectMessage()
+            {
+                SenderId = senderId,
+                ReceiverId = auction.OwnerId,
+                Message = request.Message,
+                SentTime = DateTime.UtcNow
+            };
+
+            dmService.SendDM(dm);
+
+            return new OkObjectResult(new JsonResult(new { message = WebApp.Resources.Shared.MessageSent }));
         }
 
         public ActionResult StartObservingAuction(HttpContext httpContext)
@@ -158,6 +181,8 @@ namespace WebApp.Services
 
             observedAuctionService.Observe(auctionId, userId);
             var auction = auctionsService.GetAuction(auctionId);
+            
+
             return new OkObjectResult(new JsonResult(new { message = $"{WebApp.Resources.Shared.NowObserving} {auction.Title}"}));
         }
     }
@@ -166,7 +191,7 @@ namespace WebApp.Services
     {
         public ActionResult CreateNewAuction(HttpContext httpContext);
         public ActionResult Bid(HttpContext httpContext);
-        public ActionResult SendDirectMessageToAuctionOwnerWhenAuctionNotDraftAndAuctionNotEndedAndHigherBidNotPlaced(int id, HttpContext httpContext);
+        public ActionResult SendDirectMessageToAuctionOwnerWhenAuctionNotDraftAndAuctionNotEndedAndHigherBidNotPlaced(HttpContext httpContext);
         public ActionResult GetActiveAuctions(HttpContext httpContext);
         public Task<ActionResult> GetAuctionBids(HttpContext httpContext);
         public ActionResult ObservedAuctions(HttpContext httpContext);

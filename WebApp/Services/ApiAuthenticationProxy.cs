@@ -74,7 +74,7 @@ namespace WebApp.Services
             return service.ObservedAuctions(httpContext);
         }
 
-        public ActionResult SendDirectMessageToAuctionOwnerWhenAuctionNotDraftAndAuctionNotEndedAndHigherBidNotPlaced(int id, HttpContext httpContext)
+        public ActionResult SendDirectMessageToAuctionOwnerWhenAuctionNotDraftAndAuctionNotEndedAndHigherBidNotPlaced(HttpContext httpContext)
         {
             var authResult = AuthenticateUser(ref httpContext);
             if (!authResult)
@@ -83,7 +83,7 @@ namespace WebApp.Services
             }
 
 
-            return service.SendDirectMessageToAuctionOwnerWhenAuctionNotDraftAndAuctionNotEndedAndHigherBidNotPlaced(id, httpContext);
+            return service.SendDirectMessageToAuctionOwnerWhenAuctionNotDraftAndAuctionNotEndedAndHigherBidNotPlaced(httpContext);
         }
 
         public ActionResult StartObservingAuction(HttpContext httpContext)
