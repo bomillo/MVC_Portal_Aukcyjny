@@ -35,11 +35,21 @@ namespace BackgroundTasks.Services
             //var url = $"https://api.nbp.pl/api/exchangerates/rates/{exchangeTable}/{currCode}/?format={format}";
             var web = new WebClient();
 
-            var response = web.DownloadString(url);
-            List<CurrencyTable> myDeserializedClass = JsonConvert.DeserializeObject<List<CurrencyTable>>(response);
+            try
+            {
+                var response = web.DownloadString(url);
 
+                List<CurrencyTable> myDeserializedClass = JsonConvert.DeserializeObject<List<CurrencyTable>>(response);
+         
+                return myDeserializedClass;
 
-            return myDeserializedClass;
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return null;
         }
     }
 }

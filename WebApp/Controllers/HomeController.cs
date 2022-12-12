@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PortalAukcyjny.Models;
 using System.Diagnostics;
 using WebApp.Context;
+using WebApp.Models;
 using WebApp.Models.DTO;
 using WebApp.Services;
 
@@ -13,31 +14,38 @@ namespace PortalAukcyjny.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly PortalAukcyjnyContext _context;
         private readonly AuctionFilesService filesService;
+        private readonly BidsService bidsService;
         private string iconErrorPath;
         private string imageErrorPath;
 
-        public HomeController(ILogger<HomeController> logger, PortalAukcyjnyContext context, AuctionFilesService filesService)
+        public HomeController(ILogger<HomeController> logger, 
+            PortalAukcyjnyContext context, 
+            AuctionFilesService filesService,
+            BidsService bidsService)
         {
             _logger = logger;
             _context = context;
             this.filesService = filesService;
+            this.bidsService = bidsService;
             iconErrorPath = filesService.GetErrorIconPath();
             imageErrorPath = filesService.GetErrorImagePath();
         }
 
-        public IActionResult Index()   
+        public async Task<IActionResult> IndexAsync()   
         {
             var categories = (from c in _context.Categories
                              .OrderBy(cat => cat.ParentCategory)
                              .Take(10)
                              select c).ToList();
 
+            int userId;
+            int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value, out userId);
             ViewBag.Categories = categories;
 
 
             var recentlyFinished = (from a in _context.Auctions
                                     .Include(p => p.Product)
-                                    .Where(x => x.EndTime <= DateTime.UtcNow)
+                                    .Where(x => x.EndTime <= DateTime.UtcNow && x.IsDraft == false)
                                     .OrderByDescending(x => x.EndTime)
                                     .Take(5)
                                     select a).ToList();
@@ -54,12 +62,12 @@ namespace PortalAukcyjny.Controllers
                 else
                     path = imageErrorPath;
 
-                var Bid = _context.Bid.Where(x => x.AuctionId == auction.AuctionId).ToList();
+                var Bid = await bidsService.GetAuctionBids(auction.AuctionId, userId);
                 recentlyFinishedAuctions.Add(new DisplayAuctionsModel()
                 {
                     Auction = auction,
                     iconPath = path,
-                    Bid = Bid.Select(x => x.Price).DefaultIfEmpty(0).Max()
+                    Bid = Bid.Count == 0 ? "No offers" : Bid.First().Price 
                 });
             }
 
@@ -79,7 +87,7 @@ namespace PortalAukcyjny.Controllers
             foreach (var auction in interestingAuctions)
             {
                 var icon = _context.ProductFiles.Where(x => x.ProductId == auction.AuctionId && x.Name.StartsWith("ICON")).FirstOrDefault();
-                var currentBids = _context.Bid.Where(x => x.AuctionId == auction.AuctionId).ToList();
+                var Bid = await bidsService.GetAuctionBids(auction.AuctionId, userId);
                 string path = null;
                 
                 if (icon != null)
@@ -91,7 +99,7 @@ namespace PortalAukcyjny.Controllers
                 {
                     Auction = auction,
                     iconPath = path,
-                    Bid = currentBids.Select(x => x.Price).DefaultIfEmpty(0).Max()
+                    Bid = Bid.Count == 0 ? "No offers" : Bid.First().Price 
                 });
 
             }

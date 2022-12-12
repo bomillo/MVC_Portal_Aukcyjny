@@ -9,8 +9,11 @@ namespace BackgroundTasks.Models
 {
     public class CurrencyExchangeRate
     {
-        public CurrencyExchangeRate(string currencyCode, double exchangeRate, DateTime lastUpdatedTime)
+        public CurrencyExchangeRate() { }
+
+        public CurrencyExchangeRate(string name, string currencyCode, double exchangeRate, DateTime lastUpdatedTime)
         {
+            CurrencyName = name.;
             CurrencyCode = currencyCode;
             ExchangeRate = exchangeRate;
             LastUpdatedTime = lastUpdatedTime;
@@ -18,6 +21,7 @@ namespace BackgroundTasks.Models
 
         [Key]
         public int CurrencyId { get; set; }
+        public string CurrencyName { get; set; }
         public string CurrencyCode { get; set; }
         public double ExchangeRate { get; set; }
         public DateTime LastUpdatedTime { get; set; }

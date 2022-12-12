@@ -45,19 +45,38 @@ namespace BackgroundTasks
         {
             var currList = service.GetAll();
 
-            IRateIterator<Rate> rateIterator = currList[0].getIterator();
-
-            while(rateIterator.hasNext())
+            if (currList != null)
             {
-                var item = rateIterator.next();
-                CurrencyExchangeRate rate = new CurrencyExchangeRate(item.code, item.mid, DateTime.Now.ToUniversalTime());
+                IRateIterator<Rate> rateIterator = currList[0].getIterator();
 
-                context.CurrencyExchangeRates.Add(rate);
+                while (rateIterator.hasNext())
+                {
+                    var item = rateIterator.next();
+
+                    var currency = context.CurrencyExchangeRates.Where(x => x.CurrencyCode == item.code).FirstOrDefault();
+                    if (currency != null)
+                    {
+                        currency.ExchangeRate = item.mid;
+                        currency.LastUpdatedTime = DateTime.UtcNow;
+                        context.Update(currency);
+                    }
+                    else
+                    {
+                        CurrencyExchangeRate rate = new CurrencyExchangeRate(item.currency, item.code, item.mid, DateTime.Now.ToUniversalTime());
+                        context.CurrencyExchangeRates.Add(rate);
+                    }
+                }
+
+                var pln = context.CurrencyExchangeRates.Where(x => x.CurrencyCode == "PLN").FirstOrDefault();
+                if (pln == null)
+                {
+                    CurrencyExchangeRate złoty = new CurrencyExchangeRate("złoty polski", "PLN", 1, DateTime.Now.ToUniversalTime());
+                    context.CurrencyExchangeRates.Add(złoty);
+                }
+
+                context.SaveChanges();
+                Logger.LogInformation("NBP WORKER: Data downloaded - idle: " + downloadIdle + " days");
             }
-
-            context.SaveChanges();
-
-            Logger.LogInformation("NBP WORKER: Data downloaded - idle: " + downloadIdle + " days");
         }
     }
 }
