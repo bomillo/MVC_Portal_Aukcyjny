@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Elastic.Clients.Elasticsearch;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,7 @@ namespace WebApp.Controllers
         private readonly BreadcrumbService breadcrumbService;
         private readonly AuctionFilesService _auctionFilesService;
         private readonly ObservAuctionService _observedAuctionService;
+        private readonly ElasticsearchClient _elasticsearchClient;
         private readonly BidsService bidsService;
         private readonly SetPagerService pagerService;
 
@@ -33,7 +35,9 @@ namespace WebApp.Controllers
             BreadcrumbService breadcrumbService, 
             AuctionFilesService auctionFileService, 
             BidsService bidsService,
-            SetPagerService pagerService)
+            SetPagerService pagerService,
+            ElasticsearchClient elasticsearchClient
+            )
         {
             _context = context;
             this._observedAuctionService = observAuctionService;
@@ -43,8 +47,7 @@ namespace WebApp.Controllers
             this.pagerService = pagerService;
             this._auctionFilesService = auctionFileService;
 
-            
-
+            _elasticsearchClient = elasticsearchClient;
         }
 
         // GET: Auctions
@@ -185,6 +188,7 @@ namespace WebApp.Controllers
                 auction.CreationTime = DateTime.SpecifyKind(DateTime.Now.ToUniversalTime(), DateTimeKind.Utc);
 
                 _context.Add(auction);
+                _elasticsearchClient.Index(new ElasticAuction { Id = auction.AuctionId, Title = auction.Title }, "auctions");
                 await _context.SaveChangesAsync();
 
                 //var product = _context.Products.Where(p => p.AuctionId == auction.AuctionId).FirstOrDefault();

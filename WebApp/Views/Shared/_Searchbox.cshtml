@@ -8,13 +8,23 @@
     <input type="hidden" id="recaptcha-response" name="token"/>
 <div class="header--searchbar--group" id="searchGroup">
     <input type="text" class="header--searchbar--input text--primary background--primary border--primary" placeholder="@WebApp.Resources.Shared.Search" id="searchString" name="query" oninput="getCompletion()" autocomplete="off"/>
-    <div class="header--searchbar--box text--primary background--primary border--primary" id="searchBox">
+    <div class="header--searchbar--box text--primary background--primary border--primary" style="z-index: 10;" id="searchBox">
         <hr />
-        <p>Completion 1</p>
-        <p>Completion 2</p>
-        <p>Completion 3</p>
-        <p>Completion 4</p>
-        <p>Completion 5</p>
+        <p>
+            <a id="search_tooltip_0" href="/" style="text-decoration: none;" class="text--primary"></a>
+        </p>
+        <p>
+            <a id="search_tooltip_1" href="/" style="text-decoration: none;" class="text--primary"></a>
+        </p>
+        <p>
+            <a id="search_tooltip_2" href="/" style="text-decoration: none;" class="text--primary"></a>
+        </p>
+        <p>
+            <a id="search_tooltip_3" href="/" style="text-decoration: none;" class="text--primary"></a>
+        </p>
+        <p>
+            <a id="search_tooltip_4" href="/" style="text-decoration: none;" class="text--primary"></a>
+        </p>
     </div>
 </div>
 <select class="header--searchbar--select text--primary background--primary border--primary">
@@ -65,12 +75,45 @@
 </div>
 <script>
  
+    function showTooltipAtIndex(index, href, content) {
+        let obj = $("#search_tooltip_" + index); 
+        obj.html(content);
+        obj.attr("href", href);
+        obj.show();
+    }
+
+    function hideTooltipAtIndex(index) {
+        $("#search_tooltip_" + index).hide();
+    }
+
     function getCompletion(){
         var input = $("#searchString");
         var currentInput = input.val();
+
+
         if(currentInput.length > 2){
-            $("#searchBox").show();
-            input.css({"border-bottom":"0px","border-radius": "25px 0px 0px 0px"});
+            $.get("@Url.Action("GetSearchIdea","ElasticSearch")",
+                {
+                    text: currentInput
+                },
+                function (data) {
+                    if (data.result != null) {
+                        
+                        for (let i = 0; i < data.result.length; i++) {
+                            showTooltipAtIndex(i, "@Url.Action("Auction","Auctions")"+"/"+data.result[i].id, data.result[i].title);
+                        }
+                        for (let i = data.result.length; i < 5; i++) {
+                            hideTooltipAtIndex(i);
+                        }
+
+                        $("#searchBox").show();
+                        input.css({ "border-bottom": "0px", "border-radius": "25px 0px 0px 0px" });
+                    }else {
+                        $("#searchBox").hide();
+                        input.css({ "border-bottom": "1px solid", "border-radius": "25px 0px 0px 25px" });
+                    }
+                }
+            );
         }
         else{
             $("#searchBox").hide();

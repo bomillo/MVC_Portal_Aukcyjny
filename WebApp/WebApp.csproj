@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="BuildWebCompiler2022" Version="1.14.8" Condition="$([MSBuild]::IsOsPlatform('Windows'))" />
+    <PackageReference Include="Elastic.Clients.Elasticsearch" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />

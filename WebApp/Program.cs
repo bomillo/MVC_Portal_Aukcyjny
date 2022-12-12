@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using WebApp.Services.Emails;
 using WebApp.Models;
+using Elastic.Clients.Elasticsearch;
+using Elastic.Transport;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
+
+builder.Services.AddSingleton(new ElasticsearchClient(new ElasticsearchClientSettings(new Uri("http://localhost:9200")).DisableDirectStreaming()));
+
 
 builder.Services.AddControllersWithViews();
 builder.Services.Configure<CookiePolicyOptions>(options =>
@@ -33,6 +38,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     };
     options.MinimumSameSitePolicy = SameSiteMode.Lax;
 });
+
 
 
 builder.Services.AddAuthorization(options =>
