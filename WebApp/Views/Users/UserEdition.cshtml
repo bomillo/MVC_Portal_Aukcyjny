@@ -98,6 +98,17 @@
                     @modelUser.Language
                 </div>
             </div>
+
+            <div class="item">
+                <div class="title">
+                    @Localization.ItemsOnPage:
+                </div>
+
+                <div class="info">
+                    @modelUser.itemsOnPage
+                </div>
+            </div>
+
         </div>
     </div>
     
@@ -196,6 +207,17 @@
                         </div>
                     </div>
 
+                    <div class="item">
+                        <div class="form--group">
+                            <label class="control-label form--label">@Localization.ItemsOnPage:</label>
+                            @Html.DropDownListFor(m => m.itemsOnPage, 
+                                Enumerable.Range(20, 120).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }), 
+                                @Localization.SelectNumber,
+                                new { @class = "control--input form--input" })
+
+                        </div>
+                    </div>
+
                 <div class="form--buttons">
                     <button type="submit" class="button button--secondary button--rounded">Save</button>
                     <a asp-action="UserAccount" asp-route-id="@modelUser.UserId" class="button button--secondary button--rounded">Back to Account</a>
@@ -214,13 +236,25 @@
 
 <script>
     var correctPwd = $("#correctPwd").text();
-
-    $("#password").keyup(function () {
-        var input = $("#password").val();
-        Hash(input);
-    }).keyup(); 
     
+    if(correctPwd)
+    {
+        $("#show_hide").hide();
+        $("#password").keyup(function () {
+            var input = $("#password").val();
+            if(input.length > 0)
+                Hash(input);
+        }).keyup(); 
+    }
+    else 
+    {
+        $("#show_hide").show();
+        $("#password").prop("disabled", true);
+    }
+
     function Hash(_password) {
+        var el = document.getElementById("password");
+
         $.ajax(
         {
             type: "POST",
@@ -228,12 +262,15 @@
             rp: 6,
             url: '@Url.Action("HashPassword", "Users")' + "?password=" + _password ,
             success: function (result) {
+                $("#message").hide();
                 if (result === correctPwd) {
                     $("#show_hide").show();
-                    $("#message").hide();
+                        el.style.borderBlockColor = "green";
+                        el.style.backgroundColor = "lightgreen";
                 } 
                 else {
                     $("#show_hide").hide();
+                        el.style.backgroundColor = "lightcoral";
                 }
             },
             error: function (x, e) {

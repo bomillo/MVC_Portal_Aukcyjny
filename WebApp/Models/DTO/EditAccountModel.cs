@@ -31,5 +31,7 @@ namespace WebApp.Models.DTO
 
         public ThemeType? newThemeType { get; set; }
 
+        public int? itemsOnPage { get; set; }
+
     }
 }

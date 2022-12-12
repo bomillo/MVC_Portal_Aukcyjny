@@ -265,7 +265,7 @@ namespace WebApp.Controllers
         // POST: Users/UserEdition/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UserEdition(int? id, [Bind("Name,Email,OldPassword,Password,PasswordVerification,CompanyId,newThemeType,newLanguage")] EditAccountModel editedUser)
+        public async Task<IActionResult> UserEdition(int? id, [Bind("Name,Email,OldPassword,Password,PasswordVerification,CompanyId,newThemeType,newLanguage,itemsOnPage")] EditAccountModel editedUser)
         {
             if (id == null || _context.Users == null)
             {
@@ -344,6 +344,49 @@ namespace WebApp.Controllers
                     await HttpContext.SignInAsync("CookieAuthentication", new ClaimsPrincipal(claimsIdentity));
                 }
             }
+            else  // first edition after loging with external provider - no password input
+            {
+                if (editedUser.Password != editedUser.PasswordVerification)
+                {
+                    ModelState.AddModelError("Password", WebApp.Resources.Authentication.Localization.PasswordNotMatch);
+
+                    ViewBag.User = user;
+
+                    List<Language> languages = Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
+                    List<ThemeType> themes = Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().ToList();
+
+                    ViewData["Languages"] = new SelectList(languages, null);
+                    ViewData["Themes"] = new SelectList(themes, null);
+                    ViewData["CompanyId"] = new SelectList(_context.Companies, "CompanyId", "Name", user.CompanyId);
+
+                    return View(editedUser);
+                }
+
+                if (editedUser.Name != null)
+                    user.Name = editedUser.Name;
+
+                if (editedUser.Email != null)
+                    user.Email = editedUser.Email;
+
+                if (editedUser.Password != null)
+                    user.PasswordHashed = _usersService.HashPassword(editedUser.Password);
+
+                if (editedUser.CompanyId != null)
+                    user.CompanyId = editedUser.CompanyId;
+
+                var claims = new List<Claim>()
+                    {
+                        new Claim(ClaimTypes.Name, user.Name),
+                        new Claim("mail", user.Email),
+                        new Claim("userid", user.UserId.ToString())
+                    };
+
+                HttpContext.Response.Cookies.Append("CookieAuthentication", null, new CookieOptions { Expires = DateTime.Now.AddDays(-1) });
+                var claimsIdentity = new ClaimsIdentity(claims, "CookieAuthentication");
+                await HttpContext.SignInAsync("CookieAuthentication", new ClaimsPrincipal(claimsIdentity));
+            }
+
+
 
             if (editedUser.newThemeType != null)
             {
@@ -366,10 +409,15 @@ namespace WebApp.Controllers
                 LanguageServices.SetLanguage(Response, user.Language);
             }
 
+            if (editedUser.itemsOnPage != null)
+            {
+                user.itemsOnPage = editedUser.itemsOnPage;
+            }
+
             _context.Update(user);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("UserEdition", new { id = user.UserId, result = Localization.EditionSuccess});
+            return RedirectToAction("UserEdition", new { id = user.UserId, result = Localization.EditionSuccess });
         }
 
         public string HashPassword(string password)

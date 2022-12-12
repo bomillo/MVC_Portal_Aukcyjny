@@ -1,4 +1,5 @@
 ﻿@using WebApp.Models
+@using WebApp.Resources.Authentication;
 @model WebApp.Models.Auction
 
 @{
@@ -107,5 +108,15 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.AuctionId">Edit</a> |
     <a asp-action="Index">Back to List</a> |
-    @Html.ActionLink("Observe", "ObservAuction", "Auctions", new { id = @Model?.AuctionId })
+    @if (User.Identity.IsAuthenticated)
+    {
+        if(ViewBag.IsObserved == true)
+        {
+            @Html.ActionLink(Localization.UnObserve, "UnObservAuction", "Auctions", new { id = @Model?.AuctionId })
+        }
+        else
+        {
+            @Html.ActionLink(Localization.Observe, "ObservAuction", "Auctions", new { id = @Model?.AuctionId })
+        }
+    }
 </div>

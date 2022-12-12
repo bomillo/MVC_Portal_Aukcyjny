@@ -4,6 +4,7 @@ using PortalAukcyjny.Models;
 using System.Diagnostics;
 using WebApp.Context;
 using WebApp.Models.DTO;
+using WebApp.Services;
 
 namespace PortalAukcyjny.Controllers
 {
@@ -11,16 +12,17 @@ namespace PortalAukcyjny.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly PortalAukcyjnyContext _context;
+        private readonly AuctionFilesService filesService;
         private string iconErrorPath;
         private string imageErrorPath;
 
-        public HomeController(ILogger<HomeController> logger, PortalAukcyjnyContext context)
+        public HomeController(ILogger<HomeController> logger, PortalAukcyjnyContext context, AuctionFilesService filesService)
         {
             _logger = logger;
             _context = context;
-
-            iconErrorPath = "/image/noIcon.jpg";
-            imageErrorPath = "/image/NoImage.png";
+            this.filesService = filesService;
+            iconErrorPath = filesService.GetErrorIconPath();
+            imageErrorPath = filesService.GetErrorImagePath();
         }
 
         public IActionResult Index()   

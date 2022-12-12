@@ -30,5 +30,35 @@ namespace WebApp.Services
             }
             return null;
         }
+
+        // returns true if auction is no longer being observed
+        // and false if something went wrong
+        public bool UnObserve(int auctionId, int userId)
+        {
+            var alreadyObserved = _context.ObservedAuctions
+                .Where(oa => oa.UserId == userId && oa.AuctionId == auctionId).FirstOrDefault();
+
+            if (alreadyObserved != null)
+            {
+                _context.ObservedAuctions.Remove(alreadyObserved);
+                _context.SaveChanges();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool IsAuctionObserved(int auctionId, int userId)
+        {
+            var alreadyObserved = _context.ObservedAuctions
+                .Where(oa => oa.UserId == userId && oa.AuctionId == auctionId).FirstOrDefault();
+
+            if (alreadyObserved != null)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
