@@ -100,7 +100,7 @@
                     if (data.result != null) {
                         
                         for (let i = 0; i < data.result.length; i++) {
-                            showTooltipAtIndex(i, "@Url.Action("Details","Auctions")"+"/"+data.result[i].id, data.result[i].title);
+                            showTooltipAtIndex(i, "@Url.Action("Auction","Auctions")"+"/"+data.result[i].id, data.result[i].title);
                         }
                         for (let i = data.result.length; i < 5; i++) {
                             hideTooltipAtIndex(i);
