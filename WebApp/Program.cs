@@ -79,6 +79,9 @@ builder.Services.AddTransient<BreadcrumbService>();
 
 builder.Services.AddTransient<BidsService>();
 builder.Services.AddTransient<AuctionFilesService>();
+builder.Services.AddTransient<ApiAuthenticationProxy>();
+
+builder.Services.AddTransient<IApiFacadeService, ApiFacadeService>();
 
 builder.Services.Configure<GoogleRecaptchaModel>(builder.Configuration.GetSection("reCaptcha"));
 builder.Services.AddTransient<GoogleRecaptchaService>();
@@ -86,6 +89,8 @@ builder.Services.AddTransient<GoogleRecaptchaService>();
 builder.Services.AddMemoryCache();
 
 builder.Services.AddDirectoryBrowser();
+
+builder.Services.AddTransient<AuctionsService>();
 
 var app = builder.Build();
 

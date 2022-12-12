@@ -220,7 +220,9 @@ namespace WebApp.Controllers
                 ViewBag.MyObservedAuctions = observedAuctions;
             }
 
-            var myBids = _context.Bid.Where(x => x.UserId == id).Include(x => x.Auction).ToList();
+            var myBids = _context.Bid.Where(x => x.UserId == id && x.Auction.IsDraft == false)
+                .Include(x => x.Auction)
+                .ToList();
 
             ViewBag.MyBids = myBids;
 

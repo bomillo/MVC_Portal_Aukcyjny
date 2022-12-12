@@ -171,7 +171,8 @@ namespace WebApp.Controllers
 
             if(_context.ApiKeys.Any(x => x.UserId == clientId))
             {
-                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.ApiKeyExist });
+                var key = _context.ApiKeys.First(x => x.UserId == clientId);
+                return new JsonResult(new { valid = false, message = $"{WebApp.Resources.Shared.ApiKeyExist}: <br/> <b>{key.Key}</b>" });
             }
 
             var result = GenerateKey(clientId);
