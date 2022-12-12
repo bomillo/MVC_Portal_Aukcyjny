@@ -1234,3 +1234,48 @@ nav {
   background-clip: padding-box;
   border-radius: 9999px;
 }
+
+.list--header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.list--header .add--auction--button {
+  text-decoration: none;
+  padding: 10pt;
+}
+
+.auctions--column--container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.auctions--column--container .auction--icon .icon {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: fill;
+  border-radius: 10pt;
+}
+.auctions--column--container .auction--middle--column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 70%;
+}
+.auctions--column--container .auction--title {
+  font-size: x-large;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.auctions--column--container .auction--owner {
+  float: right;
+}
+.auctions--column--container .auction--price {
+  width: 10%;
+  font-size: x-large;
+}
