@@ -115,6 +115,15 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of elements on list.
+        /// </summary>
+        public static string ItemsOnPage {
+            get {
+                return ResourceManager.GetString("ItemsOnPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         public static string Language {
@@ -220,6 +229,15 @@ namespace WebApp.Resources.Authentication {
         public static string SelectLanguage {
             get {
                 return ResourceManager.GetString("SelectLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select number.
+        /// </summary>
+        public static string SelectNumber {
+            get {
+                return ResourceManager.GetString("SelectNumber", resourceCulture);
             }
         }
         

@@ -135,6 +135,9 @@
   <data name="InvalidEmail" xml:space="preserve">
     <value>Format e-maila jest niepoprawny.</value>
   </data>
+  <data name="ItemsOnPage" xml:space="preserve">
+    <value>Liczba elementów na liście</value>
+  </data>
   <data name="Language" xml:space="preserve">
     <value>Język</value>
   </data>
@@ -171,6 +174,9 @@ Można się teraz zalogować na nowe konto.</value>
   </data>
   <data name="SelectLanguage" xml:space="preserve">
     <value>Wybierz język</value>
+  </data>
+  <data name="SelectNumber" xml:space="preserve">
+    <value>Wybierz liczbę</value>
   </data>
   <data name="SelectTheme" xml:space="preserve">
     <value>Wybierz motyw</value>

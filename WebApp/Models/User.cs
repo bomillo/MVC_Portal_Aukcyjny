@@ -21,6 +21,7 @@ namespace WebApp.Models
         public ThemeType ThemeType { get; set; }
         [DefaultValue(Language.PL)]
         public Language Language { get; set; }
+        public int? itemsOnPage { get; set; }
         
         public string? ExternalGoogleId { get; set; }
         public string? ExternalFacebookId { get; set; }

@@ -26,15 +26,21 @@ namespace WebApp.Controllers
         private readonly AuctionFilesService _auctionFilesService;
         private readonly ObservAuctionService _observedAuctionService;
         private readonly BidsService bidsService;
+        private readonly SetPagerService pagerService;
 
-
-        public AuctionsController(PortalAukcyjnyContext context, ObservAuctionService observAuctionService, BreadcrumbService breadcrumbService, AuctionFilesService auctionFileService, BidsService bidsService )
+        public AuctionsController(PortalAukcyjnyContext context, 
+            ObservAuctionService observAuctionService, 
+            BreadcrumbService breadcrumbService, 
+            AuctionFilesService auctionFileService, 
+            BidsService bidsService,
+            SetPagerService pagerService)
         {
             _context = context;
             this._observedAuctionService = observAuctionService;
             this.breadcrumbService = breadcrumbService;
 
             this.bidsService = bidsService;
+            this.pagerService = pagerService;
             this._auctionFilesService = auctionFileService;
 
             
@@ -44,28 +50,29 @@ namespace WebApp.Controllers
         // GET: Auctions
         public async Task<IActionResult> Index(int page = 1)
         {
+            if(page < 1)
+                page = 1;
+            
             var portalAukcyjnyContext = _context.Auctions
                 .Include(a => a.Owner)
                 .Include(a => a.Product).OrderBy(a => a.AuctionId);
 
-            const int pageSize = 20;
-            if(page < 1)
-                page = 1;
+            int userId = -1;
+            if(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")) != null)
+                int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value, out userId);
 
+            int pageSize = await pagerService.SetPager(userId);
             int rowsCount = portalAukcyjnyContext.Count();
-
-            var pager = new Pager(rowsCount, page, "Auctions", pageSize );
-
+            
+            var pager = new Pager(rowsCount, page, "Auctions", pageSize);
             var rowsSkipped = (page - 1) * pageSize;
-
             var auctions = portalAukcyjnyContext.Skip(rowsSkipped).Take(pager.PageSize).ToList();
 
             ViewBag.Pager = pager;
 
-            //return View(await portalAukcyjnyContext.ToListAsync());   // for displaying all auctions
-
             return View(auctions);  // for displaying paged auctions
-
+            
+            //return View(await portalAukcyjnyContext.ToListAsync());   // for displaying all auctions
         }
 
         // GET: Auctions/Details/5
@@ -105,7 +112,7 @@ namespace WebApp.Controllers
         public IActionResult Create()
         {
             //var userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.ValueType == "userid").Value.ToString());
-            var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString().ToString().ToString());
+            var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
 
             ViewBag.OwnerId = userId;
             ViewData["ProductId"] = new SelectList(_context.Products.OrderBy(p => p.Name), "ProductId", "Name");
