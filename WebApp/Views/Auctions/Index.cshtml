@@ -1,5 +1,6 @@
 ﻿@using WebApp.Models
-@model IEnumerable<WebApp.Models.Auction>
+@using WebApp.Resources.Authentication;
+@model IEnumerable<WebApp.Models.DTO.DisplayAuctionsModel>
 
 @{
     ViewData["Title"] = "Auctions";
@@ -13,87 +14,55 @@
         pager = ViewBag.Pager;
         pageNo = pager.CurrentPage;
     }
-   
+    //var usr = User.Claims.FirstOrDefault(x => x.Type.ToLower().Contains("mail"))?.Value;
 }
 
-<h1>Index</h1>
+<div class="list--header">
+    <h1 class="text--primary text">@Localization.AuctionsIndex</h1>
+    @if(User.Identity.IsAuthenticated)
+    {
+        <p ><a asp-action="Create" class="button button--secondary button--rounded add--auction--button">Create New</a></p>
+    }
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<hr/>
+    <partial name="_pager" model="@pager" />
+<hr />
 
-<partial name="_pager" model="@pager" />
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDraft)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Owner)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreationTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PublishedTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
 @foreach (var item in Model) {
-        <tr>
-                       
-                <td style=" overflow: hidden; 
-                            text-overflow: ellipsis; 
-                            white-space: nowrap;
-                            max-width: 300px;">
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDraft)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Owner.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PublishedTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AuctionId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AuctionId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AuctionId">Delete</a>
-            </td>
-        </tr>
+        
+    <a class="list--link" asp-controller="Auctions" asp-action="Auction" asp-route-id="@item.Auction.AuctionId">
+        <div class="auctions--column--container">
+            <div class="auction--icon">
+                <img class="icon" src="@item.iconPath"/>
+            </div>
+            <div class="auction--middle--column">
+                <div class="auction--title text--primary">
+                    @Html.DisplayFor(model => item.Auction.Title)
+                </div>
+                <hr />
+                @if(!item.Auction.IsDraft)
+                {
+                    <div class="auction--time text--primary">
+                        <strong>@Localization.PublishDate: </strong>@item.Auction.PublishedTime
+                    </div>
+                    <div class="auction--time text--primary">
+                        <strong>@Localization.EndDate: </strong>@item.Auction.EndTime
+                    </div>
+                }
+                <br />
+                <div class="auction--owner text--primary">
+                    <strong>@Localization.Owner: </strong>@item.Auction.Owner.Name
+                </div>
+            </div>
+            <div class="auction--price text--primary">
+                @string.Format("{0:0.00} zł", item.Bid)
+            </div>
+        </div>
+    </a>
+    <hr class="auction--bottom--line"/>
 }
-    </tbody>
-</table>
-
-
-<partial name="_pager" model="@pager" />
+<hr />
+    <partial name="_pager" model="@pager" />
+<hr/>

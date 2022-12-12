@@ -20,13 +20,20 @@ namespace WebApp.Controllers
     {
         private readonly PortalAukcyjnyContext _context;
         private readonly BreadcrumbService breadcrumbService;
+        private readonly SetPagerService pagerService;
+        private readonly AuctionFilesService fileService;
         private string iconPathError;
 
-        public CategoriesController(PortalAukcyjnyContext context, BreadcrumbService breadcrumbService)
+        public CategoriesController(PortalAukcyjnyContext context, 
+            BreadcrumbService breadcrumbService,
+            SetPagerService pagerService,
+            AuctionFilesService fileService)
         {
             _context = context;
             this.breadcrumbService = breadcrumbService;
-            iconPathError = "/image/noIcon.jpg";
+            this.pagerService = pagerService;
+            this.fileService = fileService;
+            iconPathError = fileService.GetErrorIconPath();
         }
 
         // GET: Categories
@@ -227,8 +234,13 @@ namespace WebApp.Controllers
                 page = 1;
 
 
+            int userId = -1;
+            if (HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")) != null)
+                int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value, out userId);
+
+
             int rowsCount = displayAuctions.Count();
-            const int pageSize = 5;
+            int pageSize = await pagerService.SetPager(userId);;
             var pager = new Pager(rowsCount, page, "Categories", pageSize, "CategoryAuctions", mainCategory.CategoryId);
             var rowsSkipped = (page - 1) * pageSize;
 

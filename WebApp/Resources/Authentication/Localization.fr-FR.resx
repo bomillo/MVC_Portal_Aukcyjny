@@ -120,6 +120,9 @@
   <data name="AccountDetails" xml:space="preserve">
     <value>AccountDetails FR</value>
   </data>
+  <data name="AuctionsIndex" xml:space="preserve">
+    <value>AuctionsIndex FR</value>
+  </data>
   <data name="Company" xml:space="preserve">
     <value>Company FR</value>
   </data>
@@ -132,8 +135,14 @@
   <data name="Email" xml:space="preserve">
     <value>E-mail FR</value>
   </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>EndDate FR</value>
+  </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>InvalidEmial FR</value>
+  </data>
+  <data name="ItemsOnPage" xml:space="preserve">
+    <value>ItemsOnPage FR</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>Language FR</value>
@@ -150,6 +159,12 @@
   <data name="Name" xml:space="preserve">
     <value>Name FR</value>
   </data>
+  <data name="Observe" xml:space="preserve">
+    <value>Observe FR</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Owner FR</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Password FR</value>
   </data>
@@ -162,6 +177,9 @@
   <data name="PasswordVerification" xml:space="preserve">
     <value>PasswordVerification FR</value>
   </data>
+  <data name="PublishDate" xml:space="preserve">
+    <value>PublishDate FR</value>
+  </data>
   <data name="RegistrationSucces" xml:space="preserve">
     <value>RegistrationSucces FR</value>
   </data>
@@ -171,11 +189,20 @@
   <data name="SelectLanguage" xml:space="preserve">
     <value>SelectLanguage FR</value>
   </data>
+  <data name="SelectNumber" xml:space="preserve">
+    <value>SelectNumber FR</value>
+  </data>
   <data name="SelectTheme" xml:space="preserve">
     <value>SelectTheme FR</value>
   </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>StartDate FR</value>
+  </data>
   <data name="ThemeType" xml:space="preserve">
     <value>ThemeType FR</value>
+  </data>
+  <data name="UnObserve" xml:space="preserve">
+    <value>UnObserve FR</value>
   </data>
   <data name="UserType" xml:space="preserve">
     <value>UserType FR</value>

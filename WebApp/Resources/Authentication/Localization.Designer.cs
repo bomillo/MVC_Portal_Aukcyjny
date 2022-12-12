@@ -70,6 +70,15 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available auctions.
+        /// </summary>
+        public static string AuctionsIndex {
+            get {
+                return ResourceManager.GetString("AuctionsIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company.
         /// </summary>
         public static string Company {
@@ -106,11 +115,29 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End date.
+        /// </summary>
+        public static string EndDate {
+            get {
+                return ResourceManager.GetString("EndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to E-mail format is invalid.
         /// </summary>
         public static string InvalidEmail {
             get {
                 return ResourceManager.GetString("InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of elements on list.
+        /// </summary>
+        public static string ItemsOnPage {
+            get {
+                return ResourceManager.GetString("ItemsOnPage", resourceCulture);
             }
         }
         
@@ -160,6 +187,24 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Observe.
+        /// </summary>
+        public static string Observe {
+            get {
+                return ResourceManager.GetString("Observe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auction owner.
+        /// </summary>
+        public static string Owner {
+            get {
+                return ResourceManager.GetString("Owner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {
@@ -196,6 +241,15 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Publish date.
+        /// </summary>
+        public static string PublishDate {
+            get {
+                return ResourceManager.GetString("PublishDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Registration succesful!
         ///You can now login into your accont..
         /// </summary>
@@ -224,6 +278,15 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select number.
+        /// </summary>
+        public static string SelectNumber {
+            get {
+                return ResourceManager.GetString("SelectNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Theme.
         /// </summary>
         public static string SelectTheme {
@@ -233,11 +296,29 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start date.
+        /// </summary>
+        public static string StartDate {
+            get {
+                return ResourceManager.GetString("StartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type of Theme.
         /// </summary>
         public static string ThemeType {
             get {
                 return ResourceManager.GetString("ThemeType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unobserve.
+        /// </summary>
+        public static string UnObserve {
+            get {
+                return ResourceManager.GetString("UnObserve", resourceCulture);
             }
         }
         

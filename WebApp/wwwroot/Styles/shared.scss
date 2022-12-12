@@ -1180,6 +1180,7 @@ nav {
             .text--message {
                 width: 100%;
                 min-height: fit-content;
+                text-align: center;
             }
 
             .item {
@@ -1424,6 +1425,46 @@ nav {
 }
 
 
+
+//
+.list--header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .add--auction--button {
+        text-decoration: none;
+        padding: 10pt;
+    }
+}
+
+
+
+.auctions--column--container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .auction--icon {
+
+        .icon {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: fill;
+            border-radius: 10pt;
+        }
+    }
+
+    .auction--middle--column {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        width: 70%;
+    }
+
 .button--group{
     border: 1px solid;
     border-radius: 0px;
@@ -1439,4 +1480,21 @@ nav {
 
 .grecaptcha-badge{
     bottom: 80px!important;
+}
+    .auction--title {
+        font-size: x-large;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .auction--owner {
+        float: right;
+    }
+
+    .auction--price {
+        width: 10%;
+        font-size: x-large;
+    }
 }

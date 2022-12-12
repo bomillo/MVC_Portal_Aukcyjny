@@ -1041,6 +1041,7 @@ nav {
 .account--edit--page--content .user--account--edition .password--required--edition .text--message {
   width: 100%;
   min-height: fit-content;
+  text-align: center;
 }
 .account--edit--page--content .user--account--edition .password--required--edition .item {
   width: 50%;
@@ -1233,18 +1234,61 @@ nav {
   border-radius: 9999px;
 }
 
-.button--group {
+.list--header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.list--header .add--auction--button {
+  text-decoration: none;
+  padding: 10pt;
+}
+
+.auctions--column--container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.auctions--column--container .auction--icon .icon {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: fill;
+  border-radius: 10pt;
+}
+.auctions--column--container .auction--middle--column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 70%;
+}
+.auctions--column--container .button--group {
   border: 1px solid;
   border-radius: 0px;
   border-collapse: collapse;
 }
-.button--group--first {
+.auctions--column--container .button--group--first {
   border-radius: 0.4rem 0 0 0.4rem;
 }
-.button--group--last {
+.auctions--column--container .button--group--last {
   border-radius: 0 0.4rem 0.4rem 0;
 }
-
-.grecaptcha-badge {
+.auctions--column--container .grecaptcha-badge {
   bottom: 80px !important;
+}
+.auctions--column--container .auction--title {
+  font-size: x-large;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.auctions--column--container .auction--owner {
+  float: right;
+}
+.auctions--column--container .auction--price {
+  width: 10%;
+  font-size: x-large;
 }

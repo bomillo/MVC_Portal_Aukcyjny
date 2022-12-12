@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Elastic.Clients.Elasticsearch;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,47 +26,79 @@ namespace WebApp.Controllers
         private readonly BreadcrumbService breadcrumbService;
         private readonly AuctionFilesService _auctionFilesService;
         private readonly ObservAuctionService _observedAuctionService;
+        private readonly ElasticsearchClient _elasticsearchClient;
         private readonly BidsService bidsService;
+        private readonly SetPagerService pagerService;
 
-
-        public AuctionsController(PortalAukcyjnyContext context, ObservAuctionService observAuctionService, BreadcrumbService breadcrumbService, AuctionFilesService auctionFileService, BidsService bidsService )
+        public AuctionsController(PortalAukcyjnyContext context, 
+            ObservAuctionService observAuctionService, 
+            BreadcrumbService breadcrumbService, 
+            AuctionFilesService auctionFileService, 
+            BidsService bidsService,
+            SetPagerService pagerService,
+            ElasticsearchClient elasticsearchClient
+            )
         {
             _context = context;
             this._observedAuctionService = observAuctionService;
             this.breadcrumbService = breadcrumbService;
 
             this.bidsService = bidsService;
+            this.pagerService = pagerService;
             this._auctionFilesService = auctionFileService;
 
-            
-
+            _elasticsearchClient = elasticsearchClient;
         }
 
         // GET: Auctions
         public async Task<IActionResult> Index(int page = 1)
         {
+            if(page < 1)
+                page = 1;
+            
             var portalAukcyjnyContext = _context.Auctions
+                .Where(x => x.IsDraft == false)
                 .Include(a => a.Owner)
                 .Include(a => a.Product).OrderBy(a => a.AuctionId);
 
-            const int pageSize = 20;
-            if(page < 1)
-                page = 1;
+            int userId = 0;
+            int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value, out userId);
 
+            int pageSize = await pagerService.SetPager(userId);
             int rowsCount = portalAukcyjnyContext.Count();
-
-            var pager = new Pager(rowsCount, page, "Auctions", pageSize );
-
+            
+            var pager = new Pager(rowsCount, page, "Auctions", pageSize);
             var rowsSkipped = (page - 1) * pageSize;
-
             var auctions = portalAukcyjnyContext.Skip(rowsSkipped).Take(pager.PageSize).ToList();
 
             ViewBag.Pager = pager;
 
+
+            List<DisplayAuctionsModel> auctionList = new List<DisplayAuctionsModel>();
+
+            foreach (var auction in auctions)
+            {
+                string path = null;
+                var icon = _context.ProductFiles.Where(x => x.ProductId == auction.AuctionId && x.Name.StartsWith("ICON")).FirstOrDefault();
+
+                if (icon != null)
+                    path = icon.Path;
+                else
+                    path = _auctionFilesService.GetErrorIconPath();
+
+                var Bid = _context.Bid.Where(x => x.AuctionId == auction.AuctionId).ToList();
+                auctionList.Add(new DisplayAuctionsModel()
+                {
+                    Auction = auction,
+                    iconPath = path,
+                    Bid = Bid.Select(x => x.Price).DefaultIfEmpty(0).Max()
+                });
+            }
+
+
+            return View(auctionList);  // for displaying paged auctions
+            
             //return View(await portalAukcyjnyContext.ToListAsync());   // for displaying all auctions
-
-            return View(auctions);  // for displaying paged auctions
-
         }
 
         // GET: Auctions/Details/5
@@ -90,6 +123,9 @@ namespace WebApp.Controllers
 
             ViewBag.Items = productFiles;
 
+            int userId;
+            int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value, out userId);
+            ViewBag.IsObserved = _observedAuctionService.IsAuctionObserved((int)id, userId);
 
             if (auction == null)
             {
@@ -105,7 +141,7 @@ namespace WebApp.Controllers
         public IActionResult Create()
         {
             //var userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.ValueType == "userid").Value.ToString());
-            var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString().ToString().ToString());
+            var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value);
 
             ViewBag.OwnerId = userId;
             ViewData["ProductId"] = new SelectList(_context.Products.OrderBy(p => p.Name), "ProductId", "Name");
@@ -152,6 +188,7 @@ namespace WebApp.Controllers
                 auction.CreationTime = DateTime.SpecifyKind(DateTime.Now.ToUniversalTime(), DateTimeKind.Utc);
 
                 _context.Add(auction);
+                _elasticsearchClient.Index(new ElasticAuction { Id = auction.AuctionId, Title = auction.Title }, "auctions");
                 await _context.SaveChangesAsync();
 
                 //var product = _context.Products.Where(p => p.AuctionId == auction.AuctionId).FirstOrDefault();
@@ -220,7 +257,7 @@ namespace WebApp.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString());
+            var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
             
             ViewBag.OwnerId = userId;
             ViewData["ProductId"] = new SelectList(_context.Products.OrderBy(p => p.Name), "ProductId", "Name", auction.ProductId);
@@ -449,7 +486,7 @@ namespace WebApp.Controllers
             string resultMsg = "";
             if(id > 0)
             {
-                int userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString());
+                int userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
 
                 if(userId > 0)
                 {
@@ -468,6 +505,29 @@ namespace WebApp.Controllers
             resultMsg = "Invalid data, please try again";
 
             return RedirectToAction("Details", new { id = id, result = resultMsg });
+        }
+
+        public ActionResult UnObservAuction(int? id)
+        {
+            string resultMsg = "";
+            int userId;
+            int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value, out userId);
+
+            if (userId > 0)
+            {
+                bool result = _observedAuctionService.UnObserve((int)id, userId);
+                if (result)
+                {
+                    resultMsg = "Auction is no longer being observed";
+
+                    return RedirectToAction("Details", new { id = id, result = resultMsg });
+                }
+                resultMsg = "Something went wrong, please try again!";
+
+                return RedirectToAction("Details", new { id = id, result = resultMsg });
+            }
+
+            return View();
         }
 
         public async Task<ActionResult> Auction(int? id)
