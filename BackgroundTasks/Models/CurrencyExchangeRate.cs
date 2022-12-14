@@ -13,7 +13,7 @@ namespace BackgroundTasks.Models
 
         public CurrencyExchangeRate(string name, string currencyCode, double exchangeRate, DateTime lastUpdatedTime)
         {
-            CurrencyName = name.;
+            CurrencyName = name;
             CurrencyCode = currencyCode;
             ExchangeRate = exchangeRate;
             LastUpdatedTime = lastUpdatedTime;

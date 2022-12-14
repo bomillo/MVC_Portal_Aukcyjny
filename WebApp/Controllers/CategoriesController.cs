@@ -226,12 +226,12 @@ namespace WebApp.Controllers
                     path = iconPathError;
 
 
-                var Bid = await bidsService.GetAuctionBids(auction.AuctionId, userId);
+                var Bid = bidsService.GetAuctionHighestBid(auction.AuctionId, userId);
                 displayAuctions.Add(new DisplayAuctionsModel()
                 {
                     Auction = auction,
                     iconPath = path,
-                    Bid = Bid.Count == 0 ? "No offers" : Bid.First().Price 
+                    Bid = Bid 
                 });
                 
             }

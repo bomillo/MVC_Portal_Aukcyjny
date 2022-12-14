@@ -213,18 +213,19 @@ namespace WebApp.Controllers
                     if(Auction == null)
                         { continue; }
 
-                    var Bid = await bidsService.GetAuctionBids(myObserved.AuctionId, user.UserId);
+                    var Bid = bidsService.GetAuctionHighestBid(myObserved.AuctionId, user.UserId);
                     observedAuctions.Add(new DisplayAuctionsModel()
                     {
                         Auction = Auction,
-                        Bid = Bid.Count == 0 ? "No offers" : Bid.First().Price  
+                        Bid = Bid
                     });
                 }
                 ViewBag.MyObservedAuctions = observedAuctions;
             }
 
-            var myBids = _context.Bid.Where(x => x.UserId == id).Include(x => x.Auction).ToList();
-
+            //var myBids = _context.Bid.Where(x => x.UserId == id).Include(x => x.Auction).ToList();
+            var myBids = bidsService.GetUserBids(user.UserId);
+    
             ViewBag.MyBids = myBids;
 
             return View();

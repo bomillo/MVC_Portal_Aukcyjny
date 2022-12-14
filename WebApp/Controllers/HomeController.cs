@@ -62,12 +62,12 @@ namespace PortalAukcyjny.Controllers
                 else
                     path = imageErrorPath;
 
-                var Bid = await bidsService.GetAuctionBids(auction.AuctionId, userId);
+                var Bid = bidsService.GetAuctionHighestBid(auction.AuctionId, userId);
                 recentlyFinishedAuctions.Add(new DisplayAuctionsModel()
                 {
                     Auction = auction,
                     iconPath = path,
-                    Bid = Bid.Count == 0 ? "No offers" : Bid.First().Price 
+                    Bid = Bid
                 });
             }
 
@@ -87,7 +87,7 @@ namespace PortalAukcyjny.Controllers
             foreach (var auction in interestingAuctions)
             {
                 var icon = _context.ProductFiles.Where(x => x.ProductId == auction.AuctionId && x.Name.StartsWith("ICON")).FirstOrDefault();
-                var Bid = await bidsService.GetAuctionBids(auction.AuctionId, userId);
+                var Bid = bidsService.GetAuctionHighestBid(auction.AuctionId, userId);
                 string path = null;
                 
                 if (icon != null)
@@ -99,7 +99,7 @@ namespace PortalAukcyjny.Controllers
                 {
                     Auction = auction,
                     iconPath = path,
-                    Bid = Bid.Count == 0 ? "No offers" : Bid.First().Price 
+                    Bid = Bid 
                 });
 
             }
