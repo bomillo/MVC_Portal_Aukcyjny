@@ -13,9 +13,14 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using WebApp.Services.Emails;
 using WebApp.Models;
+
 using BackgroundTasks;
 using BackgroundTasks.Services;
 using BackgroundTasks.Context;
+
+using Elastic.Clients.Elasticsearch;
+using Elastic.Transport;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,12 +29,16 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
 
+
 // BG task services
     builder.Services.AddDbContext<PortalAukcyjnyContext2>(options => 
                 options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
     builder.Services.AddHostedService<NBPWorker>();
     builder.Services.AddSingleton<CurrencyDownloadService>();
-// 
+
+builder.Services.AddSingleton(new ElasticsearchClient(new ElasticsearchClientSettings(new Uri("http://localhost:9200")).DisableDirectStreaming()));
+
+
 builder.Services.AddControllersWithViews();
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
@@ -42,6 +51,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     };
     options.MinimumSameSitePolicy = SameSiteMode.Lax;
 });
+
 
 
 builder.Services.AddAuthorization(options =>

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Elastic.Clients.Elasticsearch;
+using Microsoft.AspNetCore.Identity;
 using System.Text;
 using WebApp.Models;
+using WebApp.Models.DTO;
 using WebApp.Services;
 
 namespace WebApp.Context
@@ -11,11 +13,13 @@ namespace WebApp.Context
         //Seeder nie zrobiony dla stawek zamiany walut i kluczy api 
         private readonly PortalAukcyjnyContext _dbContext;
         private readonly UsersService _userService;
+        private readonly ElasticsearchClient _elasticsearchClient;
 
-        public DbSeeder(PortalAukcyjnyContext context, UsersService userService)
+        public DbSeeder(PortalAukcyjnyContext context, UsersService userService, ElasticsearchClient elasticsearchClient)
         {
             this._dbContext = context;
             _userService = userService;
+            _elasticsearchClient = elasticsearchClient;
         }
 
         public void Seed()
@@ -91,6 +95,17 @@ namespace WebApp.Context
                     _dbContext.Bid.AddRange(GetBids());
                     _dbContext.SaveChanges();
                 }
+
+                _elasticsearchClient.Indices.Delete("auctions");
+
+                _elasticsearchClient.Indices.Create("auctions",
+                  c =>
+                      c.Mappings(m =>
+                          m.Properties<ElasticAuction>(p => p.SearchAsYouType("title"))
+                      )
+                    );
+                
+                _elasticsearchClient.IndexMany(_dbContext.Auctions.Select(a => new ElasticAuction { Id = a.AuctionId, Title = a.Title }).ToList(), "auctions");
             }
         }
 
@@ -246,7 +261,7 @@ namespace WebApp.Context
                 Auction auction = new Auction()
                 {
                     Description = rndText(100, 1999),
-                    Title = rndText(10, 100),
+                    Title = auctionTitle(),
                     IsDraft = Convert.ToBoolean(random.Next(2)),
                     OwnerId = user.UserId,
                     Owner = user,
@@ -568,6 +583,20 @@ namespace WebApp.Context
             var result = str.ToString();
             result = char.ToUpper(str[0]) + result.Substring(1);
             return result;
+        }
+
+        private string auctionTitle()
+        {
+            List<string> state = new List<string> { "używany", "nowy", "powystawowy", "nieśmigany", "śmigany" };
+            List<string> adj = new List<string> { "mały", "duży", "szybki", "wolny", "przeciętny", "czerwony", "niebieski", "zielony", "fajny", "zgrabny", "poręczny", "ekskuluzywny" };
+            List<string> noun = new List<string> { "jacht", "helikopter","samolot", "mikser", "telefon", "laptop", "komputer", "serwer", "rower", "samochód", "jeż", "programista", "Adam", "Dominik", "Kamil" };
+            Random rnd = new Random();
+            var opt = rnd.Next(4);
+            List<string> res = new List<string> { noun[rnd.Next(noun.Count())], adj[rnd.Next(adj.Count())], state[rnd.Next(state.Count())] };
+
+            
+
+            return string.Join(' ', res); 
         }
 
         private string rndEmailEnding()
