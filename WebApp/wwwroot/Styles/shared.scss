@@ -1465,22 +1465,9 @@ nav {
         width: 70%;
     }
 
-.button--group{
-    border: 1px solid;
-    border-radius: 0px;
-    border-collapse: collapse;
-    &--first{
-        border-radius: 0.4rem 0 0 0.4rem;
-    }
 
-    &--last{
-        border-radius: 0 0.4rem 0.4rem 0;
-    }
-}
 
-.grecaptcha-badge{
-    bottom: 80px!important;
-}
+
     .auction--title {
         font-size: x-large;
         width: 100%;
@@ -1496,5 +1483,23 @@ nav {
     .auction--price {
         width: 10%;
         font-size: x-large;
+    }
+}
+
+.grecaptcha-badge {
+    bottom: 80px !important;
+}
+
+.button--group {
+    border: 1px solid;
+    border-radius: 0px;
+    border-collapse: collapse;
+
+    &--first {
+        border-radius: 0.4rem 0 0 0.4rem;
+    }
+
+    &--last {
+        border-radius: 0 0.4rem 0.4rem 0;
     }
 }
