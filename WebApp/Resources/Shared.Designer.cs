@@ -79,6 +79,42 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occured while trying to authenticate. Verify your apikey passed in request header..
+        /// </summary>
+        internal static string ApiAuthError {
+            get {
+                return ResourceManager.GetString("ApiAuthError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your account has assigned api key.
+        /// </summary>
+        internal static string ApiKeyExist {
+            get {
+                return ResourceManager.GetString("ApiKeyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auction is ended.
+        /// </summary>
+        internal static string AuctionEnded {
+            get {
+                return ResourceManager.GetString("AuctionEnded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auction is not published yet.
+        /// </summary>
+        internal static string AuctionIsDraft {
+            get {
+                return ResourceManager.GetString("AuctionIsDraft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can&apos;t bid on your own auction.
         /// </summary>
         internal static string BidInvalidUser {
@@ -93,6 +129,15 @@ namespace WebApp.Resources {
         internal static string BidInvalidValue {
             get {
                 return ResourceManager.GetString("BidInvalidValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bid has been successfully added.
+        /// </summary>
+        internal static string BidPlaced {
+            get {
+                return ResourceManager.GetString("BidPlaced", resourceCulture);
             }
         }
         
@@ -196,6 +241,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create new api key.
+        /// </summary>
+        internal static string GenerateApiKey {
+            get {
+                return ResourceManager.GetString("GenerateApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to High Contrast.
         /// </summary>
         internal static string HighContrast {
@@ -223,6 +277,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Request data was invalid.
+        /// </summary>
+        internal static string InvalidRequestData {
+            get {
+                return ResourceManager.GetString("InvalidRequestData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Light.
         /// </summary>
         internal static string Light {
@@ -241,6 +304,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Message has been sent.
+        /// </summary>
+        internal static string MessageSent {
+            get {
+                return ResourceManager.GetString("MessageSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type your answer here....
         /// </summary>
         internal static string NewAnswer {
@@ -250,11 +322,29 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save it in safe place. Your api key is.
+        /// </summary>
+        internal static string NewApiKey {
+            get {
+                return ResourceManager.GetString("NewApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ask your question to seller here.....
         /// </summary>
         internal static string NewQuestion {
             get {
                 return ResourceManager.GetString("NewQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No bid value found in request body.
+        /// </summary>
+        internal static string NoBidValue {
+            get {
+                return ResourceManager.GetString("NoBidValue", resourceCulture);
             }
         }
         
@@ -273,6 +363,15 @@ namespace WebApp.Resources {
         internal static string NotOwner {
             get {
                 return ResourceManager.GetString("NotOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You now observe auction: .
+        /// </summary>
+        internal static string NowObserving {
+            get {
+                return ResourceManager.GetString("NowObserving", resourceCulture);
             }
         }
         

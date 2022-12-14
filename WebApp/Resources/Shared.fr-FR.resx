@@ -123,11 +123,26 @@
   <data name="Answer" xml:space="preserve">
     <value>Answer (FR)</value>
   </data>
+  <data name="ApiAuthError" xml:space="preserve">
+    <value>An error occured while trying to authenticate. Verify your apikey passed in request header. (FR)</value>
+  </data>
+  <data name="ApiKeyExist" xml:space="preserve">
+    <value>Your żabojady ha bagieta in my mind</value>
+  </data>
+  <data name="AuctionEnded" xml:space="preserve">
+    <value>Auction is ended (FR)</value>
+  </data>
+  <data name="AuctionIsDraft" xml:space="preserve">
+    <value>Auction is not published yet (FR)</value>
+  </data>
   <data name="BidInvalidUser" xml:space="preserve">
     <value>You can't bid on your own auction (FR)</value>
   </data>
   <data name="BidInvalidValue" xml:space="preserve">
     <value>Bid value is invalid (FR)</value>
+  </data>
+  <data name="BidPlaced" xml:space="preserve">
+    <value>Bid has been successfully added (FR)</value>
   </data>
   <data name="Bids" xml:space="preserve">
     <value>Bids (FR)</value>
@@ -162,6 +177,9 @@
   <data name="FieldTooShort" xml:space="preserve">
     <value>FieldTooShort (FR)</value>
   </data>
+  <data name="GenerateApiKey" xml:space="preserve">
+    <value>Generate Api key (FR)</value>
+  </data>
   <data name="HighContrast" xml:space="preserve">
     <value>High Contrast (FR)</value>
   </data>
@@ -171,23 +189,38 @@
   <data name="InvalidQuestion" xml:space="preserve">
     <value>Question format is invalid (FR)</value>
   </data>
+  <data name="InvalidRequestData" xml:space="preserve">
+    <value>Request data was invalid (FR)</value>
+  </data>
   <data name="Light" xml:space="preserve">
     <value>Light (FR)</value>
   </data>
   <data name="LoggedInAs" xml:space="preserve">
     <value>Logged in as (FR) </value>
   </data>
+  <data name="MessageSent" xml:space="preserve">
+    <value>Message has been sent (FR)</value>
+  </data>
   <data name="NewAnswer" xml:space="preserve">
     <value>Type your answer here (FR)</value>
   </data>
+  <data name="NewApiKey" xml:space="preserve">
+    <value>Save it in safe place. Your new api key (FR)</value>
+  </data>
   <data name="NewQuestion" xml:space="preserve">
     <value>Ask your question to seller here.... (FR)</value>
+  </data>
+  <data name="NoBidValue" xml:space="preserve">
+    <value>No bid value found in request body (FR)</value>
   </data>
   <data name="NotLoggedIn" xml:space="preserve">
     <value>You must be logged in to do this (FR)</value>
   </data>
   <data name="NotOwner" xml:space="preserve">
     <value>Not owner (FR)</value>
+  </data>
+  <data name="NowObserving" xml:space="preserve">
+    <value>You now observe auction (FR):</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Price (FR)</value>

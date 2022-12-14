@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Text;
 using WebApp.Context;
 using WebApp.Models;
 
@@ -130,6 +131,15 @@ namespace WebApp.Services
             user.PasswordHashed= HashPassword(password);
             context.Users.Update(user);
             context.SaveChanges();
+        }
+
+        public List<ObservedAuction> GetUserObservedAuctions(int userId)
+        {
+            return context.ObservedAuctions.Where(x => x.UserId == userId)
+                 .Include(x => x.Auction)
+                 .Include(x => x.Auction.Product)
+                 .Include(x => x.Auction.Owner)
+                .ToList();
         }
     }
 }
