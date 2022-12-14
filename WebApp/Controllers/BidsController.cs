@@ -196,20 +196,8 @@ namespace WebApp.Controllers
             }
 
             var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
-            var auction = await _context.Bid.FindAsync(auctionId);
-            var currentBids = _context.Bid.Where(x => x.AuctionId == auctionId).ToList();
-            var maxBid = currentBids.Select(x => x.Price).DefaultIfEmpty(0).Max();
-
-            if(auction.UserId == userId)
-            {
-                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.BidInvalidUser });
-            }
-            if(maxBid >= bid)
-            {
-                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.BidToLow });
-            }
-
-                return new JsonResult(new { valid = true });
+            
+            return bidService.ValidateBid(auctionId, bid, userId);
         }
 
         [HttpPost]
@@ -229,16 +217,7 @@ namespace WebApp.Controllers
             }
 
 
-            var newBid = new Bid()
-            {
-                AuctionId = auctionId,
-                BidTime = DateTime.UtcNow,
-                Price = Math.Round(bid, 2),
-                UserId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value)
-                
-            };
-            _context.Bid.Add(newBid);
-            _context.SaveChanges();
+            bidService.PlaceBid(bid, auctionId, int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value));
 
             return Redirect(returnUrl);
         }

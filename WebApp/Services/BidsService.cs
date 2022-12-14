@@ -1,4 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.Language.Extensions;
+using Microsoft.EntityFrameworkCore;
+using SkiaSharp;
+using System.Net;
+using System.Security.Cryptography;
 using WebApp.Context;
 using WebApp.Models;
 using WebApp.Models.DTO;
@@ -95,6 +100,59 @@ namespace WebApp.Services
             }
 
             return bidUserDTO;
+        }
+
+        public void PlaceBid(double bid, int auctionId, int userId)
+        {
+            var newBid = new Bid()
+            {
+                AuctionId = auctionId,
+                BidTime = DateTime.UtcNow,
+                Price = Math.Round(bid, 2),
+                UserId = userId
+
+            };
+            dbContext.Bid.Add(newBid);
+            dbContext.SaveChanges();
+        }
+
+        public JsonResult ValidateBid(int auctionId, double bid, int userId)
+        {
+            var auction = dbContext.Auctions.Find(auctionId);
+            var currentBids = dbContext.Bid.Where(x => x.AuctionId == auctionId).ToList();
+            var maxBid = currentBids.Select(x => x.Price).DefaultIfEmpty(0).Max();
+            var result = new JsonResult(new { });
+            if (auction.OwnerId == userId)
+            {
+                result = new JsonResult(new { valid = false, message = WebApp.Resources.Shared.BidInvalidUser });
+                result.StatusCode = 404;
+                return result;
+            }
+
+            if(auction.IsDraft)
+            {
+                result = new JsonResult(new { valid = false, message = WebApp.Resources.Shared.AuctionIsDraft });
+                result.StatusCode = 404;
+                return result;
+            }
+
+            if(auction.EndTime < DateTime.UtcNow)
+            {
+                result = new JsonResult(new { valid = false, message = WebApp.Resources.Shared.AuctionEnded });
+                result.StatusCode = 404;
+                return result;
+            }
+
+            if (maxBid >= bid)
+            {
+                result = new JsonResult(new { valid = false, message = WebApp.Resources.Shared.BidToLow });
+                result.StatusCode = 404;
+                return result;
+            }
+
+            result = new JsonResult(new { valid = true });
+            result.StatusCode = 200;
+            return result;
         }
     }
 }

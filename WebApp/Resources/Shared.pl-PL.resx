@@ -123,11 +123,26 @@
   <data name="Answer" xml:space="preserve">
     <value>Odpowiedz</value>
   </data>
+  <data name="ApiAuthError" xml:space="preserve">
+    <value>Wystąpił problem podczas autentykacji. Sprawdź poprawność klucza przekazywany przy zapytaniu</value>
+  </data>
+  <data name="ApiKeyExist" xml:space="preserve">
+    <value>Posiadasz już wygenerowany klucz api</value>
+  </data>
+  <data name="AuctionEnded" xml:space="preserve">
+    <value>Aukcja się zakończyła</value>
+  </data>
+  <data name="AuctionIsDraft" xml:space="preserve">
+    <value>Aukcja nie została jeszcze opublikowana</value>
+  </data>
   <data name="BidInvalidUser" xml:space="preserve">
     <value>Nie możesz tworzyć ofert do swojej aukcji</value>
   </data>
   <data name="BidInvalidValue" xml:space="preserve">
     <value>Wartość oferty nieprawidłowa</value>
+  </data>
+  <data name="BidPlaced" xml:space="preserve">
+    <value>Oferta złożona pomyślnie</value>
   </data>
   <data name="Bids" xml:space="preserve">
     <value>Oferty</value>
@@ -162,6 +177,9 @@
   <data name="FieldTooShort" xml:space="preserve">
     <value>Wprowadzone dane są za krótkie</value>
   </data>
+  <data name="GenerateApikey" xml:space="preserve">
+    <value>Generuj klucz api</value>
+  </data>
   <data name="HighContrast" xml:space="preserve">
     <value>Wysoki kontrast</value>
   </data>
@@ -171,23 +189,38 @@
   <data name="InvalidQuestion" xml:space="preserve">
     <value>Wprowadzone pytanie ma niepoprawny format</value>
   </data>
+  <data name="InvalidRequestData" xml:space="preserve">
+    <value>Dane podane w request'cie są nieprawidłowe</value>
+  </data>
   <data name="Light" xml:space="preserve">
     <value>Jasny</value>
   </data>
   <data name="LoggedInAs" xml:space="preserve">
     <value>Zalogowano jako </value>
   </data>
+  <data name="MessageSent" xml:space="preserve">
+    <value>Wiadomość została wysłana</value>
+  </data>
   <data name="NewAnswer" xml:space="preserve">
     <value>Odpowiedz na pytanie...</value>
   </data>
+  <data name="NewApiKey" xml:space="preserve">
+    <value>Zapisz w bezpiecznym miejscu. Twój klucz api to</value>
+  </data>
   <data name="NewQuestion" xml:space="preserve">
     <value>Zadaj pytanie dla sprzedawcy...</value>
+  </data>
+  <data name="NoBidValue" xml:space="preserve">
+    <value>Brak wartości oferty w z ciele zapytania</value>
   </data>
   <data name="NotLoggedIn" xml:space="preserve">
     <value>Musisz być zalogowany aby to wykonać</value>
   </data>
   <data name="NotOwner" xml:space="preserve">
     <value>Nie jesteś właścicielem</value>
+  </data>
+  <data name="NowObserving" xml:space="preserve">
+    <value>Od teraz obserwujesz aukcje:</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Cena</value>

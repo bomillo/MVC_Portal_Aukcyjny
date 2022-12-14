@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,7 @@ namespace WebApp.Controllers
         // GET: ApiKeys
         public async Task<IActionResult> Index()
         {
-              return View(await _context.ApiKeys.ToListAsync());
+            return View(await _context.ApiKeys.ToListAsync());
         }
 
         // GET: ApiKeys/Details/5
@@ -148,14 +149,47 @@ namespace WebApp.Controllers
             {
                 _context.ApiKeys.Remove(apiKey);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ApiKeyExists(string id)
         {
-          return _context.ApiKeys.Any(e => e.Key == id);
+            return _context.ApiKeys.Any(e => e.Key == id);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateNewKey()
+        {
+            if (!HttpContext.User.Claims.Any())
+            {
+                return new JsonResult(new {valid = false, message = WebApp.Resources.Shared.NotLoggedIn});
+            }
+
+            var clientId = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type.ToLower().Equals("userid")).Value);
+
+            if(_context.ApiKeys.Any(x => x.UserId == clientId))
+            {
+                var key = _context.ApiKeys.First(x => x.UserId == clientId);
+                return new JsonResult(new { valid = false, message = $"{WebApp.Resources.Shared.ApiKeyExist}: <br/> <b>{key.Key}</b>" });
+            }
+
+            var result = GenerateKey(clientId);
+
+            _context.ApiKeys.Add(new ApiKey()
+            {
+                Key = result,
+                UserId = clientId
+            });
+           await _context.SaveChangesAsync();
+            return new JsonResult(new { valid = true, message = $"{WebApp.Resources.Shared.NewApiKey }:<br/> <b>{result}</b>"});
+        }
+
+        private string GenerateKey(int clientId)
+        {
+            string userId = clientId.ToString();
+            return $"{userId}-{Guid.NewGuid()}";
         }
     }
 }

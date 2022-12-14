@@ -448,7 +448,6 @@ input[type=file] {
 .box--horizontal .box--center {
   text-align: center;
   display: flex;
-  width: 15vw;
 }
 
 .box--horizontal .box--center .button {
@@ -1278,4 +1277,20 @@ nav {
 .auctions--column--container .auction--price {
   width: 10%;
   font-size: x-large;
+}
+
+.grecaptcha-badge {
+  bottom: 80px !important;
+}
+
+.button--group {
+  border: 1px solid;
+  border-radius: 0px;
+  border-collapse: collapse;
+}
+.button--group--first {
+  border-radius: 0.4rem 0 0 0.4rem;
+}
+.button--group--last {
+  border-radius: 0 0.4rem 0.4rem 0;
 }
