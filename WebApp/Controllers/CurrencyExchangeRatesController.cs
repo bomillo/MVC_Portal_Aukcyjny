@@ -22,7 +22,10 @@ namespace WebApp.Controllers
         // GET: CurrencyExchangeRates
         public async Task<IActionResult> Index()
         {
-              return View(await _context.CurrencyExchangeRates.ToListAsync());
+            var rates = await _context.CurrencyExchangeRates
+                .OrderByDescending(x => x.LastUpdatedTime).Take(34).ToListAsync();  // 34 - total number of currencies
+
+            return View(rates);
         }
 
         // GET: CurrencyExchangeRates/Details/5
@@ -35,12 +38,17 @@ namespace WebApp.Controllers
 
             var currencyExchangeRate = await _context.CurrencyExchangeRates
                 .FirstOrDefaultAsync(m => m.CurrencyId == id);
+
             if (currencyExchangeRate == null)
             {
                 return NotFound();
             }
+            
+            var currHistory = _context.CurrencyExchangeRates
+                .Where(x => x.CurrencyCode == currencyExchangeRate.CurrencyCode)
+                .OrderByDescending(x => x.LastUpdatedTime).ToList();
 
-            return View(currencyExchangeRate);
+            return View(currHistory);
         }
 
         // GET: CurrencyExchangeRates/Create
@@ -54,7 +62,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CurrencyId,CurrencyCode,ExchangeRate,LastUpdatedTime")] CurrencyExchangeRate currencyExchangeRate)
+        public async Task<IActionResult> Create([Bind("CurrencyId,CurrencyCode,CurrencyExchangeRate,LastUpdatedTime")] CurrencyExchangeRate currencyExchangeRate)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +94,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CurrencyId,CurrencyCode,ExchangeRate,LastUpdatedTime")] CurrencyExchangeRate currencyExchangeRate)
+        public async Task<IActionResult> Edit(int id, [Bind("CurrencyId,CurrencyCode,CurrencyExchangeRate,LastUpdatedTime")] CurrencyExchangeRate currencyExchangeRate)
         {
             if (id != currencyExchangeRate.CurrencyId)
             {

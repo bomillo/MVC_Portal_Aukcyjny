@@ -129,6 +129,9 @@
   <data name="CompanyEmail" xml:space="preserve">
     <value>CompanyEmail FR</value>
   </data>
+  <data name="Currency" xml:space="preserve">
+    <value>Currency FR</value>
+  </data>
   <data name="EditionSuccess" xml:space="preserve">
     <value>EditionSuccess FR</value>
   </data>
@@ -185,6 +188,9 @@
   </data>
   <data name="SelectComapny" xml:space="preserve">
     <value>SelectComapny FR</value>
+  </data>
+  <data name="SelectCurrency" xml:space="preserve">
+    <value>SelectCurrency FR</value>
   </data>
   <data name="SelectLanguage" xml:space="preserve">
     <value>SelectLanguage FR</value>
