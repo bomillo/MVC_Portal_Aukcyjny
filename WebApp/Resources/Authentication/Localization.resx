@@ -129,6 +129,9 @@
   <data name="CompanyEmail" xml:space="preserve">
     <value>Company email</value>
   </data>
+  <data name="Currency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
   <data name="EditionSuccess" xml:space="preserve">
     <value>Edition succeded!</value>
   </data>
@@ -186,6 +189,9 @@ You can now login into your accont.</value>
   </data>
   <data name="SelectCompany" xml:space="preserve">
     <value>Select Company</value>
+  </data>
+  <data name="SelectCurrency" xml:space="preserve">
+    <value>Select currency</value>
   </data>
   <data name="SelectLanguage" xml:space="preserve">
     <value>Select Language</value>

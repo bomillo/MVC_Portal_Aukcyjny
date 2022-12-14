@@ -20,11 +20,15 @@ namespace WebApp.Controllers
     {
         private readonly PortalAukcyjnyContext _context;
         private readonly UsersService _usersService;
+        private readonly BidsService bidsService;
 
-        public UsersController(PortalAukcyjnyContext context, UsersService usersService)
+        public UsersController(PortalAukcyjnyContext context, 
+            UsersService usersService,
+            BidsService bidsService)
         {
             _context = context;
             this._usersService = usersService;
+            this.bidsService = bidsService;
         }
 
         // GET: Users
@@ -209,21 +213,19 @@ namespace WebApp.Controllers
                     if(Auction == null)
                         { continue; }
 
-                    var Bid = _context.Bid.Where(x => x.AuctionId == myObserved.AuctionId).ToList();
+                    var Bid = bidsService.GetAuctionHighestBid(myObserved.AuctionId, user.UserId);
                     observedAuctions.Add(new DisplayAuctionsModel()
                     {
                         Auction = Auction,
-                        Bid = Bid.Select(x => x.Price).DefaultIfEmpty(0).Max()
-
+                        Bid = Bid
                     });
                 }
                 ViewBag.MyObservedAuctions = observedAuctions;
             }
 
-            var myBids = _context.Bid.Where(x => x.UserId == id && x.Auction.IsDraft == false)
-                .Include(x => x.Auction)
-                .ToList();
-
+            //var myBids = _context.Bid.Where(x => x.UserId == id).Include(x => x.Auction).ToList();
+            var myBids = bidsService.GetUserBids(user.UserId);
+    
             ViewBag.MyBids = myBids;
 
             return View();
@@ -260,6 +262,7 @@ namespace WebApp.Controllers
             ViewData["Themes"]= new SelectList(themes, null, null, themes[user.ThemeType.GetHashCode()]);
             ViewData["Languages"]= new SelectList(languages, null, null, languages[user.Language.GetHashCode()]);
             ViewData["CompanyId"] = new SelectList(_context.Companies, "CompanyId", "Name", user.CompanyId);
+            ViewData["Currency"] = new SelectList(_context.CurrencyExchangeRates, "CurrencyCode", "CurrencyName", user.currency);
 
             return View(editAccountModel);
         }
@@ -267,7 +270,7 @@ namespace WebApp.Controllers
         // POST: Users/UserEdition/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UserEdition(int? id, [Bind("Name,Email,OldPassword,Password,PasswordVerification,CompanyId,newThemeType,newLanguage,itemsOnPage")] EditAccountModel editedUser)
+        public async Task<IActionResult> UserEdition(int? id, [Bind("Name,Email,OldPassword,Password,PasswordVerification,CompanyId,newThemeType,newLanguage,itemsOnPage,newCurrency")] EditAccountModel editedUser)
         {
             if (id == null || _context.Users == null)
             {
@@ -414,6 +417,11 @@ namespace WebApp.Controllers
             if (editedUser.itemsOnPage != null)
             {
                 user.itemsOnPage = editedUser.itemsOnPage;
+            }
+
+            if (editedUser.newCurrency != null)
+            {
+                user.currency = editedUser.newCurrency;
             }
 
             _context.Update(user);

@@ -65,7 +65,7 @@
 
                             <div class="box--item">
                                 <div class="box--item--title">Tilte: @auction.Auction.Title</div>
-                                <div class="box--item--price">@string.Format("{0:0.00}zł", auction.Bid)</div>
+                                <div class="box--item--price">@auction.Bid</div>
                                 <div class="box--item--date">@auction.Auction.EndTime - end in @timeLeft.Days days </div>
                             </div>
                         </a>
@@ -90,7 +90,7 @@
 
                             <div class="box--item">
                                 <div class="box--item--title">Tilte: @bid.Auction.Title</div>
-                                <div class="box--item--price">@string.Format("{0:0.00}zł", bid.Price)</div>
+                                <div class="box--item--price">@bid.Price</div>
                                 <div class="box--item--date">@bid.Auction.EndTime - end in @timeLeft.Days days </div>
                             </div>
                         </a>

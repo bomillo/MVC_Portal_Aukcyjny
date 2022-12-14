@@ -97,6 +97,15 @@ namespace WebApp.Resources.Authentication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Currency.
+        /// </summary>
+        public static string Currency {
+            get {
+                return ResourceManager.GetString("Currency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edition succeded!.
         /// </summary>
         public static string EditionSuccess {
@@ -265,6 +274,15 @@ namespace WebApp.Resources.Authentication {
         public static string SelectCompany {
             get {
                 return ResourceManager.GetString("SelectCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select currency.
+        /// </summary>
+        public static string SelectCurrency {
+            get {
+                return ResourceManager.GetString("SelectCurrency", resourceCulture);
             }
         }
         

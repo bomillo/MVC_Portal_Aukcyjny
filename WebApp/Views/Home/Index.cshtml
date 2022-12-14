@@ -58,7 +58,7 @@
 
                         <div class="box--description">
                             <div class="text--primary box--text">Selled for:</div>
-                            <div class="text--secondary box--text box--price">@string.Format("{0:0.00} zł", auction.Bid)</div>
+                            <div class="text--secondary box--text box--price">@string.Format(auction.Bid)</div>
                             <div class="text--primary box--text">Ended:</div>
                             <div class="text--secondary box--text box--date">@auction.Auction.EndTime</div>
                         </div>
@@ -108,7 +108,7 @@
                                         <div class="box--item--text">
 
                                             <div class="text--primary box--item--text">Current price:</div>
-                                            <div class="text--secondary box--item--price">@string.Format("{0:0.00} zł", auctions[j].Bid)</div>
+                                            <div class="text--secondary box--item--price">@string.Format(auctions[j].Bid)</div>
                                             <div class="text--primary box--item--text">Ends in:</div>
                                             <div class="text--secondary box--item--date">@auctions[j].Auction.EndTime - end in @timeLeft.Days days</div>
 

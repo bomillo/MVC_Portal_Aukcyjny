@@ -4,7 +4,7 @@
     {
 
         public Auction Auction { get; set; } = new Auction();
-        public double Bid { get; set; }
+        public string Bid { get; set; }
         public string iconPath { get; set; }
     }
 }

@@ -109,6 +109,16 @@
                 </div>
             </div>
 
+            <div class="item">
+                <div class="title">
+                    @Localization.Currency:
+                </div>
+
+                <div class="info">
+                    @modelUser.currency
+                </div>
+            </div>
+
         </div>
     </div>
     
@@ -218,6 +228,15 @@
                         </div>
                     </div>
 
+                    <div class="item">
+                      <div class="form--group">
+                            <label class="control-label form--label">@Localization.Currency:</label>
+                            <select id="currencyDropdown" asp-for="newCurrency" class="control--input form--input" asp-items="ViewBag.Currency">
+                                <option selected="selected" value="@null"> @Localization.SelectCurrency </option>
+                            </select>
+                        </div>
+                    </div>
+
                 <div class="form--buttons">
                     <button type="submit" class="button button--secondary button--rounded">Save</button>
                     <a asp-action="UserAccount" asp-route-id="@modelUser.UserId" class="button button--secondary button--rounded">Back to Account</a>
@@ -231,6 +250,7 @@
     $("#themesDropdown").prop("selectedIndex", 0);
     $("#languagesDropdown").prop("selectedIndex", 0);
     $("#companiesDropdown").prop("selectedIndex", 0);
+    $("#currencyDropdown").prop("selectedIndex", 0);
 </script>
 
 

@@ -84,6 +84,8 @@ namespace WebApp.Services
             {
                 return new BadRequestObjectResult(new JsonResult(new {message = WebApp.Resources.Shared.InvalidRequestData}));
             }
+            httpContext.Items.TryGetValue("userid", out var userIdObj);
+            var userId = (int)userIdObj;
             var auctionBidsRequest = (AuctionBidsRequest)auctionBidsRequstObj;
             var auction = auctionsService.GetAuction(auctionBidsRequest.AuctionId);
 
@@ -95,7 +97,7 @@ namespace WebApp.Services
                 return new BadRequestObjectResult(new JsonResult(new { message = WebApp.Resources.Shared.AuctionIsDraft }));
             }
 
-            var bidsTask = bidsService.GetAuctionBids(auctionBidsRequest.AuctionId);
+            var bidsTask = bidsService.GetAuctionBids(auctionBidsRequest.AuctionId, userId);
             AuctionBidsResponse response = new AuctionBidsResponse();
             response.AuctionId = auctionBidsRequest.AuctionId;
             response.AuctionTitle = auction.Title;
