@@ -33,5 +33,6 @@ namespace WebApp.Models.DTO
 
         public int? itemsOnPage { get; set; }
 
+        public string? newCurrency { get; set; }
     }
 }

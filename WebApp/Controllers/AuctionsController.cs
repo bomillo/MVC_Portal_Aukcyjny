@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Elastic.Clients.Elasticsearch;
 using Microsoft.AspNetCore;
@@ -86,12 +87,12 @@ namespace WebApp.Controllers
                 else
                     path = _auctionFilesService.GetErrorIconPath();
 
-                var Bid = _context.Bid.Where(x => x.AuctionId == auction.AuctionId).ToList();
+                var Bid = bidsService.GetAuctionHighestBid(auction.AuctionId, userId);
                 auctionList.Add(new DisplayAuctionsModel()
                 {
                     Auction = auction,
                     iconPath = path,
-                    Bid = Bid.Select(x => x.Price).DefaultIfEmpty(0).Max()
+                    Bid = Bid
                 });
             }
 
@@ -536,7 +537,10 @@ namespace WebApp.Controllers
             {
                 return BadRequest();
             }
-            var bidsTask = bidsService.GetAuctionBids((int)id);
+            int userId;
+            int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value, out userId);
+
+            var bidsTask = bidsService.GetAuctionBids((int)id, userId);
             var questionTask = GetAuctionQuestions((int)id);
             var auction = _context.Auctions.FirstOrDefault(x => x.AuctionId == id);
             if(auction == null)

@@ -22,17 +22,20 @@ namespace WebApp.Controllers
         private readonly BreadcrumbService breadcrumbService;
         private readonly SetPagerService pagerService;
         private readonly AuctionFilesService fileService;
+        private readonly BidsService bidsService;
         private string iconPathError;
 
         public CategoriesController(PortalAukcyjnyContext context, 
             BreadcrumbService breadcrumbService,
             SetPagerService pagerService,
-            AuctionFilesService fileService)
+            AuctionFilesService fileService, 
+            BidsService bidsService)
         {
             _context = context;
             this.breadcrumbService = breadcrumbService;
             this.pagerService = pagerService;
             this.fileService = fileService;
+            this.bidsService = bidsService;
             iconPathError = fileService.GetErrorIconPath();
         }
 
@@ -207,10 +210,12 @@ namespace WebApp.Controllers
             var auctions = _context.Auctions.Where(a => products.Contains(a.ProductId) && a.EndTime > DateTime.UtcNow && a.IsDraft == false).Include(a => a.Product).Include(a => a.Product.Category).ToList();
 
             var displayAuctions = new List<DisplayAuctionsModel>();
-            
+
+            int userId = 0;
+            int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value, out userId);
 
 
-            foreach(var auction in auctions)
+            foreach (var auction in auctions)
             {
                 string path = null;
                 var icon = _context.ProductFiles.Where(x => x.ProductId == auction.AuctionId && x.Name.StartsWith("ICON")).FirstOrDefault();
@@ -221,22 +226,17 @@ namespace WebApp.Controllers
                     path = iconPathError;
 
 
-                var currentBids = _context.Bid.Where(x => x.AuctionId == auction.AuctionId).ToList();
+                var Bid = bidsService.GetAuctionHighestBid(auction.AuctionId, userId);
                 displayAuctions.Add(new DisplayAuctionsModel()
                 {
                     Auction = auction,
                     iconPath = path,
-                    Bid = currentBids.Select(x => x.Price).DefaultIfEmpty(0).Max()
+                    Bid = Bid 
                 });
                 
             }
             if (page < 1)
                 page = 1;
-
-
-            int userId = -1;
-            if (HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")) != null)
-                int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value, out userId);
 
 
             int rowsCount = displayAuctions.Count();
