@@ -34,13 +34,12 @@ namespace PortalAukcyjny.Controllers
         public async Task<IActionResult> IndexAsync()   
         {
             var categories = (from c in _context.Categories
-                             .OrderBy(cat => cat.ParentCategory)
                              .Take(10)
                              select c).ToList();
 
+            ViewBag.Categories = categories;
             int userId;
             int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value, out userId);
-            ViewBag.Categories = categories;
 
 
             var recentlyFinished = (from a in _context.Auctions

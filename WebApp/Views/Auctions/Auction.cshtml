@@ -3,6 +3,8 @@
 
 @{
     var isOwner = Context.User.Claims.Any() ? int.Parse(Context.User.Claims.First(c => c.Type.ToLower().Equals("userid")).Value) == Model.OwnerId : false;
+    var isObserved = ViewBag.IsObserved;
+    int a = 1;
 }
 
 @await Html.PartialAsync("_BreadcrumbNavigation", (List<BreadcrumbItem>) ViewBag.Breadcrumb)
@@ -14,11 +16,34 @@
         <img src="@Model.Images[0]"/>
 
         <h3 class="subsection--title">@WebApp.Resources.Shared.Description</h3>
+        
+        <div class="subscribeButton" id="subscribe">
+            @if(!isOwner)
+            {
+                @if(!isObserved )
+                {
+                    <button type="button" class="add--bid--button auction--border background--primary text--primary border--primary" onclick="observAuction()">
+                        @WebApp.Resources.Shared.Subscribe
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="add--bid--button auction--border background--primary text--primary border--primary" onclick="unObservAuction()">
+                        @WebApp.Resources.Shared.Unsubscribe
+                    </button>
+                }
+            }
+
+            <div class="auction--bid--popup" id="observPopup">
+                <span id="observationMessage" class="text-success"></span>
+            </div>
+        </div>
+
         <hr />
         <div class="auction--description">
             <p>@Model.Description</p>
         </div>
-        </div>
+    </div>
     <div class="auction--right--panel">
         <h3>@WebApp.Resources.Shared.Bids</h3>
         <div class="auction--bids--list auction--border background--primary text--primary border--primary ">
@@ -38,6 +63,7 @@
                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                 </svg>
             </button>
+
 
             <div class="auction--bid--popup" id="bidPopup">
                 <div class="form--group--with--warning">
@@ -121,6 +147,42 @@
 
 
 <script>
+
+    function observAuction() {
+        $.ajax(
+        {
+            type: "POST",
+                url: '@Url.Action("ObservAuction", "Auctions")' + "?id=" + @Model.AuctionId,
+            success: function (result) {
+                alert(result.message);
+                @isObserved = true;
+                document.location.reload(true)
+            },
+            error: function (x, e) {
+                alert(e);
+            }
+        });
+    }
+    document.getElementById("observe").addEventListener("click", observAuction);
+    
+    function unObservAuction() {
+        $.ajax(
+            {
+                type: "POST",
+                url: '@Url.Action("UnObservAuction", "Auctions")' + "?id=" + @Model.AuctionId,
+                success: function (result) {
+                    alert(result.message);
+                    @isObserved = false;
+                    document.location.reload(true)
+                },
+                error: function (x, e) {
+                    alert(e);
+                }
+            });
+    }
+    document.getElementById("unobserv").addEventListener("click", unObservAuction);
+
+
     $("#createBid").submit(function(event){
         event.preventDefault();
         $("#returnUrl").val(window.location.toString());

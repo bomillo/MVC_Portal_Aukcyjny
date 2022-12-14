@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,12 +37,13 @@ namespace BackgroundTasks
             {
                 Logger.LogInformation("NBP WORKER: Starting downloading at " + DateTime.Now.ToShortTimeString());
 
-                new Timer(UpdateCurrencyDatabase, null, TimeSpan.Zero, downloadIdle);
+                //if(checkLastUpdate())
+                    new Timer(UpdateCurrencyDatabase, null, TimeSpan.Zero, downloadIdle);
                 await Task.Delay(downloadIdle);
             }
         }
 
-        private void UpdateCurrencyDatabase(object? state)
+        private async void UpdateCurrencyDatabase(object? state)
         {
             var currList = service.GetAll();
 
@@ -77,6 +79,15 @@ namespace BackgroundTasks
                 context.SaveChanges();
                 Logger.LogInformation("NBP WORKER: Data downloaded - idle: " + downloadIdle + " days");
             }
+        }
+        private bool checkLastUpdate()
+        {
+            var curr = context.CurrencyExchangeRates.First();
+
+            if (curr.LastUpdatedTime - DateTime.UtcNow > TimeSpan.FromDays(4))
+                return true;
+
+            return false;
         }
     }
 }

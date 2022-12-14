@@ -482,7 +482,7 @@ namespace WebApp.Controllers
 
 
         // POST: Auctions/ObservAuction/5 
-        public ActionResult ObservAuction(int? id)
+        public async Task<ActionResult> ObservAuction(int? id)
         {
             string resultMsg = "";
             if(id > 0)
@@ -495,20 +495,22 @@ namespace WebApp.Controllers
                     if (result != null)
                     {
                         resultMsg = "Auction is now being observed";
-                    
-                        return RedirectToAction("Details", new { id = id, result = resultMsg});
+                        ViewBag.IsObserved = true;
+                        return new JsonResult(new { message = resultMsg });
+
                     }
                     resultMsg = "Auction already observed";
+                    ViewBag.IsObserved = true;
+                    return new JsonResult(new { message = resultMsg });
 
-                    return RedirectToAction("Details", new { id = id, result = resultMsg });
                 }
             }
             resultMsg = "Invalid data, please try again";
-
-            return RedirectToAction("Details", new { id = id, result = resultMsg });
+            ViewBag.IsObserved = false;
+            return new JsonResult(new { message = resultMsg });
         }
 
-        public ActionResult UnObservAuction(int? id)
+        public async Task<ActionResult> UnObservAuction(int? id, bool? ob)
         {
             string resultMsg = "";
             int userId;
@@ -520,15 +522,15 @@ namespace WebApp.Controllers
                 if (result)
                 {
                     resultMsg = "Auction is no longer being observed";
-
-                    return RedirectToAction("Details", new { id = id, result = resultMsg });
+                    ViewBag.IsObserved = false;
+                    return new JsonResult(new { message = resultMsg });
                 }
                 resultMsg = "Something went wrong, please try again!";
-
-                return RedirectToAction("Details", new { id = id, result = resultMsg });
+                ViewBag.IsObserved = false;
+                return new JsonResult(new { message = resultMsg });
             }
 
-            return View();
+            return new JsonResult(new { message = resultMsg });
         }
 
         public async Task<ActionResult> Auction(int? id)
@@ -569,6 +571,8 @@ namespace WebApp.Controllers
             {
                 ""
             };
+
+            ViewBag.IsObserved = _observedAuctionService.IsAuctionObserved((int)id, userId);
 
             return View(auctionDTO);
         }

@@ -240,4 +240,10 @@
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>Coś poszło nie tak, spróbuj ponownie</value>
   </data>
+  <data name="Subscribe" xml:space="preserve">
+    <value>Subscribe</value>
+  </data>
+  <data name="Unsubscribe" xml:space="preserve">
+    <value>Unsubscribe</value>
+  </data>
 </root>

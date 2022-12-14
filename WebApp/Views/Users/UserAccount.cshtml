@@ -31,7 +31,7 @@
                     @foreach(var auction in ViewBag.MyAuctions)
                     {
                         <hr />
-                        <a asp-action="Details" asp-controller="Auctions" asp-route-id="@auction.AuctionId">
+                        <a asp-action="Auction" asp-controller="Auctions" asp-route-id="@auction.AuctionId">
                             <div class="box--item">
                                 <div class="box--item--title">Tilte: @auction.Title</div>
                                 @if(@auction.IsDraft){
@@ -61,7 +61,7 @@
                         TimeSpan timeLeft = (TimeSpan)(auction.Auction.EndTime - DateTime.UtcNow);
 
                             <hr />
-                        <a asp-action="Details" asp-controller="Auctions" asp-route-id="@auction.Auction.AuctionId">
+                        <a asp-action="Auction" asp-controller="Auctions" asp-route-id="@auction.Auction.AuctionId">
 
                             <div class="box--item">
                                 <div class="box--item--title">Tilte: @auction.Auction.Title</div>
@@ -86,7 +86,7 @@
                         TimeSpan timeLeft = (TimeSpan)(bid.Auction.EndTime - DateTime.UtcNow);
 
                         <hr />
-                        <a asp-action="Details" asp-controller="Bids" asp-route-id="@bid.BidId">
+                        <a asp-action="Auction" asp-controller="Auctions" asp-route-id="@bid.BidId">
 
                             <div class="box--item">
                                 <div class="box--item--title">Tilte: @bid.Auction.Title</div>
