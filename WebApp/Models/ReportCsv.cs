@@ -23,22 +23,11 @@ namespace WebApp.Models
             }
 
             var entries = fileFormatBuilder.ToString();
-           // 
+           
             var stream = new System.IO.MemoryStream(Encoding.UTF8.GetBytes(entries));
 
-            var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
-            {
-                Content = new StreamContent(stream)
-            };
 
-            response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("text/csv");
-            response.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
-            {
-                FileName = this.FileName
-            };
-
-
-            return Encoding.ASCII.GetBytes(entries);
+            return Encoding.UTF8.GetBytes(entries);
         }
     }
 }

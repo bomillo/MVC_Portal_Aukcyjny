@@ -16,11 +16,10 @@ namespace WebApp.Models
             this.dbContext = dbContext;
         }
         
-        public void GenerateNewAuctionsReport(DateTime fromDate, int daySpan = 7)
+        public void GenerateNewAuctionsReport(int daySpan = 7)
         {
-            fromDate = fromDate.ToUniversalTime();
-
-            FileName = $"NewAuctions_{fromDate.Day}.{fromDate.Month}.{fromDate.Year}-{fromDate.Day}.{fromDate.Month}.{fromDate.Year}";
+            var fromDate = DateTime.UtcNow.AddDays(daySpan * -1);
+            FileName = $"NewAuctions_{fromDate.Day}.{fromDate.Month}.{fromDate.Year}-{DateTime.UtcNow.Day}.{DateTime.UtcNow.Month}.{DateTime.UtcNow.Year}";
             var auctions = dbContext.Auctions.Where(x => x.CreationTime >= fromDate.ToUniversalTime() && x.CreationTime <= fromDate.ToUniversalTime().AddDays(daySpan))
                 .Include(x => x.Product)
                 .Include(x => x.Owner)
@@ -88,6 +87,9 @@ namespace WebApp.Models
 
         public byte[] GenerateAuctionsEndedInGivenTimeSpan(int timeSpan = 7)
         {
+            var fromDate = DateTime.UtcNow.AddDays(timeSpan * -1);
+            var toDate = DateTime.UtcNow;
+            FileName = $"AuctionsEndedIn_{fromDate.Day}.{fromDate.Month}.{fromDate.Year}-{toDate.Day}.{toDate.Month}.{toDate.Year}";
             var startDate = DateTime.UtcNow.AddDays(timeSpan * -1);
             var endDate = DateTime.UtcNow;
 
@@ -110,17 +112,16 @@ namespace WebApp.Models
             {
                 var bidCounts = dbContext.Bid.Where(x => x.AuctionId == auction.AuctionId).Count();
 
-                var highestBid = dbContext.Bid.Where(x => x.AuctionId == auction.AuctionId).Max(x => (int?)x.Price);
+                var highestBid = dbContext.Bid.Where(x => x.AuctionId == auction.AuctionId).Max(x => (double?)x.Price);
 
                 data.Add(new string[]
                 {
                     auction.Title, auction.Product.Name, auction.Product.Category.Name, auction.CreationTime.ToString(),
-                    auction.PublishedTime?.ToString() ?? "Not Published Yet", auction.EndTime?.ToString() ?? "No end time defined", bidCounts.ToString(), highestBid.ToString()
+                    auction.PublishedTime?.ToString() ?? "Not Published Yet", auction.EndTime?.ToString() ?? "No end time defined", bidCounts.ToString(), string.Format("{0:0.00}", highestBid)
                 });
             }
 
             return SerializeToFile(data, headers);
-
         }
 
         public abstract byte[] SerializeToFile(List<string[]> data, string[] headers);
