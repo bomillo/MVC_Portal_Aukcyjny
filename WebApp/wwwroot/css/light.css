@@ -42,3 +42,8 @@
 .light-mode .user--details .item {
   background: aliceblue;
 }
+
+#subPopUp {
+  background-color: gray;
+  color: white;
+}

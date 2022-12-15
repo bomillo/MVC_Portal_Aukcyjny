@@ -15,27 +15,38 @@
         <p>@Model.EndDate - @Model.TimeToEnd</p>
         <img src="@Model.Images[0]"/>
 
-        <h3 class="subsection--title">@WebApp.Resources.Shared.Description</h3>
+        <div class="description--header">
+            <h3 class="subsection--title">@WebApp.Resources.Shared.Description</h3>
         
-        <div class="subscribeButton" id="subscribe">
-            @if(!isOwner)
-            {
-                @if(!isObserved )
+            <div class="subscribeButton" id="subscribe">
+                @if(!isOwner)
                 {
-                    <button type="button" class="add--bid--button auction--border background--primary text--primary border--primary" onclick="observAuction()">
-                        @WebApp.Resources.Shared.Subscribe
-                    </button>
-                }
-                else
-                {
-                    <button type="button" class="add--bid--button auction--border background--primary text--primary border--primary" onclick="unObservAuction()">
-                        @WebApp.Resources.Shared.Unsubscribe
-                    </button>
-                }
-            }
+                    <div id="subPopUp" class="slider--fade">
+                        <div class="message">
+                            <hr />
+                            <span class="text--primary">
+                                    Subscription
+                                </span>
+                            <hr />
+                        </div>
+                        <button class="ok btn button button--secondary">OKAY</button>
+                    </div>
 
-            <div class="auction--bid--popup" id="observPopup">
-                <span id="observationMessage" class="text-success"></span>
+                    @if(!isObserved )
+                    {
+                        <input type="button" class="add--bid--button auction--border background--primary text--primary border--primary" onclick="observAuction();"
+                            value="@WebApp.Resources.Shared.Subscribe" />
+                    }
+                    else
+                    {
+                        <input type="button" class="add--bid--button auction--border background--primary text--primary border--primary" onclick="unObservAuction();"
+                           value="@WebApp.Resources.Shared.Unsubscribe" />
+                    }
+                }
+
+                <div class="auction--bid--popup" id="observPopup">
+                    <span id="observationMessage" class="text-success"></span>
+                </div>
             </div>
         </div>
 
@@ -148,39 +159,61 @@
 
 <script>
 
-    function observAuction() {
-        $.ajax(
-        {
-            type: "POST",
-                url: '@Url.Action("ObservAuction", "Auctions")' + "?id=" + @Model.AuctionId,
-            success: function (result) {
-                alert(result.message);
-                @isObserved = true;
-                document.location.reload(true)
-            },
-            error: function (x, e) {
-                alert(e);
-            }
-        });
-    }
-    document.getElementById("observe").addEventListener("click", observAuction);
-    
-    function unObservAuction() {
+    function observAuction(btn) {
         $.ajax(
             {
                 type: "POST",
-                url: '@Url.Action("UnObservAuction", "Auctions")' + "?id=" + @Model.AuctionId,
+                    url: '@Url.Action("ObservAuction", "Auctions")' + "?id=" + @Model.AuctionId,
                 success: function (result) {
-                    alert(result.message);
-                    @isObserved = false;
-                    document.location.reload(true)
+
+                    var confirmBox = $("#subPopUp");
+                
+                    confirmBox.find(".message").text(result.message);
+                
+                    confirmBox.find(".ok").unbind().click(function()
+                    {
+                        confirmBox.hide();
+                        document.location.reload(true);
+                    });
+                    confirmBox.find(".ok").click(btn);
+                    confirmBox.show();
+
+                    //setTimeout(() => document.location.reload(true), 1200);
+                    @isObserved = true;
                 },
                 error: function (x, e) {
                     alert(e);
                 }
             });
     }
-    document.getElementById("unobserv").addEventListener("click", unObservAuction);
+    
+    function unObservAuction(btn) {
+        $.ajax(
+            {
+                type: "POST",
+                url: '@Url.Action("UnObservAuction", "Auctions")' + "?id=" + @Model.AuctionId,
+                success: function (result) {
+                    
+                    var confirmBox = $("#subPopUp");
+
+                    confirmBox.find(".message").text(result.message);
+                    confirmBox.find(".ok").unbind().click(function()
+                    {
+                        confirmBox.hide();
+                        document.location.reload(true);
+                    });
+                    confirmBox.find(".ok").click(btn);
+
+                    confirmBox.show();
+
+                    //setTimeout(() => document.location.reload(true), 1200);
+                    @isObserved = false;
+                },
+                error: function (x, e) {
+                    alert(e);
+                }
+            });
+    }
 
 
     $("#createBid").submit(function(event){
