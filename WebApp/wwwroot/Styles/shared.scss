@@ -1515,11 +1515,15 @@ nav {
     width: 450px;
     top: 40%;
     left: 50%;
-    margin-left: -225px; 
+    margin-left: -225px;
     padding: 16px 8px 16px 8px;
     box-sizing: border-box;
     text-align: center;
     z-index: 1;
+    animation: slider-fade;
+    animation-duration: 0.8s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
 
     /* Dialog box message */
     .message {
