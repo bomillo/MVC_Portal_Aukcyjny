@@ -358,6 +358,24 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auctions history csv.
+        /// </summary>
+        internal static string MyAuctionsCsv {
+            get {
+                return ResourceManager.GetString("MyAuctionsCsv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auctions history pdf.
+        /// </summary>
+        internal static string MyAuctionsPdf {
+            get {
+                return ResourceManager.GetString("MyAuctionsPdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type your answer here....
         /// </summary>
         internal static string NewAnswer {
@@ -390,6 +408,15 @@ namespace WebApp.Resources {
         internal static string NoBidValue {
             get {
                 return ResourceManager.GetString("NoBidValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No result.
+        /// </summary>
+        internal static string NoResult {
+            get {
+                return ResourceManager.GetString("NoResult", resourceCulture);
             }
         }
         

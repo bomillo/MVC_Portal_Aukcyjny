@@ -216,6 +216,12 @@
   <data name="MessageSent" xml:space="preserve">
     <value>Wiadomość została wysłana</value>
   </data>
+  <data name="MyAuctionsCsv" xml:space="preserve">
+    <value>Historia aukcji csv</value>
+  </data>
+  <data name="MyAuctionsPdf" xml:space="preserve">
+    <value>Historia aukcji pdf</value>
+  </data>
   <data name="NewAnswer" xml:space="preserve">
     <value>Odpowiedz na pytanie...</value>
   </data>
@@ -227,6 +233,9 @@
   </data>
   <data name="NoBidValue" xml:space="preserve">
     <value>Brak wartości oferty w z ciele zapytania</value>
+  </data>
+  <data name="NoResult" xml:space="preserve">
+    <value>Brak wyników</value>
   </data>
   <data name="NotLoggedIn" xml:space="preserve">
     <value>Musisz być zalogowany aby to wykonać</value>

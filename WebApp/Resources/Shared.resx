@@ -216,6 +216,12 @@
   <data name="MessageSent" xml:space="preserve">
     <value>Message has been sent</value>
   </data>
+  <data name="MyAuctionsCsv" xml:space="preserve">
+    <value>Auctions history csv</value>
+  </data>
+  <data name="MyAuctionsPdf" xml:space="preserve">
+    <value>Auctions history pdf</value>
+  </data>
   <data name="NewAnswer" xml:space="preserve">
     <value>Type your answer here...</value>
   </data>
@@ -227,6 +233,9 @@
   </data>
   <data name="NoBidValue" xml:space="preserve">
     <value>No bid value found in request body</value>
+  </data>
+  <data name="NoResult" xml:space="preserve">
+    <value>No result</value>
   </data>
   <data name="NotLoggedIn" xml:space="preserve">
     <value>You must be logged in to do this</value>

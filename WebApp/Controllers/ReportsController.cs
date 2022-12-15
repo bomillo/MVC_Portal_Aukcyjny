@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Net.Mime;
 using WebApp.Context;
 using WebApp.Models;
@@ -101,6 +102,28 @@ namespace WebApp.Controllers
 
 
             return File(file, "application/pdf", $"AuctionCreatedFrom_{startDate.Day}.{startDate.Month}.{startDate.Year}_{DateTime.UtcNow.Day}.{DateTime.UtcNow.Month}.{DateTime.UtcNow.Year}.pdf");
+        }
+
+        [HttpGet]
+        [Route("/reports/pdf/auctions/history/my")]
+        public ActionResult MyAuctionsHistoryPdf(int userId)
+        {
+            var report = new ReportPdf(dbContext);
+            var file = report.GenerateMyAuctionHistoryReport(userId);
+
+
+            return File(file, "application/pdf", $"MyAuctionHistory.pdf");
+        }
+
+        [HttpGet]
+        [Route("/reports/csv/auctions/history/my")]
+        public ActionResult MyAuctionsHistoryCsv(int userId)
+        {
+            var report = new ReportCsv(dbContext);
+            var file = report.GenerateMyAuctionHistoryReport(userId);
+
+
+            return File(file, "text/csv", $"MyAuctionHistory.csv");
         }
 
     }

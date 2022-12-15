@@ -39,18 +39,15 @@ namespace WebApp.Models
                 });
             }
 
-            return SerializeToFile(ConvertToFileFormat(data, headers));
+            var result = ConvertToFileFormat(data, headers);
+
+            return SerializeToFile(String.IsNullOrWhiteSpace(result) ? WebApp.Resources.Shared.NoResult : result);
 
         }
 
-        public void GenerateMyAuctionHistoryReport(int userId)
+        public byte[] GenerateMyAuctionHistoryReport(int userId)
         {
             var user = dbContext.Users.FirstOrDefault(x => x.UserId == userId);
-
-            if (user == null)
-            {
-                return;
-            }
 
             var userAuctions = dbContext.Auctions.Where(x => x.OwnerId == userId).Include(x => x.Product).Include(x => x.Product.Category).OrderBy(x => x.CreationTime).ToList();
 
@@ -78,7 +75,9 @@ namespace WebApp.Models
                 });
             }
 
-            SerializeToFile(ConvertToFileFormat(data, headers));
+            var result = ConvertToFileFormat(data, headers);
+
+            return SerializeToFile(String.IsNullOrWhiteSpace(result) ? WebApp.Resources.Shared.NoResult : result);
 
         }
 
@@ -117,7 +116,9 @@ namespace WebApp.Models
                 });
             }
 
-            return SerializeToFile(ConvertToFileFormat(data, headers));
+            var result = ConvertToFileFormat(data, headers);
+
+            return SerializeToFile(String.IsNullOrWhiteSpace(result) ? WebApp.Resources.Shared.NoResult : result);
         }
 
         public byte[] GenerateCategoryPopularityInDaySpan(int daySpan = 3)
@@ -150,7 +151,9 @@ namespace WebApp.Models
                 });
             }
 
-            return SerializeToFile(ConvertToFileFormat(data, headers));
+            var result = ConvertToFileFormat(data, headers);
+
+            return SerializeToFile(String.IsNullOrWhiteSpace(result) ? WebApp.Resources.Shared.NoResult : result);
         }
 
         public byte[] GenerateBusinessReport(int daySpan = 3)
