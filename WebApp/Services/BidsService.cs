@@ -87,6 +87,11 @@ namespace WebApp.Services
 
             foreach (var bid in bidList)
             {
+                if(bidList.Find(x => x.AuctionId == bid.AuctionId && x.Price > bid.Price) != null)
+                {
+                    continue;
+                }
+
                 bidUserDTO.Add(
                     new BidUserDTO()
                     {

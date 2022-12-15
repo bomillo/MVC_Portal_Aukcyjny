@@ -33,12 +33,12 @@
 
                     @if(!isObserved )
                     {
-                        <input type="button" class="auction--border background--primary text--primary border--primary" onclick="observAuction();"
+                        <input type="button" class="btn button auction--border background--primary text--primary border--primary" onclick="observAuction();"
                             value="@WebApp.Resources.Shared.Subscribe" />
                     }
                     else
                     {
-                        <input type="button" class="auction--border background--primary text--primary border--primary" onclick="unObservAuction();"
+                        <input type="button" class="btn button auction--border background--primary text--primary border--primary" onclick="unObservAuction();"
                            value="@WebApp.Resources.Shared.Unsubscribe" />
                     }
                 }
@@ -49,9 +49,7 @@
                     </a>
                 }
 
-                <div class="auction--bid--popup" id="observPopup">
-                    <span id="observationMessage" class="text-success"></span>
-                </div>
+                
             </div>
         </div>
 
