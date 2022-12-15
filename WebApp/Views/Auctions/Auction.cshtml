@@ -19,7 +19,7 @@
             <h3 class="subsection--title">@WebApp.Resources.Shared.Description</h3>
         
             <div class="subscribeButton" id="subscribe">
-                @if(!isOwner)
+                @*@if(!isOwner)
                 {
                     <div id="subPopUp">
                         <div class="message">
@@ -34,15 +34,21 @@
 
                     @if(!isObserved )
                     {
-                        <input type="button" class="add--bid--button auction--border background--primary text--primary border--primary" onclick="observAuction();"
+                        <input type="button" class="auction--border background--primary text--primary border--primary" onclick="observAuction();"
                             value="@WebApp.Resources.Shared.Subscribe" />
                     }
                     else
                     {
-                        <input type="button" class="add--bid--button auction--border background--primary text--primary border--primary" onclick="unObservAuction();"
+                        <input type="button" class="auction--border background--primary text--primary border--primary" onclick="unObservAuction();"
                            value="@WebApp.Resources.Shared.Unsubscribe" />
                     }
                 }
+                else
+                {
+                    <a asp-action="Edit" asp-controller="Auctions" asp-route-id="@Model.AuctionId" type="button" class="btn button auction--border background--primary text--primary border--primary">
+                        @WebApp.Resources.Shared.EditAuction 
+                    </a>
+                }*@
 
                 <div class="auction--bid--popup" id="observPopup">
                     <span id="observationMessage" class="text-success"></span>
@@ -158,7 +164,7 @@
 
 
 <script>
-
+    @*
     function observAuction(btn) {
         $.ajax(
             {
@@ -214,7 +220,7 @@
                 }
             });
     }
-
+    *@
 
     $("#createBid").submit(function(event){
         event.preventDefault();

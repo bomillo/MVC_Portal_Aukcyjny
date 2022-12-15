@@ -429,7 +429,7 @@ namespace WebApp.Controllers
                         return View("Error", NotFoundViewModel);
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Auction", new { id = auction.AuctionId });
             }
             ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
             ViewData["ProductId"] = new SelectList(_context.Products.OrderBy(p => p.Name), "ProductId", "Name", auction.ProductId);

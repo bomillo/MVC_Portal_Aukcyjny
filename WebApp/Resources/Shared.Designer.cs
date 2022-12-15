@@ -205,6 +205,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit auction.
+        /// </summary>
+        internal static string EditAuction {
+            get {
+                return ResourceManager.GetString("EditAuction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to end in.
         /// </summary>
         internal static string EndIn {

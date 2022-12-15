@@ -165,6 +165,9 @@
   <data name="Description" xml:space="preserve">
     <value>Description (FR)</value>
   </data>
+  <data name="EditAuction" xml:space="preserve">
+    <value>EditAuction (FR)</value>
+  </data>
   <data name="EndIn" xml:space="preserve">
     <value>end in (fr)</value>
   </data>
@@ -241,9 +244,9 @@
     <value>Something went wrong (FR)</value>
   </data>
   <data name="Subscribe" xml:space="preserve">
-    <value>Subscribe</value>
+    <value>Subscribe (FR)</value>
   </data>
   <data name="Unsubscribe" xml:space="preserve">
-    <value>Unsubscribe</value>
+    <value>Unsubscribe (FR)</value>
   </data>
 </root>
