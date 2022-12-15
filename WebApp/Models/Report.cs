@@ -16,7 +16,7 @@ namespace WebApp.Models
             this.dbContext = dbContext;
         }
         
-        public byte[] GenerateNewAuctionsReport(int daySpan = 7)
+        public byte[] GenerateNewAuctionsReport(int daySpan = 3)
         {
             var fromDate = DateTime.UtcNow.AddDays(daySpan * -1);
             var auctions = dbContext.Auctions.Where(x => x.CreationTime >= fromDate.ToUniversalTime() && x.CreationTime <= fromDate.ToUniversalTime().AddDays(daySpan))
@@ -82,7 +82,7 @@ namespace WebApp.Models
 
         }
 
-        public byte[] GenerateAuctionsEndedInGivenTimeSpan(int timeSpan = 7)
+        public byte[] GenerateAuctionsEndedInGivenTimeSpan(int timeSpan = 3)
         {
             var fromDate = DateTime.UtcNow.AddDays(timeSpan * -1);
             var toDate = DateTime.UtcNow;
@@ -120,7 +120,7 @@ namespace WebApp.Models
             return SerializeToFile(ConvertToFileFormat(data, headers));
         }
 
-        public byte[] GenerateCategoryPopularityInDaySpan(int daySpan = 7)
+        public byte[] GenerateCategoryPopularityInDaySpan(int daySpan = 3)
         {
             var fromDate = DateTime.UtcNow.AddDays(daySpan * -1);
             var toDate = DateTime.UtcNow;
@@ -153,7 +153,7 @@ namespace WebApp.Models
             return SerializeToFile(ConvertToFileFormat(data, headers));
         }
 
-        public byte[] GenerateBusinessReport(int daySpan = 7)
+        public byte[] GenerateBusinessReport(int daySpan = 3)
         {
             var fromDate = DateTime.UtcNow.AddDays(daySpan * -1);
             var toDate = DateTime.UtcNow;

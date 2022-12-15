@@ -79,6 +79,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Analytics.
+        /// </summary>
+        internal static string Analytics {
+            get {
+                return ResourceManager.GetString("Analytics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Answer.
         /// </summary>
         internal static string Answer {
@@ -169,6 +178,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Business report.
+        /// </summary>
+        internal static string Business {
+            get {
+                return ResourceManager.GetString("Business", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Close {
@@ -183,6 +201,15 @@ namespace WebApp.Resources {
         internal static string CreateBid {
             get {
                 return ResourceManager.GetString("CreateBid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New auctions.
+        /// </summary>
+        internal static string Created {
+            get {
+                return ResourceManager.GetString("Created", resourceCulture);
             }
         }
         
@@ -210,6 +237,15 @@ namespace WebApp.Resources {
         internal static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auctions ended.
+        /// </summary>
+        internal static string Ended {
+            get {
+                return ResourceManager.GetString("Ended", resourceCulture);
             }
         }
         
@@ -385,6 +421,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Categories popularity.
+        /// </summary>
+        internal static string Popularity {
+            get {
+                return ResourceManager.GetString("Popularity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Price.
         /// </summary>
         internal static string Price {
@@ -435,6 +480,15 @@ namespace WebApp.Resources {
         internal static string SomethingWentWrong {
             get {
                 return ResourceManager.GetString("SomethingWentWrong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Report time span (days).
+        /// </summary>
+        internal static string TimeSpan {
+            get {
+                return ResourceManager.GetString("TimeSpan", resourceCulture);
             }
         }
     }

@@ -57,7 +57,7 @@ namespace WebApp.Models
                     }
                 }
             };
-            MemoryStream stream = new MemoryStream();
+
             var converter = new BasicConverter(new PdfTools());
 
             byte[] pdf = converter.Convert(doc);

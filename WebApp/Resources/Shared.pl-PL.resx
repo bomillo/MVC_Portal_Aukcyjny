@@ -123,6 +123,9 @@
   <data name="AdminPanel" xml:space="preserve">
     <value>Panel administracyjny</value>
   </data>
+  <data name="Analytics" xml:space="preserve">
+    <value>Analityka</value>
+  </data>
   <data name="Answer" xml:space="preserve">
     <value>Odpowiedz</value>
   </data>
@@ -153,11 +156,17 @@
   <data name="BidToLow" xml:space="preserve">
     <value>Wartość oferty za niska</value>
   </data>
+  <data name="Business" xml:space="preserve">
+    <value>Raport biznesowy</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Zamknij</value>
   </data>
   <data name="CreateBid" xml:space="preserve">
     <value>Oferta</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Nowe aukcje</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Ciemny</value>
@@ -167,6 +176,9 @@
   </data>
   <data name="Description" xml:space="preserve">
     <value>Szczegóły</value>
+  </data>
+  <data name="Ended" xml:space="preserve">
+    <value>Zakończone aukcje</value>
   </data>
   <data name="EndIn" xml:space="preserve">
     <value>kończy się za</value>
@@ -225,6 +237,9 @@
   <data name="NowObserving" xml:space="preserve">
     <value>Od teraz obserwujesz aukcje:</value>
   </data>
+  <data name="Popularity" xml:space="preserve">
+    <value>Popularność kategorii</value>
+  </data>
   <data name="Price" xml:space="preserve">
     <value>Cena</value>
   </data>
@@ -242,5 +257,8 @@
   </data>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>Coś poszło nie tak, spróbuj ponownie</value>
+  </data>
+  <data name="TimeSpan" xml:space="preserve">
+    <value>Okres raportu (dni)</value>
   </data>
 </root>

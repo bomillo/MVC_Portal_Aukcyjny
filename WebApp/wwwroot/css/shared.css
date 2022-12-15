@@ -1294,3 +1294,18 @@ nav {
 .button--group--last {
   border-radius: 0 0.4rem 0.4rem 0;
 }
+
+.reports--container input {
+  width: 12vw;
+}
+.reports--container .form--group input {
+  width: 5vw;
+  margin-right: 2vw;
+}
+.reports--container p {
+  margin-left: 2vw;
+}
+
+.a--no--style {
+  text-decoration: none;
+}

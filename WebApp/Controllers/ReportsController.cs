@@ -16,8 +16,8 @@ namespace WebApp.Controllers
 
 
         [HttpGet]
-        [Route("/reports/csv/auctions/endedin/{timeSpan}")]
-        public ActionResult AuctionEndedInGivenTimeCsv(int timeSpan = 7)
+        [Route("/reports/csv/auctions/ended")]
+        public ActionResult AuctionEndedInGivenTimeCsv(int timeSpan = 3)
         {
             var report = new ReportCsv(dbContext);
             var file = report.GenerateAuctionsEndedInGivenTimeSpan(timeSpan);
@@ -26,8 +26,8 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        [Route("/reports/pdf/auctions/endedin/{timeSpan}")]
-        public ActionResult AuctionEndedInGivenTimePdf(int timeSpan = 7)
+        [Route("/reports/pdf/auctions/ended")]
+        public ActionResult AuctionEndedInGivenTimePdf(int timeSpan = 3)
         {
             var report = new ReportPdf(dbContext);
             var file = report.GenerateAuctionsEndedInGivenTimeSpan(timeSpan);
@@ -38,8 +38,8 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        [Route("/reports/pdf/categories/popularityin/{timeSpan}")]
-        public ActionResult CategoriesPopularity(int timeSpan = 7)
+        [Route("/reports/pdf/categories/popularity")]
+        public ActionResult CategoriesPopularity(int timeSpan = 3)
         {
             var report = new ReportPdf(dbContext);
             var file = report.GenerateCategoryPopularityInDaySpan(timeSpan);
@@ -49,8 +49,19 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        [Route("/reports/pdf/business/{daySpan}")]
-        public ActionResult Business(int timeSpan = 7)
+        [Route("/reports/csv/categories/popularity")]
+        public ActionResult CategoriesPopularityCsv(int timeSpan = 3)
+        {
+            var report = new ReportCsv(dbContext);
+            var file = report.GenerateCategoryPopularityInDaySpan(timeSpan);
+            var startDate = DateTime.UtcNow.AddDays(timeSpan * -1);
+
+            return File(file, "text/csv", $"CategoriesPopularity_{startDate.Day}.{startDate.Month}.{startDate.Year}_{DateTime.UtcNow.Day}.{DateTime.UtcNow.Month}.{DateTime.UtcNow.Year}.csv");
+        }
+
+        [HttpGet]
+        [Route("/reports/pdf/business")]
+        public ActionResult Business(int timeSpan = 3)
         {
             var report = new ReportPdf(dbContext);
             var file = report.GenerateBusinessReport(timeSpan);
@@ -60,8 +71,8 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        [Route("/reports/csv/business/{daySpan}")]
-        public ActionResult BusinessCsv(int timeSpan = 7)
+        [Route("/reports/csv/business")]
+        public ActionResult BusinessCsv(int timeSpan = 3)
         {
             var report = new ReportCsv(dbContext);
             var file = report.GenerateBusinessReport(timeSpan);
@@ -69,5 +80,28 @@ namespace WebApp.Controllers
 
             return File(file, "text/csv", $"Business_{startDate.Day}.{startDate.Month}.{startDate.Year}_{DateTime.UtcNow.Day}.{DateTime.UtcNow.Month}.{DateTime.UtcNow.Year}.csv");
         }
+
+        [HttpGet]
+        [Route("/reports/csv/auctions/created")]
+        public ActionResult AuctionCreatedInGivenTimeCsv(int timeSpan = 3)
+        {
+            var report = new ReportCsv(dbContext);
+            var file = report.GenerateNewAuctionsReport(timeSpan);
+            var startDate = DateTime.UtcNow.AddDays(timeSpan * -1);
+            return File(file, "text/csv", $"AuctionCreatedFrom_{startDate.Day}.{startDate.Month}.{startDate.Year}_{DateTime.UtcNow.Day}.{DateTime.UtcNow.Month}.{DateTime.UtcNow.Year}.csv");
+        }
+
+        [HttpGet]
+        [Route("/reports/pdf/auctions/created")]
+        public ActionResult AuctionCreatedInGivenTimePdf(int timeSpan = 3)
+        {
+            var report = new ReportPdf(dbContext);
+            var file = report.GenerateNewAuctionsReport(timeSpan);
+            var startDate = DateTime.UtcNow.AddDays(timeSpan * -1);
+
+
+            return File(file, "application/pdf", $"AuctionCreatedFrom_{startDate.Day}.{startDate.Month}.{startDate.Year}_{DateTime.UtcNow.Day}.{DateTime.UtcNow.Month}.{DateTime.UtcNow.Year}.pdf");
+        }
+
     }
 }
