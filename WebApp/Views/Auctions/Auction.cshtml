@@ -4,7 +4,6 @@
 @{
     var isOwner = Context.User.Claims.Any() ? int.Parse(Context.User.Claims.First(c => c.Type.ToLower().Equals("userid")).Value) == Model.OwnerId : false;
     var isObserved = ViewBag.IsObserved;
-    int a = 1;
 }
 
 @await Html.PartialAsync("_BreadcrumbNavigation", (List<BreadcrumbItem>) ViewBag.Breadcrumb)
@@ -19,7 +18,7 @@
             <h3 class="subsection--title">@WebApp.Resources.Shared.Description</h3>
         
             <div class="subscribeButton" id="subscribe">
-                @*@if(!isOwner)
+                @if(!isOwner)
                 {
                     <div id="subPopUp">
                         <div class="message">
@@ -48,7 +47,7 @@
                     <a asp-action="Edit" asp-controller="Auctions" asp-route-id="@Model.AuctionId" type="button" class="btn button auction--border background--primary text--primary border--primary">
                         @WebApp.Resources.Shared.EditAuction 
                     </a>
-                }*@
+                }
 
                 <div class="auction--bid--popup" id="observPopup">
                     <span id="observationMessage" class="text-success"></span>
@@ -164,7 +163,7 @@
 
 
 <script>
-    @*
+
     function observAuction(btn) {
         $.ajax(
             {
@@ -220,7 +219,7 @@
                 }
             });
     }
-    *@
+
 
     $("#createBid").submit(function(event){
         event.preventDefault();
