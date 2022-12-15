@@ -120,6 +120,9 @@
   <data name="AddBid" xml:space="preserve">
     <value>Place bid</value>
   </data>
+  <data name="AdminPanel" xml:space="preserve">
+    <value>Admin dashboard</value>
+  </data>
   <data name="Answer" xml:space="preserve">
     <value>Answer</value>
   </data>

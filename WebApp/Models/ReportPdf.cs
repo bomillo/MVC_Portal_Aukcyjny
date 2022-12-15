@@ -14,7 +14,7 @@ namespace WebApp.Models
         {
 
         }
-        public override byte[] SerializeToFile(List<string[]> data, string[] headers)
+        public override string ConvertToFileFormat(List<string[]> data, string[] headers)
         {
             StringBuilder formatBuilder = new StringBuilder();
 
@@ -30,9 +30,11 @@ namespace WebApp.Models
                 }
                 formatBuilder.AppendLine("<br/>");
             }
-            
+            return formatBuilder.ToString();
+        }
 
-
+        public override byte[] SerializeToFile(string fileData)
+        {
             var doc = new HtmlToPdfDocument()
             {
                 GlobalSettings =
@@ -40,16 +42,16 @@ namespace WebApp.Models
                     ColorMode = ColorMode.Color,
                     Orientation = Orientation.Portrait,
                     PaperSize = PaperKind.A4Plus
-                    
-                    
+
+
                 },
                 Objects =
                 {
                     new ObjectSettings()
                     {
-                        
+
                         PagesCount = true,
-                        HtmlContent = formatBuilder.ToString(),
+                        HtmlContent = fileData,
                         WebSettings = {DefaultEncoding = "utf-8", MinimumFontSize = 20},
                         HeaderSettings = {FontSize = 9, Right = "Page [page] of [toPage]", Line = true, Spacing = 2.812}
                     }

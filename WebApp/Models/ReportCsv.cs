@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Elastic.Clients.Elasticsearch;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using System.Text;
 using WebApp.Context;
@@ -11,7 +12,7 @@ namespace WebApp.Models
         {
 
         }
-        public override byte[] SerializeToFile(List<string[]> data, string[] headers)
+        public override string ConvertToFileFormat(List<string[]> data, string[] headers)
         {
             StringBuilder fileFormatBuilder = new StringBuilder();
 
@@ -22,12 +23,14 @@ namespace WebApp.Models
                 fileFormatBuilder.AppendLine(string.Join(';', line));
             }
 
-            var entries = fileFormatBuilder.ToString();
-           
-            var stream = new System.IO.MemoryStream(Encoding.UTF8.GetBytes(entries));
+            return fileFormatBuilder.ToString();
 
+            
+        }
 
-            return Encoding.UTF8.GetBytes(entries);
+        public override byte[] SerializeToFile(string fileData)
+        {
+            return Encoding.UTF8.GetBytes(fileData);
         }
     }
 }
