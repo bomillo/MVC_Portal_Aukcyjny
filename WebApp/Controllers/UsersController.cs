@@ -209,7 +209,8 @@ namespace WebApp.Controllers
                     {
                         var myAuctions = (from a in _context.Auctions
                                             .Where(au => au.OwnerId == id &&
-                                            au.IsDraft == false)
+                                            au.IsDraft == false &&
+                                            au.EndTime > DateTime.UtcNow)
                                           select a).ToList();
 
                         ViewBag.MyAuctions = myAuctions;

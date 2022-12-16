@@ -81,7 +81,10 @@
                                 @if(@auction.IsDraft){
                                     <div id="aType" class="box--item--price">Draft</div>
                                 }
-                                else{
+                                else if (auction.EndTime < DateTime.UtcNow) {
+                                    <div id="aType" class="box--item--price">Ended</div>
+                                }
+                                else {
                                     <div id="aType" class="box--item--price">Active</div>
                                 }
                                 <div class="box--item--date">CreationTime: @auction.CreationTime</div>
