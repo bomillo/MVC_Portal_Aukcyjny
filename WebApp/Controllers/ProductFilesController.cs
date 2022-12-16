@@ -15,6 +15,9 @@ using WebApp.Context;
 using WebApp.Models;
 using static System.Net.Mime.MediaTypeNames;
 using WebApp.Services;
+using Newtonsoft.Json;
+using Elastic.Clients.Elasticsearch;
+using static System.Collections.Specialized.BitVector32;
 
 namespace WebApp.Controllers
 {
@@ -22,11 +25,15 @@ namespace WebApp.Controllers
     {
         private readonly PortalAukcyjnyContext _context;
         private readonly AuctionFilesService _addFilesService;
+        private readonly AuctionEditHistoryService editHistoryService;
 
-        public ProductFilesController(PortalAukcyjnyContext context, AuctionFilesService auctionFilesService)
+        public ProductFilesController(PortalAukcyjnyContext context, 
+            AuctionFilesService auctionFilesService, 
+            AuctionEditHistoryService editHistoryService)
         {
             _context = context;
             this._addFilesService = auctionFilesService;
+            this.editHistoryService = editHistoryService;
         }
 
         // GET: ProductFiles
@@ -118,7 +125,7 @@ namespace WebApp.Controllers
 
                             if (productFile.Name.StartsWith("ICON"))
                             {
-                                var result = _addFilesService.AddIcon(newFile, auction);
+                                var result = await _addFilesService.AddIcon(newFile, auction);
                                 if (result != null) // new file has been added to DB
                                 {   
                                     TempData["FileChanged"] = "File has been changed!";
@@ -128,6 +135,7 @@ namespace WebApp.Controllers
                                 else
                                 TempData["FileChanged"] = "File has NOT been changed, try again!";
 
+                                await editHistoryService.AddChangesToHistory(auction, JsonConvert.SerializeObject(result));
 
                             }
                             else
@@ -141,6 +149,9 @@ namespace WebApp.Controllers
                                 }
                                 else
                                     TempData["FileChanged"] = "File has NOT been changed, try again!";
+
+                                await editHistoryService.AddChangesToHistory(auction, JsonConvert.SerializeObject(result));
+
                             }
 
                         }
@@ -156,6 +167,8 @@ namespace WebApp.Controllers
                             }
                             else
                                 TempData["FileChanged"] = "File has NOT been changed, try again!";
+
+                            await editHistoryService.AddChangesToHistory(auction, JsonConvert.SerializeObject(result));
 
                         }
                         await _context.SaveChangesAsync();

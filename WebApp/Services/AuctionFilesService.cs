@@ -103,7 +103,7 @@ namespace WebApp.Services
 
 
 
-        public ProductFile? AddIcon(IFormFile iconFile, Auction auction)
+        public async Task<ProductFile?> AddIcon(IFormFile iconFile, Auction auction)
         {
             try
             {
@@ -113,6 +113,7 @@ namespace WebApp.Services
                 if (createdFile != null)
                 {
                     _context.ProductFiles.Add(createdFile);
+                    await _context.SaveChangesAsync();
 
                     return createdFile;
 
@@ -132,7 +133,7 @@ namespace WebApp.Services
 
 
 
-        public ProductFile? AddImage(IFormFile imageFile, Auction auction)
+        public async Task<ProductFile?> AddImage(IFormFile imageFile, Auction auction)
         {
             if (imageFile != null)
             {
@@ -144,6 +145,7 @@ namespace WebApp.Services
                     if (createdFile != null)
                     {
                         _context.ProductFiles.Add(createdFile);
+                        await _context.SaveChangesAsync();
                         return createdFile;
                     }
                     else
@@ -165,7 +167,7 @@ namespace WebApp.Services
 
 
 
-        public ProductFile? AddOrdinaryFile(IFormFile postedFile, Auction auction, string description)
+        public async Task<ProductFile?> AddOrdinaryFile(IFormFile postedFile, Auction auction, string description)
         {
             try
             {
@@ -175,6 +177,7 @@ namespace WebApp.Services
                 if (createdFile != null)
                 {
                     _context.ProductFiles.Add(createdFile);
+                    await _context.SaveChangesAsync();
                     return createdFile;
                 }
                 else

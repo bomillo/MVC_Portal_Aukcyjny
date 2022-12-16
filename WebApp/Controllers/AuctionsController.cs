@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PortalAukcyjny.Models;
 using WebApp.Context;
@@ -28,6 +29,7 @@ namespace WebApp.Controllers
         private readonly AuctionFilesService _auctionFilesService;
         private readonly ObservAuctionService _observedAuctionService;
         private readonly ElasticsearchClient _elasticsearchClient;
+        private readonly AuctionEditHistoryService editHistoryService;
         private readonly BidsService bidsService;
         private readonly SetPagerService pagerService;
 
@@ -37,7 +39,8 @@ namespace WebApp.Controllers
             AuctionFilesService auctionFileService, 
             BidsService bidsService,
             SetPagerService pagerService,
-            ElasticsearchClient elasticsearchClient
+            ElasticsearchClient elasticsearchClient,
+            AuctionEditHistoryService editHistoryService
             )
         {
             _context = context;
@@ -49,6 +52,7 @@ namespace WebApp.Controllers
             this._auctionFilesService = auctionFileService;
 
             _elasticsearchClient = elasticsearchClient;
+            this.editHistoryService = editHistoryService;
         }
 
         // GET: Auctions
@@ -305,6 +309,7 @@ namespace WebApp.Controllers
             ModelState["productIcon"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
             ModelState["productImage"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
 
+            
 
             if (id != auction.AuctionId)
             {
@@ -362,7 +367,7 @@ namespace WebApp.Controllers
 
                         filesToSkip++;
 
-                        string result = _auctionFilesService.AddIcon(productIcon, auction).ToString();
+                        ProductFile result = await _auctionFilesService.AddIcon(productIcon, auction);
 
                         if (result == null)
                         {
@@ -372,13 +377,14 @@ namespace WebApp.Controllers
                             return View(auction);
                         }
 
+                        await editHistoryService.AddChangesToHistory(auction, JsonConvert.SerializeObject(result));
                     }
 
                     if (productImage != null)
                     {
                         filesToSkip++;
 
-                        string result = _auctionFilesService.AddImage(productImage, auction).ToString();
+                        ProductFile result = await _auctionFilesService.AddImage(productImage, auction);
 
                         if (result == null)
                         {
@@ -388,6 +394,7 @@ namespace WebApp.Controllers
                             return View(auction);
                         }
 
+                        await editHistoryService.AddChangesToHistory(auction, JsonConvert.SerializeObject(result));
                     }
 
                     if (postedFiles != null)
@@ -399,7 +406,7 @@ namespace WebApp.Controllers
                             if (filesToSkip-- > 0)
                                 continue;
 
-                            string result = _auctionFilesService.AddOrdinaryFile(file, auction, descriptions[i++]).ToString();
+                            ProductFile result = await _auctionFilesService.AddOrdinaryFile(file, auction, descriptions[i++]);
 
                             if (result == null)
                             {
@@ -409,13 +416,14 @@ namespace WebApp.Controllers
                                 return View(auction);
                             }
 
+                            await editHistoryService.AddChangesToHistory(auction, JsonConvert.SerializeObject(result));
                         }
-
                     }
-                    
+
+                    await editHistoryService.AddToHistoryChange(auction);
+
                     _context.Auctions.Update(auction);
                     await _context.SaveChangesAsync();
-
                 }
                 catch (DbUpdateConcurrencyException e)
                 {
