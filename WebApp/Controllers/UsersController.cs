@@ -22,7 +22,7 @@ namespace WebApp.Controllers
         private readonly UsersService _usersService;
         private readonly BidsService bidsService;
 
-        public UsersController(PortalAukcyjnyContext context, 
+        public UsersController(PortalAukcyjnyContext context,
             UsersService usersService,
             BidsService bidsService)
         {
@@ -167,7 +167,7 @@ namespace WebApp.Controllers
             {
                 _context.Users.Remove(user);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -179,7 +179,7 @@ namespace WebApp.Controllers
 
 
         // GET: Users/Details/5
-        public async Task<IActionResult> UserAccount(int? id)
+        public async Task<IActionResult> UserAccount(int? id, string? auctionType)
         {
             if (id == null || _context.Users == null)
             {
@@ -192,26 +192,65 @@ namespace WebApp.Controllers
 
             ViewBag.User = user;
 
-            var myAuctions = (from a in _context.Auctions
-                             .Where(au => au.OwnerId == user.UserId &&
-                                   (au.EndTime > DateTime.UtcNow || 
-                                    au.IsDraft == true))
-                             select a).ToList();
+            switch (auctionType)
+            {
+                case "draft":
+                    {
+                        var myAuctions = (from a in _context.Auctions
+                                            .Where(au => au.OwnerId == id &&
+                                            au.IsDraft == true)
+                                          select a).ToList();
 
-            ViewBag.MyAuctions = myAuctions;
+                        ViewBag.MyAuctions = myAuctions;
+                    }
+                    break;
+
+                case "active":
+                    {
+                        var myAuctions = (from a in _context.Auctions
+                                            .Where(au => au.OwnerId == id &&
+                                            au.IsDraft == false)
+                                          select a).ToList();
+
+                        ViewBag.MyAuctions = myAuctions;
+                    }
+                    break;
+
+                case "ended":
+                    {
+                        var myAuctions = (from a in _context.Auctions
+                                            .Where(au => au.OwnerId == id &&
+                                            au.IsDraft == false &&
+                                            au.EndTime < DateTime.UtcNow)
+                                          select a).ToList();
+
+                        ViewBag.MyAuctions = myAuctions;
+                    }
+                    break;
+
+                default:
+                    {
+                        var myAuctions = (from a in _context.Auctions
+                                            .Where(au => au.OwnerId == id)
+                                          select a).ToList();
+
+                        ViewBag.MyAuctions = myAuctions;
+                    }
+                    break;
+            }
 
             var myObservedAuctions = _context.ObservedAuctions.Where(x => x.UserId == id).ToList();
-            if(myObservedAuctions != null)
+            if (myObservedAuctions != null)
             {
                 List<DisplayAuctionsModel> observedAuctions = new List<DisplayAuctionsModel>();
 
-                foreach(var myObserved in myObservedAuctions)
+                foreach (var myObserved in myObservedAuctions)
                 {
                     var Auction = _context.Auctions.Where(x => x.AuctionId == myObserved.AuctionId &&
                                                           x.IsDraft == false).FirstOrDefault();
 
-                    if(Auction == null)
-                        { continue; }
+                    if (Auction == null)
+                    { continue; }
 
                     var Bid = bidsService.GetAuctionHighestBid(myObserved.AuctionId, user.UserId);
                     observedAuctions.Add(new DisplayAuctionsModel()
@@ -225,14 +264,14 @@ namespace WebApp.Controllers
 
             //var myBids = _context.Bid.Where(x => x.UserId == id).Include(x => x.Auction).ToList();
             var myBids = bidsService.GetUserBids(user.UserId);
-    
+
             ViewBag.MyBids = myBids;
 
             return View();
 
         }
- 
-    
+
+
         // GET: Users/UserEdition/{id}
         public async Task<IActionResult> UserEdition(int? id, string? result)
         {
@@ -259,8 +298,8 @@ namespace WebApp.Controllers
             List<Language> languages = Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
             List<ThemeType> themes = Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().ToList();
 
-            ViewData["Themes"]= new SelectList(themes, null, null, themes[user.ThemeType.GetHashCode()]);
-            ViewData["Languages"]= new SelectList(languages, null, null, languages[user.Language.GetHashCode()]);
+            ViewData["Themes"] = new SelectList(themes, null, null, themes[user.ThemeType.GetHashCode()]);
+            ViewData["Languages"] = new SelectList(languages, null, null, languages[user.Language.GetHashCode()]);
             ViewData["CompanyId"] = new SelectList(_context.Companies, "CompanyId", "Name", user.CompanyId);
             ViewData["Currency"] = new SelectList(_context.CurrencyExchangeRates, "CurrencyCode", "CurrencyName", user.currency);
 
@@ -434,7 +473,7 @@ namespace WebApp.Controllers
         {
             if (password != null)
                 return _usersService.HashPassword(password);
-            else 
+            else
                 return password;
         }
     }

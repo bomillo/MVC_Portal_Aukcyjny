@@ -47,3 +47,7 @@
   background-color: gray;
   color: white;
 }
+
+.svg--icon {
+  stroke: black;
+}

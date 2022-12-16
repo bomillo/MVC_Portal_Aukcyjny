@@ -72,3 +72,7 @@
   background-color: aliceblue;
   color: black;
 }
+
+.svg--icon {
+  stroke: aliceblue;
+}

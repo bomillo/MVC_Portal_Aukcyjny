@@ -322,6 +322,24 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to My auctions.
+        /// </summary>
+        internal static string MyAuctions {
+            get {
+                return ResourceManager.GetString("MyAuctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to My Bids.
+        /// </summary>
+        internal static string MyBids {
+            get {
+                return ResourceManager.GetString("MyBids", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type your answer here....
         /// </summary>
         internal static string NewAnswer {
@@ -385,6 +403,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Observed.
+        /// </summary>
+        internal static string Observed {
+            get {
+                return ResourceManager.GetString("Observed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Price.
         /// </summary>
         internal static string Price {
@@ -426,6 +453,42 @@ namespace WebApp.Resources {
         internal static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Active.
+        /// </summary>
+        internal static string ShowActive {
+            get {
+                return ResourceManager.GetString("ShowActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show All.
+        /// </summary>
+        internal static string ShowAll {
+            get {
+                return ResourceManager.GetString("ShowAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Draft.
+        /// </summary>
+        internal static string ShowDraft {
+            get {
+                return ResourceManager.GetString("ShowDraft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Ended.
+        /// </summary>
+        internal static string ShowEnded {
+            get {
+                return ResourceManager.GetString("ShowEnded", resourceCulture);
             }
         }
         

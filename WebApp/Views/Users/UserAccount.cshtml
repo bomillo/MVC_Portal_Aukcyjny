@@ -1,4 +1,8 @@
 ﻿
+@{
+    string auctions = "all";
+
+}
 
 
 <div class="userAccount--container">
@@ -23,9 +27,49 @@
         <div class="box box--horizontal">
 
             <div class="box box--vertical">
-                <span class="box--text">
-                    My auctions
-                </span>
+                <div class="header" >
+                    <span class="box--text">
+                        @WebApp.Resources.Shared.MyAuctions
+                    </span>
+
+                    <button type="button" class="btn button dropdown--button" onclick="showAuctionTypesDropdown()" id="myAuctDropdown">
+                        <svg width="45" height="45" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg--icon" >
+                            <rect width="48" height="48" fill="white" fill-opacity="0.01" />
+                            <path d="M40 28L24 40L8 28" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M8 10H40" stroke-width="1" stroke-linecap="round" />
+                            <path d="M8 18H40" stroke-width="1" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div style="display: flex; justify-content: end">
+
+                    <input type="hidden" name="changeAuctions" id="auctions" />
+
+                    <div id="buttonsDropdown" class="dropdown--auctions text--primary background--primary border--primary">
+                    <form name="theForm" method="post" id="displayAuctions" asp-action="UserAccount" asp-route-id="@ViewBag.User.UserId" asp-route-auctionType="all"  >
+                        <button type="submit" value="Show All" onclick="showAuction('all')" name="ShowAll" id="showAll" title="@WebApp.Resources.Shared.Dark" class="btn button text--primary background--primary" style="width: 100%">
+                                    @WebApp.Resources.Shared.ShowAll
+                        </button>
+                    </form>
+                    <form name="theForm" method="post" id="displayAuctions" asp-action="UserAccount" asp-route-id="@ViewBag.User.UserId" asp-route-auctionType="draft" >
+                        <button type="submit" value="Show Draft" onclick="showAuction('draft')" name="ShowDraft" id="showDraft" title="@WebApp.Resources.Shared.Light" class="btn button text--primary background--primary" style="width: 100%">
+                                @WebApp.Resources.Shared.ShowDraft
+                        </button>
+                    </form>
+                    <form name="theForm" method="post" id="displayAuctions" asp-action="UserAccount" asp-route-id="@ViewBag.User.UserId" asp-route-auctionType="active" >
+
+                        <button type="submit" value="Show Active" onclick="showAuction('active')" name="ShowActive" id="showActive" title="@WebApp.Resources.Shared.HighContrast" class="btn button text--primary background--primary" style="width: 100%">
+                                @WebApp.Resources.Shared.ShowActive
+                        </button>
+                    </form>
+                    <form name="theForm" method="post" id="displayAuctions" asp-action="UserAccount" asp-route-id="@ViewBag.User.UserId" asp-route-auctionType="ended" >
+                        <button type="submit" value="Show Ended" onclick="showAuction('ended')" name="ShowEnded" id="showEnded" title="@WebApp.Resources.Shared.HighContrast" class="btn button text--primary background--primary" style="width: 100%">
+                                @WebApp.Resources.Shared.ShowEnded
+                        </button>
+                    </form>
+                    </div>
+                </div>
                 <div class="box-shadow box--content">
                    
                     @foreach(var auction in ViewBag.MyAuctions)
@@ -35,10 +79,10 @@
                             <div class="box--item">
                                 <div class="box--item--title">Tilte: @auction.Title</div>
                                 @if(@auction.IsDraft){
-                                    <div class="box--item--price">Is draft</div>
+                                    <div id="aType" class="box--item--price">Draft</div>
                                 }
                                 else{
-                                    <div class="box--item--price">Is not draft</div>
+                                    <div id="aType" class="box--item--price">Active</div>
                                 }
                                 <div class="box--item--date">CreationTime: @auction.CreationTime</div>
                             </div>
@@ -52,7 +96,7 @@
 
             <div class="box box--vertical">
                 <span class="box--text">
-                    Observed
+                    @WebApp.Resources.Shared.Observed
                 </span>
                 <div class="box-shadow box--content">
 
@@ -77,7 +121,7 @@
 
             <div class="box box--vertical">
                 <span class="box--text">
-                    My bids
+                    @WebApp.Resources.Shared.MyBids
                 </span>
                 <div class="box-shadow box--content">
 
@@ -102,7 +146,13 @@
     </div>
 </div>
 
+<script defer>
+    $('#buttonsDropdown').hide();
+</script>
+
+
 <script>
+
     function generateNewApiKey(){
         $.post("@Url.Action("CreateNewKey","ApiKeys")",
             function (data) {
@@ -111,4 +161,45 @@
             }
         );
     }
+
+    function showAuctionTypesDropdown() {
+        $('#buttonsDropdown').toggle();
+    }
+
+    @*function showAuction(type) {
+        alert(type);
+
+        //@auctions = type.val();
+        //console.log(@auctions);
+
+        var elem = document.getElementById("aType");
+
+        alert(elem);
+    }*@
+
+@*
+    function showDropdown() {
+        alert('aaaa');
+        
+        //
+        
+    }
+
+    document.getElementById('dropdown').addEventListener('click', showDropdown
+
+
+    function Show(type) {
+        auctionType = type;
+    }
+
+    $("#displayAuctions").submit(function (event) {
+        $.post("@Url.Action("UserAccount","Users")", new
+            {
+                id: @ViewBag.User.UserId
+                auctionType: auctionType,
+            },
+        );
+    });
+    *@
+
 </script>

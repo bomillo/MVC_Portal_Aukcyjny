@@ -464,6 +464,12 @@ input[type=file] {
   flex: 1;
   position: relative;
 }
+.box--vertical .header {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .box--vertical .box--text {
   margin-left: 10pt;
@@ -1326,4 +1332,24 @@ nav {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.svg--icon {
+  height: 40px;
+}
+
+.dropdown--button {
+  height: 50%;
+  font-size: x-large;
+  padding: 5pt;
+}
+
+.dropdown--auctions {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  position: absolute;
+  margin-right: 0.5vw;
+  background-color: aqua;
+  z-index: 2;
 }

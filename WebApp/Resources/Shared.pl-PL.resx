@@ -204,6 +204,12 @@
   <data name="MessageSent" xml:space="preserve">
     <value>Wiadomość została wysłana</value>
   </data>
+  <data name="MyAuctions" xml:space="preserve">
+    <value>Moje aukcje</value>
+  </data>
+  <data name="MyBids" xml:space="preserve">
+    <value>Moje oferty</value>
+  </data>
   <data name="NewAnswer" xml:space="preserve">
     <value>Odpowiedz na pytanie...</value>
   </data>
@@ -225,6 +231,9 @@
   <data name="NowObserving" xml:space="preserve">
     <value>Od teraz obserwujesz aukcje:</value>
   </data>
+  <data name="Observed" xml:space="preserve">
+    <value>Obserwowane</value>
+  </data>
   <data name="Price" xml:space="preserve">
     <value>Cena</value>
   </data>
@@ -239,6 +248,18 @@
   </data>
   <data name="Search" xml:space="preserve">
     <value>Szukaj</value>
+  </data>
+  <data name="ShowActive" xml:space="preserve">
+    <value>Pokaż Aktywne</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Pokaż Wszystkie</value>
+  </data>
+  <data name="ShowDraft" xml:space="preserve">
+    <value>Pokaż Projekty</value>
+  </data>
+  <data name="ShowEnded" xml:space="preserve">
+    <value>Pokaż Zakończone</value>
   </data>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>Coś poszło nie tak, spróbuj ponownie</value>
