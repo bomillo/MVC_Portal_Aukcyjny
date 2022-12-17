@@ -1,0 +1,33 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="reports--container background--primary text--primary">
+    <h3 class="text--secondary">@WebApp.Resources.Shared.Analytics</h3>
+    <hr class="text--secondary"/>
+    <form method="GET">
+        <input type="number" step="1" placeholder="@WebApp.Resources.Shared.TimeSpan" class="control--input form--input" id="timeSpan" name="timeSpan" min="0"/>
+        <div class="form--group">
+            <p>@WebApp.Resources.Shared.Business</p>
+            <input class="button--rounded button button--secondary" type="submit" formaction="/Reports/csv/business" value="Csv" />
+            <input class="button--rounded button button--secondary" type="submit" formaction="/reports/pdf/business" value="Pdf" />
+        </div>
+        <div class="form--group">
+            <p>@WebApp.Resources.Shared.Ended</p>
+            <input class="button--rounded button button--secondary" type="submit" formaction="/Reports/csv/auctions/ended" value="Csv" />
+            <input class="button--rounded button button--secondary" type="submit" formaction="/reports/pdf/auctions/ended" value="Pdf" />
+        </div>
+        <div class="form--group">
+            <p>@WebApp.Resources.Shared.Created</p>
+            <input class="button--rounded button button--secondary" type="submit" formaction="/Reports/csv/auctions/created" value="Csv" />
+            <input class="button--rounded button button--secondary" type="submit" formaction="/reports/pdf/auctions/created" value="Pdf" />
+        </div>
+        <div class="form--group">
+            <p>@WebApp.Resources.Shared.Popularity</p>
+            <input class="button--rounded button button--secondary" type="submit" formaction="/Reports/csv/categories/popularity" value="Csv" />
+            <input class="button--rounded button button--secondary" type="submit" formaction="/reports/pdf/categories/popularity" value="Pdf" />
+        </div>
+    </form>
+</div>

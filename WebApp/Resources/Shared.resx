@@ -120,6 +120,12 @@
   <data name="AddBid" xml:space="preserve">
     <value>Place bid</value>
   </data>
+  <data name="AdminPanel" xml:space="preserve">
+    <value>Admin dashboard</value>
+  </data>
+  <data name="Analytics" xml:space="preserve">
+    <value>Analytics</value>
+  </data>
   <data name="Answer" xml:space="preserve">
     <value>Answer</value>
   </data>
@@ -150,11 +156,17 @@
   <data name="BidToLow" xml:space="preserve">
     <value>Bid value is too low</value>
   </data>
+  <data name="Business" xml:space="preserve">
+    <value>Business report</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
   <data name="CreateBid" xml:space="preserve">
     <value>Bid</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>New auctions</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Dark</value>
@@ -164,6 +176,9 @@
   </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
+  </data>
+  <data name="Ended" xml:space="preserve">
+    <value>Auctions ended</value>
   </data>
   <data name="EndIn" xml:space="preserve">
     <value>end in</value>
@@ -201,6 +216,12 @@
   <data name="MessageSent" xml:space="preserve">
     <value>Message has been sent</value>
   </data>
+  <data name="MyAuctionsCsv" xml:space="preserve">
+    <value>Auctions history csv</value>
+  </data>
+  <data name="MyAuctionsPdf" xml:space="preserve">
+    <value>Auctions history pdf</value>
+  </data>
   <data name="NewAnswer" xml:space="preserve">
     <value>Type your answer here...</value>
   </data>
@@ -213,6 +234,9 @@
   <data name="NoBidValue" xml:space="preserve">
     <value>No bid value found in request body</value>
   </data>
+  <data name="NoResult" xml:space="preserve">
+    <value>No result</value>
+  </data>
   <data name="NotLoggedIn" xml:space="preserve">
     <value>You must be logged in to do this</value>
   </data>
@@ -221,6 +245,9 @@
   </data>
   <data name="NowObserving" xml:space="preserve">
     <value>You now observe auction: </value>
+  </data>
+  <data name="Popularity" xml:space="preserve">
+    <value>Categories popularity</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Price</value>
@@ -239,5 +266,8 @@
   </data>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>Something went wrong</value>
+  </data>
+  <data name="TimeSpan" xml:space="preserve">
+    <value>Report time span (days)</value>
   </data>
 </root>

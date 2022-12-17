@@ -120,6 +120,12 @@
   <data name="AddBid" xml:space="preserve">
     <value>Place bid (FR)</value>
   </data>
+  <data name="AdminPanel" xml:space="preserve">
+    <value>Admin dashboard (FR)</value>
+  </data>
+  <data name="Analytics" xml:space="preserve">
+    <value>Analytics (FR)</value>
+  </data>
   <data name="Answer" xml:space="preserve">
     <value>Answer (FR)</value>
   </data>
@@ -150,11 +156,17 @@
   <data name="BidToLow" xml:space="preserve">
     <value>Bid value is too low (FR)</value>
   </data>
+  <data name="Business" xml:space="preserve">
+    <value>Business report (FR)</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Close FR</value>
   </data>
   <data name="CreateBid" xml:space="preserve">
     <value>Bid (FR)</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>New auctions (FR)</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Dark (FR)</value>
@@ -164,6 +176,9 @@
   </data>
   <data name="Description" xml:space="preserve">
     <value>Description (FR)</value>
+  </data>
+  <data name="Ended" xml:space="preserve">
+    <value>Auctions ended (FR)</value>
   </data>
   <data name="EndIn" xml:space="preserve">
     <value>end in (fr)</value>
@@ -201,6 +216,12 @@
   <data name="MessageSent" xml:space="preserve">
     <value>Message has been sent (FR)</value>
   </data>
+  <data name="MyAuctionsCsv" xml:space="preserve">
+    <value>Auctions history csv (FR)</value>
+  </data>
+  <data name="MyAuctionsPdf" xml:space="preserve">
+    <value>Auctions history pdf (FR)</value>
+  </data>
   <data name="NewAnswer" xml:space="preserve">
     <value>Type your answer here (FR)</value>
   </data>
@@ -213,6 +234,9 @@
   <data name="NoBidValue" xml:space="preserve">
     <value>No bid value found in request body (FR)</value>
   </data>
+  <data name="NoResult" xml:space="preserve">
+    <value>NoResult (FR)</value>
+  </data>
   <data name="NotLoggedIn" xml:space="preserve">
     <value>You must be logged in to do this (FR)</value>
   </data>
@@ -221,6 +245,9 @@
   </data>
   <data name="NowObserving" xml:space="preserve">
     <value>You now observe auction (FR):</value>
+  </data>
+  <data name="Popularity" xml:space="preserve">
+    <value>Categories popularity (FR)</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Price (FR)</value>
@@ -239,5 +266,8 @@
   </data>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>Something went wrong (FR)</value>
+  </data>
+  <data name="TimeSpan" xml:space="preserve">
+    <value>Report time span (days) (FR)</value>
   </data>
 </root>

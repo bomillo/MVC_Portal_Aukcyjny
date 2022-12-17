@@ -13,6 +13,8 @@
             <div class="box box--content box--center">
                 <a asp-action="Create" asp-controller="Auctions" class="button button--secondary button--rounded button--group button--group--first"> New Auction  + </a>
                 <a asp-action="UserEdition" asp-route-id="@ViewBag.User.UserId" class="button button--secondary button--rounded button--group"> Edit Account </a>
+                <a asp-controller="Reports" asp-action="MyAuctionsHistoryCsv" asp-route-id="@ViewBag.User.UserId" class="button button--secondary button--rounded button--group"> @WebApp.Resources.Shared.MyAuctionsCsv </a>
+                <a asp-controller="Reports" asp-action="MyAuctionsHistoryPdf" asp-route-id="@ViewBag.User.UserId" class="button button--secondary button--rounded button--group"> @WebApp.Resources.Shared.MyAuctionsPdf </a>
                 <a class="button button--secondary button--rounded button--group button--group--last" onclick="generateNewApiKey()">@WebApp.Resources.Shared.GenerateApiKey</a>
             </div>
 
