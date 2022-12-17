@@ -46,25 +46,25 @@
 
                     <input type="hidden" name="changeAuctions" id="auctions" />
 
-                    <div id="buttonsDropdown" class="dropdown--auctions text--primary background--primary border--primary">
+                    <div id="buttonsDropdown" class="dropdown--auctions text--primary background--primary border--primary slider--fade">
                     <form name="theForm" method="post" id="displayAuctions" asp-action="UserAccount" asp-route-id="@ViewBag.User.UserId" asp-route-auctionType="all"  >
-                        <button type="submit" value="Show All" onclick="showAuction('all')" name="ShowAll" id="showAll" title="@WebApp.Resources.Shared.Dark" class="btn button text--primary background--primary" style="width: 100%">
+                        <button type="submit" value="Show All" class="btn button text--primary background--primary" style="width: 100%">
                                     @WebApp.Resources.Shared.ShowAll
                         </button>
                     </form>
                     <form name="theForm" method="post" id="displayAuctions" asp-action="UserAccount" asp-route-id="@ViewBag.User.UserId" asp-route-auctionType="draft" >
-                        <button type="submit" value="Show Draft" onclick="showAuction('draft')" name="ShowDraft" id="showDraft" title="@WebApp.Resources.Shared.Light" class="btn button text--primary background--primary" style="width: 100%">
+                        <button type="submit" value="Show Draft" class="btn button text--primary background--primary" style="width: 100%">
                                 @WebApp.Resources.Shared.ShowDraft
                         </button>
                     </form>
                     <form name="theForm" method="post" id="displayAuctions" asp-action="UserAccount" asp-route-id="@ViewBag.User.UserId" asp-route-auctionType="active" >
 
-                        <button type="submit" value="Show Active" onclick="showAuction('active')" name="ShowActive" id="showActive" title="@WebApp.Resources.Shared.HighContrast" class="btn button text--primary background--primary" style="width: 100%">
+                        <button type="submit" value="Show Active" class="btn button text--primary background--primary" style="width: 100%">
                                 @WebApp.Resources.Shared.ShowActive
                         </button>
                     </form>
                     <form name="theForm" method="post" id="displayAuctions" asp-action="UserAccount" asp-route-id="@ViewBag.User.UserId" asp-route-auctionType="ended" >
-                        <button type="submit" value="Show Ended" onclick="showAuction('ended')" name="ShowEnded" id="showEnded" title="@WebApp.Resources.Shared.HighContrast" class="btn button text--primary background--primary" style="width: 100%">
+                        <button type="submit" value="Show Ended" class="btn button text--primary background--primary" style="width: 100%">
                                 @WebApp.Resources.Shared.ShowEnded
                         </button>
                     </form>
@@ -168,41 +168,5 @@
     function showAuctionTypesDropdown() {
         $('#buttonsDropdown').toggle();
     }
-
-    @*function showAuction(type) {
-        alert(type);
-
-        //@auctions = type.val();
-        //console.log(@auctions);
-
-        var elem = document.getElementById("aType");
-
-        alert(elem);
-    }*@
-
-@*
-    function showDropdown() {
-        alert('aaaa');
-        
-        //
-        
-    }
-
-    document.getElementById('dropdown').addEventListener('click', showDropdown
-
-
-    function Show(type) {
-        auctionType = type;
-    }
-
-    $("#displayAuctions").submit(function (event) {
-        $.post("@Url.Action("UserAccount","Users")", new
-            {
-                id: @ViewBag.User.UserId
-                auctionType: auctionType,
-            },
-        );
-    });
-    *@
 
 </script>
