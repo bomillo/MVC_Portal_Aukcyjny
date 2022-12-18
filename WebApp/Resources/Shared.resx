@@ -177,6 +177,9 @@
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
+  <data name="EditAuction" xml:space="preserve">
+    <value>Edit auction</value>
+  </data>
   <data name="Ended" xml:space="preserve">
     <value>Auctions ended</value>
   </data>
@@ -216,11 +219,18 @@
   <data name="MessageSent" xml:space="preserve">
     <value>Message has been sent</value>
   </data>
+  <data name="MyAuctions" xml:space="preserve">
+    <value>My auctions</value>
+  </data>
+  <data name="MyBids" xml:space="preserve">
+    <value>My Bids</value>
+  </data>
   <data name="MyAuctionsCsv" xml:space="preserve">
     <value>Auctions history csv</value>
   </data>
   <data name="MyAuctionsPdf" xml:space="preserve">
     <value>Auctions history pdf</value>
+  </data>
   </data>
   <data name="NewAnswer" xml:space="preserve">
     <value>Type your answer here...</value>
@@ -246,6 +256,9 @@
   <data name="NowObserving" xml:space="preserve">
     <value>You now observe auction: </value>
   </data>
+  <data name="Observed" xml:space="preserve">
+    <value>Observed</value>
+  </data>
   <data name="Popularity" xml:space="preserve">
     <value>Categories popularity</value>
   </data>
@@ -264,8 +277,26 @@
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="ShowActive" xml:space="preserve">
+    <value>Show Active</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Show All</value>
+  </data>
+  <data name="ShowDraft" xml:space="preserve">
+    <value>Show Draft</value>
+  </data>
+  <data name="ShowEnded" xml:space="preserve">
+    <value>Show Ended</value>
+  </data>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>Something went wrong</value>
+  </data>
+  <data name="Subscribe" xml:space="preserve">
+    <value>Subscribe</value>
+  </data>
+  <data name="Unsubscribe" xml:space="preserve">
+    <value>Unsubscribe</value>
   </data>
   <data name="TimeSpan" xml:space="preserve">
     <value>Report time span (days)</value>

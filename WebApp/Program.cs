@@ -32,7 +32,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // BG task services
     builder.Services.AddDbContext<PortalAukcyjnyContext2>(options => 
-                options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
+                options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")));
     builder.Services.AddHostedService<NBPWorker>();
     builder.Services.AddSingleton<CurrencyDownloadService>();
 
@@ -101,6 +101,7 @@ builder.Services.AddTransient<BidsService>();
 builder.Services.AddTransient<SetPagerService>();
 builder.Services.AddTransient<AuctionFilesService>();
 builder.Services.AddTransient<ApiAuthenticationProxy>();
+builder.Services.AddTransient<AuctionEditHistoryService>();
 
 builder.Services.AddTransient<IApiFacadeService, ApiFacadeService>();
 

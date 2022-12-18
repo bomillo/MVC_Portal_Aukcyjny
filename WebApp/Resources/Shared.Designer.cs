@@ -241,11 +241,20 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+
+        ///   Looks up a localized string similar to Edit auction.
+        /// </summary>
+        internal static string EditAuction {
+            get {
+                return ResourceManager.GetString("EditAuction", resourceCulture);
+            }
+        }
         ///   Looks up a localized string similar to Auctions ended.
         /// </summary>
         internal static string Ended {
             get {
                 return ResourceManager.GetString("Ended", resourceCulture);
+
             }
         }
         
@@ -358,6 +367,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+
+        ///   Looks up a localized string similar to My auctions.
+        /// </summary>
+        internal static string MyAuctions {
+            get {
+                return ResourceManager.GetString("MyAuctions", resourceCulture);
+            }
+        }    
+  
         ///   Looks up a localized string similar to Auctions history csv.
         /// </summary>
         internal static string MyAuctionsCsv {
@@ -367,6 +385,14 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+
+        ///   Looks up a localized string similar to My Bids.
+        /// </summary>
+        internal static string MyBids {
+            get {
+                return ResourceManager.GetString("MyBids", resourceCulture);
+            }
+        }
         ///   Looks up a localized string similar to Auctions history pdf.
         /// </summary>
         internal static string MyAuctionsPdf {
@@ -448,6 +474,13 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Observed.
+        /// </summary>
+        internal static string Observed {
+            get {
+                return ResourceManager.GetString("Observed", resourceCulture);
+            }
+        }
         ///   Looks up a localized string similar to Categories popularity.
         /// </summary>
         internal static string Popularity {
@@ -502,6 +535,42 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Active.
+        /// </summary>
+        internal static string ShowActive {
+            get {
+                return ResourceManager.GetString("ShowActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show All.
+        /// </summary>
+        internal static string ShowAll {
+            get {
+                return ResourceManager.GetString("ShowAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Draft.
+        /// </summary>
+        internal static string ShowDraft {
+            get {
+                return ResourceManager.GetString("ShowDraft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Ended.
+        /// </summary>
+        internal static string ShowEnded {
+            get {
+                return ResourceManager.GetString("ShowEnded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Something went wrong.
         /// </summary>
         internal static string SomethingWentWrong {
@@ -511,6 +580,22 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Subscribe.
+        /// </summary>
+        internal static string Subscribe {
+            get {
+                return ResourceManager.GetString("Subscribe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsubscribe.
+        /// </summary>
+        internal static string Unsubscribe {
+            get {
+                return ResourceManager.GetString("Unsubscribe", resourceCulture);
+          }
+        }
         ///   Looks up a localized string similar to Report time span (days).
         /// </summary>
         internal static string TimeSpan {

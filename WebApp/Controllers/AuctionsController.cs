@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PortalAukcyjny.Models;
 using WebApp.Context;
@@ -28,6 +29,7 @@ namespace WebApp.Controllers
         private readonly AuctionFilesService _auctionFilesService;
         private readonly ObservAuctionService _observedAuctionService;
         private readonly ElasticsearchClient _elasticsearchClient;
+        private readonly AuctionEditHistoryService editHistoryService;
         private readonly BidsService bidsService;
         private readonly SetPagerService pagerService;
 
@@ -37,7 +39,8 @@ namespace WebApp.Controllers
             AuctionFilesService auctionFileService, 
             BidsService bidsService,
             SetPagerService pagerService,
-            ElasticsearchClient elasticsearchClient
+            ElasticsearchClient elasticsearchClient,
+            AuctionEditHistoryService editHistoryService
             )
         {
             _context = context;
@@ -49,6 +52,7 @@ namespace WebApp.Controllers
             this._auctionFilesService = auctionFileService;
 
             _elasticsearchClient = elasticsearchClient;
+            this.editHistoryService = editHistoryService;
         }
 
         // GET: Auctions
@@ -305,6 +309,7 @@ namespace WebApp.Controllers
             ModelState["productIcon"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
             ModelState["productImage"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
 
+            
 
             if (id != auction.AuctionId)
             {
@@ -362,7 +367,7 @@ namespace WebApp.Controllers
 
                         filesToSkip++;
 
-                        string result = _auctionFilesService.AddIcon(productIcon, auction).ToString();
+                        ProductFile result = await _auctionFilesService.AddIcon(productIcon, auction);
 
                         if (result == null)
                         {
@@ -372,13 +377,14 @@ namespace WebApp.Controllers
                             return View(auction);
                         }
 
+                        await editHistoryService.AddChangesToHistory(auction, JsonConvert.SerializeObject(result));
                     }
 
                     if (productImage != null)
                     {
                         filesToSkip++;
 
-                        string result = _auctionFilesService.AddImage(productImage, auction).ToString();
+                        ProductFile result = await _auctionFilesService.AddImage(productImage, auction);
 
                         if (result == null)
                         {
@@ -388,6 +394,7 @@ namespace WebApp.Controllers
                             return View(auction);
                         }
 
+                        await editHistoryService.AddChangesToHistory(auction, JsonConvert.SerializeObject(result));
                     }
 
                     if (postedFiles != null)
@@ -399,7 +406,7 @@ namespace WebApp.Controllers
                             if (filesToSkip-- > 0)
                                 continue;
 
-                            string result = _auctionFilesService.AddOrdinaryFile(file, auction, descriptions[i++]).ToString();
+                            ProductFile result = await _auctionFilesService.AddOrdinaryFile(file, auction, descriptions[i++]);
 
                             if (result == null)
                             {
@@ -409,13 +416,14 @@ namespace WebApp.Controllers
                                 return View(auction);
                             }
 
+                            await editHistoryService.AddChangesToHistory(auction, JsonConvert.SerializeObject(result));
                         }
-
                     }
-                    
+
+                    await editHistoryService.AddToHistoryChange(auction);
+
                     _context.Auctions.Update(auction);
                     await _context.SaveChangesAsync();
-
                 }
                 catch (DbUpdateConcurrencyException e)
                 {
@@ -429,7 +437,7 @@ namespace WebApp.Controllers
                         return View("Error", NotFoundViewModel);
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Auction", new { id = auction.AuctionId });
             }
             ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
             ViewData["ProductId"] = new SelectList(_context.Products.OrderBy(p => p.Name), "ProductId", "Name", auction.ProductId);
@@ -482,7 +490,7 @@ namespace WebApp.Controllers
 
 
         // POST: Auctions/ObservAuction/5 
-        public ActionResult ObservAuction(int? id)
+        public async Task<ActionResult> ObservAuction(int? id)
         {
             string resultMsg = "";
             if(id > 0)
@@ -495,20 +503,22 @@ namespace WebApp.Controllers
                     if (result != null)
                     {
                         resultMsg = "Auction is now being observed";
-                    
-                        return RedirectToAction("Details", new { id = id, result = resultMsg});
+                        ViewBag.IsObserved = true;
+                        return new JsonResult(new { message = resultMsg });
+
                     }
                     resultMsg = "Auction already observed";
+                    ViewBag.IsObserved = true;
+                    return new JsonResult(new { message = resultMsg });
 
-                    return RedirectToAction("Details", new { id = id, result = resultMsg });
                 }
             }
             resultMsg = "Invalid data, please try again";
-
-            return RedirectToAction("Details", new { id = id, result = resultMsg });
+            ViewBag.IsObserved = false;
+            return new JsonResult(new { message = resultMsg });
         }
 
-        public ActionResult UnObservAuction(int? id)
+        public async Task<ActionResult> UnObservAuction(int? id, bool? ob)
         {
             string resultMsg = "";
             int userId;
@@ -520,15 +530,15 @@ namespace WebApp.Controllers
                 if (result)
                 {
                     resultMsg = "Auction is no longer being observed";
-
-                    return RedirectToAction("Details", new { id = id, result = resultMsg });
+                    ViewBag.IsObserved = false;
+                    return new JsonResult(new { message = resultMsg });
                 }
                 resultMsg = "Something went wrong, please try again!";
-
-                return RedirectToAction("Details", new { id = id, result = resultMsg });
+                ViewBag.IsObserved = false;
+                return new JsonResult(new { message = resultMsg });
             }
 
-            return View();
+            return new JsonResult(new { message = resultMsg });
         }
 
         public async Task<ActionResult> Auction(int? id)
@@ -569,6 +579,8 @@ namespace WebApp.Controllers
             {
                 ""
             };
+
+            ViewBag.IsObserved = _observedAuctionService.IsAuctionObserved((int)id, userId);
 
             return View(auctionDTO);
         }

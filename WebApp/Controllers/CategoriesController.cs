@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,6 +17,7 @@ using WebApp.Services;
 
 namespace WebApp.Controllers
 {
+    [Authorize(Policy = "RequireAdmin")]
     public class CategoriesController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
@@ -187,6 +189,7 @@ namespace WebApp.Controllers
 
 
         //Displays auctions which belongs to the category with given id and it's childs 
+        [AllowAnonymous]
         [Route("/Category/Auctions/{id}")]
         public async Task<IActionResult> CategoryAuctions(int? id, int page = 1)
         {
@@ -194,7 +197,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-
+            
 
             var categoriesTask = GetChildCategories(id);
             List<int> products = new List<int>();
