@@ -231,7 +231,6 @@
   <data name="MyAuctionsPdf" xml:space="preserve">
     <value>Auctions history pdf</value>
   </data>
-  </data>
   <data name="NewAnswer" xml:space="preserve">
     <value>Type your answer here...</value>
   </data>
