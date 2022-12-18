@@ -528,6 +528,13 @@ input[type=file] {
     margin: 5pt;
     flex: 1;
     position: relative;
+
+    .header {
+        display: flex;
+        position: relative;
+        justify-content: space-between;
+        align-items: center;
+    }
 }
 
 .box--vertical .box--text {
@@ -1329,6 +1336,7 @@ nav {
 
 .subsection--title{
     padding-left: 2vw;
+    width: fit-content;
 }
 
 .add {
@@ -1505,9 +1513,65 @@ nav {
         border-radius: 0.4rem 0 0 0.4rem;
     }
 
+
     &--last {
         border-radius: 0 0.4rem 0.4rem 0;
     }
+}
+
+#subPopUp {
+    display: none;
+    background-size: cover;
+    border-radius: 20px;
+    position: fixed;
+    width: 450px;
+    top: 40%;
+    left: 50%;
+    margin-left: -225px;
+    padding: 16px 8px 16px 8px;
+    box-sizing: border-box;
+    text-align: center;
+    z-index: 1;
+    animation: slider-fade;
+    animation-duration: 0.8s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+
+    /* Dialog box message */
+    .message {
+        text-align: left;
+        padding: 10px 30px;
+        text-align: center;
+    }
+}
+
+
+.description--header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.svg--icon {
+    height: 40px;
+}
+
+
+.dropdown--button {
+    height: 50%;
+    font-size: x-large;
+    padding: 5pt;
+}
+
+.dropdown--auctions {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    position: absolute;
+    margin-right: 0.5vw;
+    background-color: aqua;
+    z-index: 2;
 }
 
 .reports--container {

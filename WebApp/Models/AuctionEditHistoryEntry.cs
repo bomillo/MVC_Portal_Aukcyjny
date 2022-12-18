@@ -4,6 +4,16 @@ namespace WebApp.Models
 {
     public class AuctionEditHistoryEntry 
     {
+        public AuctionEditHistoryEntry()
+        {
+        }
+
+        public AuctionEditHistoryEntry(Auction auction)
+        {
+            AuctionId = auction.AuctionId;
+            UserId = auction.OwnerId;
+        }
+
         [Key]
         public int EntryId { get; set; }
         public int AuctionId { get; set; }

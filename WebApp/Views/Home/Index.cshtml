@@ -20,7 +20,7 @@
         @foreach (var category in ViewBag.Categories)
         {
             <div class="nav--item">
-                <a asp-action="Details" asp-controller="Categories" asp-route-id="@category.CategoryId" 
+                <a asp-action="Auctions" asp-controller="Category" asp-route-id="@category.CategoryId" 
                     class="button button--secondary button--rounded">@category.Name</a>
             </div>
         }

@@ -45,7 +45,7 @@
     .background {
 
         &--primary {
-            background-color: aliceblue;
+            background-color: white;
         }
 
         &--error {
@@ -65,6 +65,15 @@
     }
 
     .user--details .item {
-        background: aliceblue;
+        background: white;
     }
+}
+
+#subPopUp {
+    background-color: gray;
+    color: white;
+}
+
+.svg--icon {
+    stroke: black;
 }

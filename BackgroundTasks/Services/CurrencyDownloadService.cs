@@ -16,8 +16,6 @@ namespace BackgroundTasks.Services
 
         public List<CurrencyTable> Get(string currCode)
         {
-
-            //var url = $"https://api.nbp.pl/api/exchangerates/tables/{exchangeTable}/?format={format}";
             var url = $"https://api.nbp.pl/api/exchangerates/rates/{exchangeTable}/{currCode}/?format={format}";
             var web = new WebClient();
 
@@ -30,9 +28,7 @@ namespace BackgroundTasks.Services
 
         public List<CurrencyTable> GetAll()
         {
-
             var url = $"https://api.nbp.pl/api/exchangerates/tables/{exchangeTable}?format={format}";
-            //var url = $"https://api.nbp.pl/api/exchangerates/rates/{exchangeTable}/{currCode}/?format={format}";
             var web = new WebClient();
 
             try

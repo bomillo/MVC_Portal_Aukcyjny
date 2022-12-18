@@ -61,7 +61,8 @@ namespace WebApp.Controllers
             {
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim("mail", user.Email),
-                new Claim("userid", user.UserId.ToString())
+                new Claim("userid", user.UserId.ToString()),
+                new Claim(ClaimTypes.Role, user.UserType.ToString().ToLower())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, "CookieAuthentication");

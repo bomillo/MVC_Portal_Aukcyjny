@@ -3,6 +3,7 @@
 
 @{
     var isOwner = Context.User.Claims.Any() ? int.Parse(Context.User.Claims.First(c => c.Type.ToLower().Equals("userid")).Value) == Model.OwnerId : false;
+    var isObserved = ViewBag.IsObserved;
 }
 
 @await Html.PartialAsync("_BreadcrumbNavigation", (List<BreadcrumbItem>) ViewBag.Breadcrumb)
@@ -27,17 +28,54 @@
               </button>
               <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+                </div>
+                </div>
+                </div>
+        <div class="description--header">
+            <h3 class="subsection--title">@WebApp.Resources.Shared.Description</h3>
+        
+            <div class="subscribeButton" id="subscribe">
+                @if(!isOwner)
+                {
+                    <div id="subPopUp">
+                        <div class="message">
+                            <hr />
+                            <span class="text--primary">
+                                    Subscription
+                                </span>
+                            <hr />
+                        </div>
+                        <button class="ok btn button button--secondary">OKAY</button>
+                    </div>
 
-              </button>
-              </div>
+                    @if(!isObserved )
+                    {
+                        <input type="button" class="btn button auction--border background--primary text--primary border--primary" onclick="observAuction();"
+                            value="@WebApp.Resources.Shared.Subscribe" />
+                    }
+                    else
+                    {
+                        <input type="button" class="btn button auction--border background--primary text--primary border--primary" onclick="unObservAuction();"
+                           value="@WebApp.Resources.Shared.Unsubscribe" />
+                    }
+                }
+                else
+                {
+                    <a asp-action="Edit" asp-controller="Auctions" asp-route-id="@Model.AuctionId" type="button" class="btn button auction--border background--primary text--primary border--primary">
+                        @WebApp.Resources.Shared.EditAuction 
+                    </a>
+                }
+
+                
             </div>
         </div>
-        <h3 class="subsection--title">@WebApp.Resources.Shared.Description</h3>
+
         <hr />
         <div class="auction--description">
             <p>@Model.Description</p>
         </div>
-        </div>
+    </div>
     <div class="auction--right--panel">
         <h3>@WebApp.Resources.Shared.Bids</h3>
         <div class="auction--bids--list auction--border background--primary text--primary border--primary ">
@@ -57,6 +95,7 @@
                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                 </svg>
             </button>
+
 
             <div class="auction--bid--popup" id="bidPopup">
                 <div class="form--group--with--warning">
@@ -140,6 +179,64 @@
 
 
 <script>
+
+    function observAuction(btn) {
+        $.ajax(
+            {
+                type: "POST",
+                    url: '@Url.Action("ObservAuction", "Auctions")' + "?id=" + @Model.AuctionId,
+                success: function (result) {
+
+                    var confirmBox = $("#subPopUp");
+                
+                    confirmBox.find(".message").text(result.message);
+                
+                    confirmBox.find(".ok").unbind().click(function()
+                    {
+                        confirmBox.hide();
+                        document.location.reload(true);
+                    });
+                    confirmBox.find(".ok").click(btn);
+                    confirmBox.show();
+
+                    //setTimeout(() => document.location.reload(true), 1200);
+                    @isObserved = true;
+                },
+                error: function (x, e) {
+                    alert(e);
+                }
+            });
+    }
+    
+    function unObservAuction(btn) {
+        $.ajax(
+            {
+                type: "POST",
+                url: '@Url.Action("UnObservAuction", "Auctions")' + "?id=" + @Model.AuctionId,
+                success: function (result) {
+                    
+                    var confirmBox = $("#subPopUp");
+
+                    confirmBox.find(".message").text(result.message);
+                    confirmBox.find(".ok").unbind().click(function()
+                    {
+                        confirmBox.hide();
+                        document.location.reload(true);
+                    });
+                    confirmBox.find(".ok").click(btn);
+
+                    confirmBox.show();
+
+                    //setTimeout(() => document.location.reload(true), 1200);
+                    @isObserved = false;
+                },
+                error: function (x, e) {
+                    alert(e);
+                }
+            });
+    }
+
+
     $("#createBid").submit(function(event){
         event.preventDefault();
         $("#returnUrl").val(window.location.toString());

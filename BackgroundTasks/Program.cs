@@ -15,7 +15,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         //services.AddHostedService<Worker>();
         services.AddHostedService<NBPWorker>();
         services.AddTransient<CurrencyDownloadService>();
-        services.AddDbContext<PortalAukcyjnyContext2>(options => options.UseNpgsql(hostContext.Configuration.GetConnectionString("PortalAukcyjnyContext")));
+        services.AddDbContext<WebApp.Context.PortalAukcyjnyContext>(options => options.UseNpgsql(hostContext.Configuration.GetConnectionString("PortalAukcyjnyContext")));
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     })
     .Build();

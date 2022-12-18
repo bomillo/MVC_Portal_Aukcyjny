@@ -50,7 +50,7 @@
   background-color: lightslategrey;
 }
 .dark-mode .border--primary {
-  border-color: aliceblue;
+  border-color: white;
 }
 .dark-mode .form--input {
   color: white;
@@ -66,4 +66,13 @@
 }
 .dark-mode .user--details .item {
   background: radial-gradient(black, transparent);
+}
+
+#subPopUp {
+  background-color: aliceblue;
+  color: black;
+}
+
+.svg--icon {
+  stroke: aliceblue;
 }

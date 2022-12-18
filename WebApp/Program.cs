@@ -11,12 +11,9 @@ using WebApp.Middlewares;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
+using WebApp.BackgroundTasks;
 using WebApp.Services.Emails;
 using WebApp.Models;
-
-using BackgroundTasks;
-using BackgroundTasks.Services;
-using BackgroundTasks.Context;
 
 using Elastic.Clients.Elasticsearch;
 using Elastic.Transport;
@@ -31,8 +28,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // BG task services
-    builder.Services.AddDbContext<PortalAukcyjnyContext2>(options => 
-                options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
+
     builder.Services.AddHostedService<NBPWorker>();
     builder.Services.AddSingleton<CurrencyDownloadService>();
 
@@ -101,6 +97,7 @@ builder.Services.AddTransient<BidsService>();
 builder.Services.AddTransient<SetPagerService>();
 builder.Services.AddTransient<AuctionFilesService>();
 builder.Services.AddTransient<ApiAuthenticationProxy>();
+builder.Services.AddTransient<AuctionEditHistoryService>();
 
 builder.Services.AddTransient<IApiFacadeService, ApiFacadeService>();
 
@@ -133,6 +130,7 @@ app.UseHttpsRedirection();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
 
     var context = services.GetRequiredService<PortalAukcyjnyContext>();
     context.Database.EnsureCreated();

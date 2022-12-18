@@ -3,6 +3,16 @@
 namespace WebApp.Models
 {
     public class CurrencyExchangeRate {
+        public CurrencyExchangeRate() { }
+
+        public CurrencyExchangeRate(string name, string currencyCode, double exchangeRate, DateTime lastUpdatedTime)
+        {
+            CurrencyName = name;
+            CurrencyCode = currencyCode;
+            ExchangeRate = exchangeRate;
+            LastUpdatedTime = lastUpdatedTime;
+        }
+
         [Key]
         public int CurrencyId { get; set; }
         public string CurrencyName { get; set; }

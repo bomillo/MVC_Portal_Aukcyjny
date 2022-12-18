@@ -177,6 +177,9 @@
   <data name="Description" xml:space="preserve">
     <value>Szczegóły</value>
   </data>
+  <data name="EditAuction" xml:space="preserve">
+    <value>Edytuj aukcję</value>
+  </data>
   <data name="Ended" xml:space="preserve">
     <value>Zakończone aukcje</value>
   </data>
@@ -216,6 +219,13 @@
   <data name="MessageSent" xml:space="preserve">
     <value>Wiadomość została wysłana</value>
   </data>
+
+  <data name="MyAuctions" xml:space="preserve">
+    <value>Moje aukcje</value>
+  </data>
+  <data name="MyBids" xml:space="preserve">
+    <value>Moje oferty</value>
+  </data>
   <data name="MyAuctionsCsv" xml:space="preserve">
     <value>Historia aukcji csv</value>
   </data>
@@ -246,6 +256,10 @@
   <data name="NowObserving" xml:space="preserve">
     <value>Od teraz obserwujesz aukcje:</value>
   </data>
+
+  <data name="Observed" xml:space="preserve">
+    <value>Obserwowane</value>
+  </data>
   <data name="Popularity" xml:space="preserve">
     <value>Popularność kategorii</value>
   </data>
@@ -264,8 +278,26 @@
   <data name="Search" xml:space="preserve">
     <value>Szukaj</value>
   </data>
+  <data name="ShowActive" xml:space="preserve">
+    <value>Pokaż Aktywne</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Pokaż Wszystkie</value>
+  </data>
+  <data name="ShowDraft" xml:space="preserve">
+    <value>Pokaż Projekty</value>
+  </data>
+  <data name="ShowEnded" xml:space="preserve">
+    <value>Pokaż Zakończone</value>
+  </data>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>Coś poszło nie tak, spróbuj ponownie</value>
+  </data>
+  <data name="Subscribe" xml:space="preserve">
+    <value>Subscribe</value>
+  </data>
+  <data name="Unsubscribe" xml:space="preserve">
+    <value>Unsubscribe</value>
   </data>
   <data name="TimeSpan" xml:space="preserve">
     <value>Okres raportu (dni)</value>
