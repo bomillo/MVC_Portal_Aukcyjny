@@ -33,6 +33,15 @@ namespace WebApp.Middlewares
                     {
                         theme = user.ThemeType.ToString();
                     }
+
+                    if (_dbContext.Users.Single(x => x.UserId == userId).UserType == Models.UserType.Admin)
+                    {
+                        httpContext.Items.Add("role", "admin");
+                    }
+                    else
+                    {
+                        httpContext.Items.Add("role", "client");
+                    }
                 }
 
             }

@@ -1513,7 +1513,6 @@ nav {
     }
 }
 
-
 #subPopUp {
     display: none;
     background-size: cover;
@@ -1567,4 +1566,25 @@ nav {
     margin-right: 0.5vw;
     background-color: aqua;
     z-index: 2;
+}
+
+.reports--container {
+    input{
+        width: 12vw;
+    }
+    .form--group{
+
+        input {
+            width: 5vw;
+            margin-right: 2vw;
+        }
+    }
+
+    p{
+        margin-left: 2vw;
+    }
+}
+
+.a--no--style{
+    text-decoration: none;
 }

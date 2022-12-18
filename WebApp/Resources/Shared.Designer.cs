@@ -70,6 +70,24 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Admin dashboard.
+        /// </summary>
+        internal static string AdminPanel {
+            get {
+                return ResourceManager.GetString("AdminPanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analytics.
+        /// </summary>
+        internal static string Analytics {
+            get {
+                return ResourceManager.GetString("Analytics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Answer.
         /// </summary>
         internal static string Answer {
@@ -160,6 +178,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Business report.
+        /// </summary>
+        internal static string Business {
+            get {
+                return ResourceManager.GetString("Business", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Close {
@@ -174,6 +201,15 @@ namespace WebApp.Resources {
         internal static string CreateBid {
             get {
                 return ResourceManager.GetString("CreateBid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New auctions.
+        /// </summary>
+        internal static string Created {
+            get {
+                return ResourceManager.GetString("Created", resourceCulture);
             }
         }
         
@@ -205,11 +241,20 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+
         ///   Looks up a localized string similar to Edit auction.
         /// </summary>
         internal static string EditAuction {
             get {
                 return ResourceManager.GetString("EditAuction", resourceCulture);
+            }
+        }
+        ///   Looks up a localized string similar to Auctions ended.
+        /// </summary>
+        internal static string Ended {
+            get {
+                return ResourceManager.GetString("Ended", resourceCulture);
+
             }
         }
         
@@ -322,20 +367,37 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+
         ///   Looks up a localized string similar to My auctions.
         /// </summary>
         internal static string MyAuctions {
             get {
                 return ResourceManager.GetString("MyAuctions", resourceCulture);
             }
+        }    
+  
+        ///   Looks up a localized string similar to Auctions history csv.
+        /// </summary>
+        internal static string MyAuctionsCsv {
+            get {
+                return ResourceManager.GetString("MyAuctionsCsv", resourceCulture);
+            }
         }
         
         /// <summary>
+
         ///   Looks up a localized string similar to My Bids.
         /// </summary>
         internal static string MyBids {
             get {
                 return ResourceManager.GetString("MyBids", resourceCulture);
+            }
+        }
+        ///   Looks up a localized string similar to Auctions history pdf.
+        /// </summary>
+        internal static string MyAuctionsPdf {
+            get {
+                return ResourceManager.GetString("MyAuctionsPdf", resourceCulture);
             }
         }
         
@@ -376,6 +438,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No result.
+        /// </summary>
+        internal static string NoResult {
+            get {
+                return ResourceManager.GetString("NoResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must be logged in to do this.
         /// </summary>
         internal static string NotLoggedIn {
@@ -408,6 +479,13 @@ namespace WebApp.Resources {
         internal static string Observed {
             get {
                 return ResourceManager.GetString("Observed", resourceCulture);
+            }
+        }
+        ///   Looks up a localized string similar to Categories popularity.
+        /// </summary>
+        internal static string Popularity {
+            get {
+                return ResourceManager.GetString("Popularity", resourceCulture);
             }
         }
         
@@ -516,6 +594,13 @@ namespace WebApp.Resources {
         internal static string Unsubscribe {
             get {
                 return ResourceManager.GetString("Unsubscribe", resourceCulture);
+          }
+        }
+        ///   Looks up a localized string similar to Report time span (days).
+        /// </summary>
+        internal static string TimeSpan {
+            get {
+                return ResourceManager.GetString("TimeSpan", resourceCulture);
             }
         }
     }
