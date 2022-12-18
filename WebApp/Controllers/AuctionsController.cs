@@ -565,11 +565,14 @@ namespace WebApp.Controllers
 
             //todo upload photo
 
-            auctionDTO.Images = new List<string>()
-            {
-                ""
-            };
+            auctionDTO.Images = _context.ProductFiles.Where(x => x.ProductId == auction.AuctionId && x.Name.StartsWith("IMAGE")).Select(x => x.Path).ToList();
 
+
+            if(auctionDTO.Images == null || auctionDTO.Images.Count() == 0)
+            {
+                auctionDTO.Images = new List<string>();
+                auctionDTO.Images.Add(_auctionFilesService.GetErrorImagePath());
+            }
             return View(auctionDTO);
         }
 
