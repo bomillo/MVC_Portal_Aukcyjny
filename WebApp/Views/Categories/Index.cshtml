@@ -29,9 +29,12 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ParentCategory.Name)
+                <tr>
+                    <td>
+                        @{
+                            var parentCategoryName = item.ParentCategory != null ? item.ParentCategory.Name : string.Empty;
+                        }
+                @Html.DisplayFor(modelItem => parentCategoryName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)

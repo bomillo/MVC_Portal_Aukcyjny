@@ -93,25 +93,14 @@
 
                 <div class="form--group">
                     <label asp-for="Description" class="control--label form--label"></label>
-                    <textarea asp-for="Description" class="control--input form--input"></textarea>
+                    <textarea asp-for="Description" class="control--input form--input" style="border-radius: 18px;"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
-
-                <div class="form--group form-check text-lg-end">
-                    <label class="form-check-label input--checkbox">
-                        <input onchange="displayDateDialog()" id="draftCHechBox" class="form-check-input" asp-for="IsDraft" /> @Html.DisplayNameFor(model => model.IsDraft)
-                    </label>
                 </div>
 
                 <div>
                     <span class="text--error">@ViewBag.DatesMsg</span>
                 </div>
 
-                <div class="form--group" id="dateP">
-                    <label asp-for="PublishedTime" class="control--label form--label"></label>
-                    <input asp-for="PublishedTime" class="control--input form--input" />
-                    <span asp-validation-for="PublishedTime" class="text-danger"></span>
-                </div>
                 <div class="form--group" id="dateE">
                     <label asp-for="EndTime" class="control--label form--label"></label>
                     <input asp-for="EndTime" class="control--input form--input" />

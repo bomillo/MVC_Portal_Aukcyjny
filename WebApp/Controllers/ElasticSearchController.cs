@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp.Context;
 using WebApp.Models.DTO;
 using Elastic.Clients.Elasticsearch.QueryDsl;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Controllers
 {
+    [AllowAnonymous]
     public class ElasticSearchController : Controller
     {
         private readonly ElasticsearchClient _elasticsearchClient;
@@ -16,11 +17,6 @@ namespace WebApp.Controllers
         {
             this._elasticsearchClient = elasticsearchClient;
             _context = context;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
         public ActionResult GetSearchIdea(string text)

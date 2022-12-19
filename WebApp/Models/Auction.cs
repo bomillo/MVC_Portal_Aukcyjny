@@ -1,9 +1,12 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Policy;
 
 namespace WebApp.Models
 {
+    [Index(nameof(Status), nameof(EndTime))]
     public class Auction
     {
         [Key]
@@ -13,9 +16,8 @@ namespace WebApp.Models
         [Required]
         [MaxLength(100)]
         public string Title { get; set; }
-        [DefaultValue(true)]
-        public bool IsDraft { get; set; }
-        
+        public AuctionStatus Status { get; set; }
+
         public int OwnerId { get; set; }
         public User Owner { get; set; }
         public DateTime CreationTime { get; set; }
@@ -25,5 +27,5 @@ namespace WebApp.Models
         public Product Product { get; set; }
     }
 
-    public enum AuctionType { Draft, Real }
+    public enum AuctionStatus { Draft = 0, Published = 1, Ended = 2}
 }

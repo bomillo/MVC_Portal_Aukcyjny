@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net.Mime;
 using WebApp.Context;
@@ -6,6 +7,7 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    [Authorize("RequireAdmin")]
     public class ReportsController : Controller
     {
         private readonly PortalAukcyjnyContext dbContext;
@@ -106,6 +108,7 @@ namespace WebApp.Controllers
 
         [HttpGet]
         [Route("/reports/pdf/auctions/history/my")]
+        [Authorize]
         public ActionResult MyAuctionsHistoryPdf(int userId)
         {
             var report = new ReportPdf(dbContext);
@@ -117,6 +120,7 @@ namespace WebApp.Controllers
 
         [HttpGet]
         [Route("/reports/csv/auctions/history/my")]
+        [Authorize]
         public ActionResult MyAuctionsHistoryCsv(int userId)
         {
             var report = new ReportCsv(dbContext);

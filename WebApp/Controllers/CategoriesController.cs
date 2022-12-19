@@ -46,6 +46,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Categories
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var portalAukcyjnyContext = _context.Categories.Include(c => c.ParentCategory);
@@ -214,7 +215,7 @@ namespace WebApp.Controllers
                 products = _context.Products.Where(p => categories.Contains(p.CategoryId)).Select(p => p.ProductId).ToList();
             }
 
-            var auctions = _context.Auctions.Where(a => products.Contains(a.ProductId) && a.EndTime > DateTime.UtcNow && a.IsDraft == false).Include(a => a.Product).Include(a => a.Product.Category).ToList();
+            var auctions = _context.Auctions.Where(a => products.Contains(a.ProductId) && a.EndTime > DateTime.UtcNow && a.Status != AuctionStatus.Draft).Include(a => a.Product).Include(a => a.Product.Category).ToList();
 
             var displayAuctions = new List<DisplayAuctionsModel>();
 

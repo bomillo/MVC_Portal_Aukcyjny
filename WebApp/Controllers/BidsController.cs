@@ -24,6 +24,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Bids
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Index()
         {
             var portalAukcyjnyContext = _context.Bid.Include(b => b.Auction).Include(b => b.User);
@@ -31,6 +32,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Bids/Details/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Bid == null)
@@ -51,6 +53,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Bids/Create
+        [Authorize("RequireAdmin")]
         public IActionResult Create()
         {
             ViewData["AuctionId"] = new SelectList(_context.Auctions, "AuctionId", "Title");
@@ -63,6 +66,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Create([Bind("BidId,UserId,AuctionId,BidTime,Price")] Bid bid)
         {
             if (ModelState.IsValid)
@@ -79,6 +83,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Bids/Edit/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Bid == null)
@@ -103,6 +108,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("BidId,UserId,AuctionId,BidTime,Price")] Bid bid)
         {
             if (id != bid.BidId)
@@ -138,6 +144,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Bids/Delete/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Bid == null)
@@ -160,6 +167,7 @@ namespace WebApp.Controllers
         // POST: Bids/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Bid == null)
@@ -201,6 +209,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddBid(string bidString, int auctionId, string returnUrl)
         {
 

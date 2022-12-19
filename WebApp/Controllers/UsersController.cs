@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace WebApp.Controllers
 {
+    
     public class UsersController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
@@ -32,6 +34,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Users
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Index()
         {
             var portalAukcyjnyContext = _context.Users.Include(u => u.Company);
@@ -39,6 +42,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Users/Details/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Users == null)
@@ -58,6 +62,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Users/Create
+        [Authorize("RequireAdmin")]
         public IActionResult Create()
         {
             ViewData["CompanyId"] = new SelectList(_context.Companies, "CompanyId", "Email");
@@ -69,6 +74,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Create([Bind("UserId,Name,Email,PasswordHashed,UserType,CompanyId,ThemeType,Language")] User user)
         {
             if (ModelState.IsValid)
@@ -82,6 +88,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Users/Edit/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Users == null)
@@ -103,6 +110,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("UserId,Name,Email,PasswordHashed,UserType,CompanyId,ThemeType,Language")] User user)
         {
             if (id != user.UserId)
@@ -135,6 +143,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Users/Delete/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Users == null)
@@ -156,6 +165,7 @@ namespace WebApp.Controllers
         // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Users == null)
@@ -179,6 +189,7 @@ namespace WebApp.Controllers
 
 
         // GET: Users/Details/5
+        [Authorize]
         public async Task<IActionResult> UserAccount(int? id, string? auctionType)
         {
             if (id == null || _context.Users == null)
@@ -198,7 +209,7 @@ namespace WebApp.Controllers
                     {
                         var myAuctions = (from a in _context.Auctions
                                             .Where(au => au.OwnerId == id &&
-                                            au.IsDraft == true)
+                                            au.Status == AuctionStatus.Draft)
                                           select a).ToList();
 
                         ViewBag.MyAuctions = myAuctions;
@@ -209,7 +220,7 @@ namespace WebApp.Controllers
                     {
                         var myAuctions = (from a in _context.Auctions
                                             .Where(au => au.OwnerId == id &&
-                                            au.IsDraft == false &&
+                                            au.Status != AuctionStatus.Draft &&
                                             au.EndTime > DateTime.UtcNow)
                                           select a).ToList();
 
@@ -221,7 +232,7 @@ namespace WebApp.Controllers
                     {
                         var myAuctions = (from a in _context.Auctions
                                             .Where(au => au.OwnerId == id &&
-                                            au.IsDraft == false &&
+                                            au.Status != AuctionStatus.Draft &&
                                             au.EndTime < DateTime.UtcNow)
                                           select a).ToList();
 
@@ -248,7 +259,7 @@ namespace WebApp.Controllers
                 foreach (var myObserved in myObservedAuctions)
                 {
                     var Auction = _context.Auctions.Where(x => x.AuctionId == myObserved.AuctionId &&
-                                                          x.IsDraft == false).FirstOrDefault();
+                                                          x.Status != AuctionStatus.Draft).FirstOrDefault();
 
                     if (Auction == null)
                     { continue; }
@@ -274,6 +285,7 @@ namespace WebApp.Controllers
 
 
         // GET: Users/UserEdition/{id}
+        [Authorize]
         public async Task<IActionResult> UserEdition(int? id, string? result)
         {
             if (id == null || _context.Users == null)
@@ -310,6 +322,7 @@ namespace WebApp.Controllers
         // POST: Users/UserEdition/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> UserEdition(int? id, [Bind("Name,Email,OldPassword,Password,PasswordVerification,CompanyId,newThemeType,newLanguage,itemsOnPage,newCurrency")] EditAccountModel editedUser)
         {
             if (id == null || _context.Users == null)

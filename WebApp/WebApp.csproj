@@ -43,10 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BackgroundTasks\BackgroundTasks.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Resources\Authentication\Mail.Designer.cs">
       <DependentUpon>Mail.resx</DependentUpon>
       <DesignTime>True</DesignTime>

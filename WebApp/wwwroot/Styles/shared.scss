@@ -100,6 +100,7 @@ footer {
     justify-items: center;
     align-items: center;
     flex-direction: row;
+    height: 50px;
 }
 
 .currentLogin {
@@ -462,6 +463,8 @@ input[type=file] {
     margin: 2pt;
     height: 10vh;
     position: relative;
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 
 .userAccount--container .box .box--content .box--item .box--item--title {
@@ -507,6 +510,12 @@ input[type=file] {
 .box--horizontal .box .box--content {
     border: 2px solid #f1f1f1;
     justify-content: center;
+}
+
+.box--510--w--scroll {
+    height: 510px;
+    overflow-y: scroll;
+    border-radius: 0.4rem;
 }
 
 .box--horizontal .box--center {
@@ -776,30 +785,35 @@ input[type=file] {
     display: flex;
     flex-direction: column;
     width: 52px;
+    z-index: 1000000;
     position: absolute;
     margin-left: 1vw;
+
     button {
         margin-bottom: 0;
-
         margin-top: 0;
         border: 0;
         width: 50px;
         aspect-ratio: 1/1;
         border-left: 1px solid;
-        border-right:1px solid;
+        border-right: 1px solid;
+
         &:hover {
             opacity: 50%;
         }
 
 
-        &:last-child{
+        &:last-child {
             border: 1px solid;
             border-radius: 0 0 50% 50%;
             border-top: 0px;
         }
-    }
 
-    
+        &:focus-visible {
+            outline-offset: unset;
+            outline: unset;
+        }
+    }
 }
 
 .theme--form{
@@ -814,6 +828,7 @@ input[type=file] {
     width: 50px;
     border-radius: 50%;
     aspect-ratio: 1 / 1;
+    height: 50px;
     margin-left: 1vw;
     &:hover {
         opacity: 50%;
@@ -829,7 +844,7 @@ input[type=file] {
     border-right: 0px;
     text-align: center;
     min-width: 150px;
-
+    margin-left: 1vw;
     span {
         display: inline-block;
         vertical-align: middle;
@@ -863,7 +878,7 @@ input[type=file] {
     }
 
     &--right {
-        flex: 3;
+        flex: 5;
         display: flex;
         align-content: end;
         margin-bottom: 2vh;
@@ -871,7 +886,7 @@ input[type=file] {
 
     &--searchbar {
         min-width: 450px;
-        flex: 8;
+        flex: 5;
         align-content: center;
         justify-content: center;
         margin-bottom: 2vh;
@@ -927,7 +942,7 @@ input[type=file] {
 
         &--group {
             height: 50px;
-            width: 50%;
+            width: 80%;
             min-width: 200px;
             margin-right: 0px;
             position: relative;
@@ -1054,6 +1069,8 @@ nav {
         &--left--panel {
             
             margin-right: 2vw;
+            
+            
         }
 
         &--right--panel {
@@ -1248,6 +1265,10 @@ nav {
     &--left--panel {
         flex: 3;
         margin-right: 2vw;
+
+        .main--image {
+            width: 80%;
+        }
     }
 
     &--right--panel {
@@ -1312,7 +1333,7 @@ nav {
             flex: 0 0 100%;
         }
 
-        &--popup{
+        &--popup {
             display: none;
             border: 1px solid;
             border-top: 0px;
@@ -1320,7 +1341,7 @@ nav {
             padding: 2.5vh 1.5vw;
         }
 
-        &s--list{
+        &s--list {
             min-height: 60vh;
             max-height: 60vh;
             overflow-y: scroll;
@@ -1432,9 +1453,6 @@ nav {
     border-radius: 9999px;
 }
 
-
-
-//
 .list--header {
     display: flex;
     flex-direction: row;
@@ -1587,4 +1605,11 @@ nav {
 
 .a--no--style{
     text-decoration: none;
+}
+
+
+.d--flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

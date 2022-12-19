@@ -28,7 +28,7 @@
   color: red;
 }
 .light-mode .background--primary {
-  background-color: aliceblue;
+  background-color: white;
 }
 .light-mode .background--secondary {
   background-color: aquamarine;
@@ -40,7 +40,7 @@
   background-color: gray;
 }
 .light-mode .user--details .item {
-  background: aliceblue;
+  background: white;
 }
 
 #subPopUp {

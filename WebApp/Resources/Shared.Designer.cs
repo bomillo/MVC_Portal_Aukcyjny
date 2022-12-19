@@ -61,6 +61,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Access Denied.
+        /// </summary>
+        internal static string AccessDenied {
+            get {
+                return ResourceManager.GetString("AccessDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place bid.
         /// </summary>
         internal static string AddBid {
@@ -129,6 +138,15 @@ namespace WebApp.Resources {
         internal static string AuctionIsDraft {
             get {
                 return ResourceManager.GetString("AuctionIsDraft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back to home page.
+        /// </summary>
+        internal static string BackToHomePage {
+            get {
+                return ResourceManager.GetString("BackToHomePage", resourceCulture);
             }
         }
         
@@ -264,6 +282,24 @@ namespace WebApp.Resources {
         internal static string EndIn {
             get {
                 return ResourceManager.GetString("EndIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auction {0} has ended!.
+        /// </summary>
+        internal static string EndOfAuctionMailBody {
+            get {
+                return ResourceManager.GetString("EndOfAuctionMailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auction has ended.
+        /// </summary>
+        internal static string EndOfAuctionMailSubject {
+            get {
+                return ResourceManager.GetString("EndOfAuctionMailSubject", resourceCulture);
             }
         }
         
@@ -421,6 +457,24 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New bid has been placed on auction {0}. Current highest bid is for {1}..
+        /// </summary>
+        internal static string NewBidMailBody {
+            get {
+                return ResourceManager.GetString("NewBidMailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New bid has been placed.
+        /// </summary>
+        internal static string NewBidMailSubject {
+            get {
+                return ResourceManager.GetString("NewBidMailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ask your question to seller here.....
         /// </summary>
         internal static string NewQuestion {
@@ -516,6 +570,15 @@ namespace WebApp.Resources {
         internal static string PriceTo {
             get {
                 return ResourceManager.GetString("PriceTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Publish.
+        /// </summary>
+        internal static string Publish {
+            get {
+                return ResourceManager.GetString("Publish", resourceCulture);
             }
         }
         

@@ -1,4 +1,5 @@
-﻿using WebApp.Context;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebApp.Context;
 using WebApp.Models;
 
 namespace WebApp.Services
@@ -16,7 +17,7 @@ namespace WebApp.Services
         {
             if(auction == null || auction.Product == null)
             {
-                throw new Exception("Are you fucking stupid???? Auction and product asociated with auction cannot be null.");
+                return new List<BreadcrumbItem>();
             }
 
             var items = new List<BreadcrumbItem>() { new BreadcrumbItem() { ItemName = auction.Title, RelativePath = $"/Auctions/Details/{auction.AuctionId}" } };
