@@ -14,7 +14,7 @@ namespace WebApp.Services
         }
         public IEnumerable<Auction> GetActiveAuctions()
         {
-            var auctionList = context.Auctions.Where(a => !a.IsDraft && a.PublishedTime < DateTime.UtcNow && a.EndTime > DateTime.UtcNow )
+            var auctionList = context.Auctions.Where(a => a.Status != AuctionStatus.Draft && a.PublishedTime < DateTime.UtcNow && a.EndTime > DateTime.UtcNow )
                 .Include(x => x.Owner)
                 .Include(x => x.Product)
                 .ToList();

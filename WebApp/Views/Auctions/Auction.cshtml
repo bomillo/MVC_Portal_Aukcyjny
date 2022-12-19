@@ -42,14 +42,14 @@
                            value="@WebApp.Resources.Shared.Unsubscribe" />
                     }
                 }
-                else
-                {
+                else if (Model.Status == AuctionStatus.Draft) {
                     <a asp-action="Edit" asp-controller="Auctions" asp-route-id="@Model.AuctionId" type="button" class="btn button auction--border background--primary text--primary border--primary">
                         @WebApp.Resources.Shared.EditAuction 
                     </a>
+                    <a asp-action="Publish" asp-controller="Auctions" asp-route-id="@Model.AuctionId" type="button" class="btn button auction--border background--primary text--primary border--primary">
+                        @WebApp.Resources.Shared.Publish
+                    </a>
                 }
-
-                
             </div>
         </div>
 
@@ -59,39 +59,44 @@
         </div>
     </div>
     <div class="auction--right--panel">
-        <h3>@WebApp.Resources.Shared.Bids</h3>
-        <div class="auction--bids--list auction--border background--primary text--primary border--primary ">
-            @foreach(var bid in Model.Bids){
-                <div class="auction--bid">
-                    <h5>@bid.UserName</h5>
-                    <h3>@bid.Price</h3>
-                    <p>@bid.BidTime</p>
-                    <hr />
-                </div>
-            }
-        </div>
-        <form method="post" id="createBid" action="/Bids/AddBid" class="auction--add--bid">
-            <button type="button" class="add--bid--button auction--border background--primary text--primary border--primary" id="popupToggler" onclick="togglePopup()">
-                @WebApp.Resources.Shared.AddBid
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                </svg>
-            </button>
-
-
-            <div class="auction--bid--popup" id="bidPopup">
-                <div class="form--group--with--warning">
-                    <input type="number" step="0.01" placeholder="@WebApp.Resources.Shared.CreateBid" class="control--input form--input" id="bid" name="bidString"/>
-                    <input type="hidden" value="@Model.AuctionId" name="auctionId"/>
-                    <input type="hidden" id="returnUrl" name="returnUrl" />
-                    <span id="bidFormMessage" class="text-danger">
-                    </span>
-                    <div style="display: flex; justify-content: flex-end;">
-                        <button class="button button--primary button--rounded button--thin" type="submit">@WebApp.Resources.Shared.CreateBid</button>
+        @if (Model.Status != AuctionStatus.Draft)
+        {
+            <h3>@WebApp.Resources.Shared.Bids</h3>
+            <div class="auction--bids--list auction--border background--primary text--primary border--primary ">
+                @foreach (var bid in Model.Bids)
+                {
+                    <div class="auction--bid">
+                        <h5>@bid.UserName</h5>
+                        <h3>@bid.Price</h3>
+                        <p>@bid.BidTime</p>
+                        <hr />
                     </div>
-                </div>
+                }
             </div>
-        </form>
+            @if (Model.Status == AuctionStatus.Published) { 
+                <form method="post" id="createBid" action="/Bids/AddBid" class="auction--add--bid">
+                    <button type="button" class="add--bid--button auction--border background--primary text--primary border--primary" id="popupToggler" onclick="togglePopup()">
+                    @WebApp.Resources.Shared.AddBid
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                    </svg>
+                    </button>
+
+                    <div class="auction--bid--popup" id="bidPopup">
+                        <div class="form--group--with--warning">
+                            <input type="number" step="0.01" placeholder="@WebApp.Resources.Shared.CreateBid" class="control--input form--input" id="bid" name="bidString"/>
+                            <input type="hidden" value="@Model.AuctionId" name="auctionId"/>
+                            <input type="hidden" id="returnUrl" name="returnUrl" />
+                            <span id="bidFormMessage" class="text-danger">
+                            </span>
+                            <div style="display: flex; justify-content: flex-end;">
+                                <button class="button button--primary button--rounded button--thin" type="submit">@WebApp.Resources.Shared.CreateBid</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            }
+        }
     </div>
 </div>
 

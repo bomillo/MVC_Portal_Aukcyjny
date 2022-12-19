@@ -32,16 +32,17 @@ namespace WebApp.Controllers
         private readonly AuctionEditHistoryService editHistoryService;
         private readonly BidsService bidsService;
         private readonly SetPagerService pagerService;
+        private readonly AuctionsStatusService auctionsStatusService;
 
-        public AuctionsController(PortalAukcyjnyContext context, 
-            ObservAuctionService observAuctionService, 
-            BreadcrumbService breadcrumbService, 
-            AuctionFilesService auctionFileService, 
+        public AuctionsController(PortalAukcyjnyContext context,
+            ObservAuctionService observAuctionService,
+            BreadcrumbService breadcrumbService,
+            AuctionFilesService auctionFileService,
             BidsService bidsService,
             SetPagerService pagerService,
             ElasticsearchClient elasticsearchClient,
-            AuctionEditHistoryService editHistoryService
-            )
+            AuctionEditHistoryService editHistoryService,
+            AuctionsStatusService auctionsStatusService)
         {
             _context = context;
             this._observedAuctionService = observAuctionService;
@@ -53,6 +54,7 @@ namespace WebApp.Controllers
 
             _elasticsearchClient = elasticsearchClient;
             this.editHistoryService = editHistoryService;
+            this.auctionsStatusService = auctionsStatusService;
         }
 
         // GET: Auctions
@@ -62,7 +64,7 @@ namespace WebApp.Controllers
                 page = 1;
             
             var portalAukcyjnyContext = _context.Auctions
-                .Where(x => x.IsDraft == false)
+                .Where(x => x.Status != AuctionStatus.Draft)
                 .Include(a => a.Owner)
                 .Include(a => a.Product).OrderBy(a => a.AuctionId);
 
@@ -158,7 +160,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AuctionId,Description,Title,IsDraft,OwnerId,CreationTime,PublishedTime,EndTime,ProductId")] Auction auction, IFormCollection postedFiles, IFormFile productIcon, IFormFile productImage)
+        public async Task<IActionResult> Create([Bind("AuctionId,Description,Title,OwnerId,CreationTime,PublishedTime,EndTime,ProductId")] Auction auction, IFormCollection postedFiles, IFormFile productIcon, IFormFile productImage)
         {
             string[] descriptions = postedFiles["fileDescription"].ToString().Split(',');
 
@@ -167,25 +169,20 @@ namespace WebApp.Controllers
             ModelState["productIcon"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
             ModelState["productImage"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
 
-            if (auction.IsDraft)
+            auction.Status = AuctionStatus.Draft;
+            auction.PublishedTime = null;
+ 
+            if (auction.EndTime != null)
             {
-                auction.PublishedTime = null;
-                auction.EndTime = null;
-            }
-            else
-            {
-                if ((auction.PublishedTime > auction.EndTime) || (auction.PublishedTime == null || auction.EndTime == null))
-                {
-                    /*ViewBag.DatesMsg = WebApp.Resources.Shared.;*/
-                    ViewBag.DatesMsg = "Dates are not valid!";
-                    ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
-                    ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "Name", auction.ProductId);
-                    return View(auction);
-                }
-
-                auction.PublishedTime = DateTime.SpecifyKind(auction.PublishedTime.Value, DateTimeKind.Utc);
                 auction.EndTime = DateTime.SpecifyKind(auction.EndTime.Value, DateTimeKind.Utc);
+            }
 
+            if (auction.EndTime == null || DateTime.UtcNow > auction.EndTime)
+            {
+                ViewBag.DatesMsg = "End time is not valid!";
+                ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
+                ViewData["ProductId"] = new SelectList(_context.Products.OrderBy(p => p.Name), "ProductId", "Name", auction.ProductId);
+                return View(auction);
             }
 
             if (ModelState.IsValid)
@@ -194,6 +191,8 @@ namespace WebApp.Controllers
 
                 _context.Add(auction);
                 _elasticsearchClient.Index(new ElasticAuction { Id = auction.AuctionId, Title = auction.Title }, "auctions");
+               
+
                 await _context.SaveChangesAsync();
 
                 //var product = _context.Products.Where(p => p.AuctionId == auction.AuctionId).FirstOrDefault();
@@ -289,6 +288,11 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
+
+            if (auction.Status != AuctionStatus.Draft) {
+                return RedirectToAction("Auction", "Auctions");
+            }
+
             ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
             ViewData["ProductId"] = new SelectList(_context.Products.OrderBy(p => p.Name), "ProductId", "Name", auction.ProductId);
             ViewData["ProductFiles"] = productFiles;
@@ -300,7 +304,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AuctionId,Description,Title,IsDraft,OwnerId,CreationTime,PublishedTime,EndTime,ProductId")] Auction auction, IFormCollection postedFiles, IFormFile productIcon, IFormFile productImage)
+        public async Task<IActionResult> Edit(int id, [Bind("AuctionId,Description,Title,OwnerId,CreationTime,PublishedTime,EndTime,ProductId")] Auction auction, IFormCollection postedFiles, IFormFile productIcon, IFormFile productImage)
         {
             string[] descriptions = postedFiles["fileDescription"].ToString().Split(',');
 
@@ -320,40 +324,21 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    if(!auction.IsDraft)
+                    if(auction.EndTime != null)
                     {
-                        if(!(auction.PublishedTime == null || auction.EndTime == null))
-                        {
-                            auction.PublishedTime = DateTime.SpecifyKind(auction.PublishedTime.Value, DateTimeKind.Utc);
-                            auction.EndTime = DateTime.SpecifyKind(auction.EndTime.Value, DateTimeKind.Utc);
-                        }
-                        else
-                        {
-                            ViewBag.DatesMsg = "Both dates must be submited when publishing auction!";
-                            ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
-                            ViewData["ProductId"] = new SelectList(_context.Products.OrderBy(p => p.Name), "ProductId", "Name", auction.ProductId);
-                            return View(auction);
-                        }
-
-                        if(auction.PublishedTime > auction.EndTime)
-                        {
-                            /*ViewBag.DatesMsg = WebApp.Resources.Shared.;*/
-                            ViewBag.DatesMsg = "Dates are not valid - end time is before publishing!";
-                            ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
-                            ViewData["ProductId"] = new SelectList(_context.Products.OrderBy(p => p.Name), "ProductId", "Name", auction.ProductId);
-                            return View(auction);
-                        }
-
-
-                    }
-                    else
-                    {
-                        auction.PublishedTime = null;
-                        auction.EndTime = null;
+                        auction.EndTime = DateTime.SpecifyKind(auction.EndTime.Value, DateTimeKind.Utc);
                     }
 
+                    if(auction.EndTime == null || DateTime.UtcNow > auction.EndTime)
+                    {
+                        ViewBag.DatesMsg = "End time is not valid!";
+                        ViewData["OwnerId"] = new SelectList(_context.Users, "UserId", "Name", auction.OwnerId);
+                        ViewData["ProductId"] = new SelectList(_context.Products.OrderBy(p => p.Name), "ProductId", "Name", auction.ProductId);
+                        return View(auction);
+                    }
+
+                    auction.PublishedTime = null;
                     auction.CreationTime = DateTime.SpecifyKind(auction.CreationTime, DateTimeKind.Utc);
-
 
                     int filesToSkip = 0;
 
@@ -564,6 +549,7 @@ namespace WebApp.Controllers
                 OwnerId = auction.OwnerId,
                 Title = auction.Title,
                 Description = auction.Description,
+                Status = auction.Status,
                 EndDate = auction.EndTime.GetValueOrDefault().ToString(),
                 TimeToEnd = $"{WebApp.Resources.Shared.EndIn} {(auction.EndTime - DateTime.UtcNow).GetValueOrDefault().Days.ToString()} {WebApp.Resources.Shared.Days}"
             };
@@ -582,7 +568,7 @@ namespace WebApp.Controllers
 
             ViewBag.IsObserved = _observedAuctionService.IsAuctionObserved((int)id, userId);
 
-            return View(auctionDTO);
+            return View("Auction",auctionDTO);
         }
 
         private async Task<List<QuestionDTO>> GetAuctionQuestions(int auctionId)
@@ -640,5 +626,29 @@ namespace WebApp.Controllers
             }
         }
 
+        public async Task<ActionResult> Publish(int? id)
+        {
+            if (id == null || _context.Auctions == null)
+            {
+                return NotFound();
+            }
+
+            var auction = await _context.Auctions.FindAsync(id);
+            if (auction == null)
+            {
+                return NotFound();
+            }
+
+            if (DateTime.UtcNow < auction.EndTime)
+            {
+                auction.PublishedTime = DateTime.UtcNow;
+                auction.Status = AuctionStatus.Published;
+                _context.Update(auction);
+                _context.SaveChanges();
+                auctionsStatusService.RegisterNewAuctionForNotification(auction.AuctionId);
+            }
+
+            return await Auction(id);
+        }
     }
 }

@@ -10,6 +10,7 @@
         public string EndDate { get; set; }
 
         public string TimeToEnd { get; set; }
+        public AuctionStatus Status { get; set; }
 
         public List<string> Images { get; set; }
 
