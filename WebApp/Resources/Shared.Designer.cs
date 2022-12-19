@@ -61,6 +61,15 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Access Denied.
+        /// </summary>
+        internal static string AccessDenied {
+            get {
+                return ResourceManager.GetString("AccessDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place bid.
         /// </summary>
         internal static string AddBid {
@@ -129,6 +138,15 @@ namespace WebApp.Resources {
         internal static string AuctionIsDraft {
             get {
                 return ResourceManager.GetString("AuctionIsDraft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back to home page.
+        /// </summary>
+        internal static string BackToHomePage {
+            get {
+                return ResourceManager.GetString("BackToHomePage", resourceCulture);
             }
         }
         

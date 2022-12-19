@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    [Authorize]
     public class AuctionAlertsController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
@@ -20,6 +22,7 @@ namespace WebApp.Controllers
         }
 
         // GET: AuctionAlerts
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Index()
         {
             var portalAukcyjnyContext = _context.AuctionAlerts.Include(a => a.Category).Include(a => a.Product).Include(a => a.User);
@@ -27,6 +30,7 @@ namespace WebApp.Controllers
         }
 
         // GET: AuctionAlerts/Details/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.AuctionAlerts == null)
@@ -48,6 +52,7 @@ namespace WebApp.Controllers
         }
 
         // GET: AuctionAlerts/Create
+        [Authorize("RequireAdmin")]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
@@ -76,6 +81,7 @@ namespace WebApp.Controllers
         }
 
         // GET: AuctionAlerts/Edit/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.AuctionAlerts == null)
@@ -99,6 +105,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("AlertId,UserId,CategoryId,ProductId,MaxPrice")] AuctionAlerts auctionAlerts)
         {
             if (id != auctionAlerts.AlertId)
@@ -133,6 +140,7 @@ namespace WebApp.Controllers
         }
 
         // GET: AuctionAlerts/Delete/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.AuctionAlerts == null)
@@ -156,6 +164,7 @@ namespace WebApp.Controllers
         // POST: AuctionAlerts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.AuctionAlerts == null)

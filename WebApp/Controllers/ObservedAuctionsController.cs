@@ -27,6 +27,7 @@ namespace WebApp.Controllers
         }
 
         // GET: ObservedAuctions
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Index(int page = 1)
         {
             var usr = (HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("mail")).Value);
@@ -73,6 +74,7 @@ namespace WebApp.Controllers
         }
 
         // GET: ObservedAuctions/Details/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Details(int? aId, int? uId)
         {
             if (aId == null || uId == null || _context.ObservedAuctions == null)
@@ -92,8 +94,9 @@ namespace WebApp.Controllers
             return View(observedAuction);
         }
 
-        
+
         // GET: ObservedAuctions/Delete/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Delete(int? aId, int? uId)
         {
             if (aId == null || uId == null || _context.ObservedAuctions == null)
@@ -115,6 +118,7 @@ namespace WebApp.Controllers
 
 
         // POST: ObservedAuctions/Delete/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int? aId, int? uId)
         {
             if (_context.ObservedAuctions == null)

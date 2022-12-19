@@ -23,6 +23,7 @@ using WebApp.Models;
 using WebApp.Models.DTO;
 using WebApp.Services;
 using WebApp.Services.Emails;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace WebApp.Controllers
 {
@@ -40,14 +41,13 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> Login()
         {
             return PartialView("_LoginModal");
         }
 
         [HttpPost]
-        [AllowAnonymous]
+
         public async Task<IActionResult> Login(string mail, string password, string url)
         {
             var user = usersService.ValidateAndGetUser(mail ?? "", password ?? "");
@@ -147,7 +147,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+
         public async Task LoginGoogle(string url)
         {
             var authProp = new AuthenticationProperties()
@@ -160,7 +160,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+
         public async Task LoginFacebook(string url)
         {
             var authProp = new AuthenticationProperties()
@@ -172,7 +172,7 @@ namespace WebApp.Controllers
             await HttpContext.ChallengeAsync(FacebookDefaults.AuthenticationScheme, authProp);
         }
 
-        [AllowAnonymous]
+
         public async Task<IActionResult> ExternalLoginCallback(string url, ExternalProvider provider)
         {
             var request = HttpContext.Request;
@@ -221,7 +221,7 @@ namespace WebApp.Controllers
 
 
         [HttpPost]
-        [AllowAnonymous]
+
         public async Task<IActionResult> ValidateCrenedtials(string mail, string password)
         {
             if (usersService.ValidateUser(mail ?? "", password ?? ""))
@@ -287,6 +287,13 @@ namespace WebApp.Controllers
 
             }
             return usersService.AddUserFromExternalProvider(user);
+        }
+
+        public async Task<IActionResult> AutoLogin()
+        {
+
+            
+            return View();
         }
     }
 }

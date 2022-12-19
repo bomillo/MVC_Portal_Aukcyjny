@@ -702,6 +702,7 @@ input[type=file] {
   display: flex;
   flex-direction: column;
   width: 52px;
+  z-index: 1000000;
   position: absolute;
   margin-left: 1vw;
 }
@@ -722,6 +723,10 @@ input[type=file] {
   border-radius: 0 0 50% 50%;
   border-top: 0px;
 }
+.fake--dropdown button:focus-visible {
+  outline-offset: unset;
+  outline: unset;
+}
 
 .theme--form {
   margin-right: 2vw;
@@ -735,6 +740,7 @@ input[type=file] {
   width: 50px;
   border-radius: 50%;
   aspect-ratio: 1/1;
+  height: 50px;
   margin-left: 1vw;
 }
 .round--svg--button:hover {

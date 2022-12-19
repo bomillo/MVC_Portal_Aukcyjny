@@ -42,6 +42,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Categories
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var portalAukcyjnyContext = _context.Categories.Include(c => c.ParentCategory);

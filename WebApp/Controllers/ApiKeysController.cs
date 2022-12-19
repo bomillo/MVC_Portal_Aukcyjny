@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    [Authorize]
     public class ApiKeysController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
@@ -21,12 +23,14 @@ namespace WebApp.Controllers
         }
 
         // GET: ApiKeys
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.ApiKeys.ToListAsync());
         }
 
         // GET: ApiKeys/Details/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null || _context.ApiKeys == null)
@@ -45,6 +49,7 @@ namespace WebApp.Controllers
         }
 
         // GET: ApiKeys/Create
+        [Authorize("RequireAdmin")]
         public IActionResult Create()
         {
             return View();
@@ -55,6 +60,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Create([Bind("Key")] ApiKey apiKey)
         {
             if (ModelState.IsValid)
@@ -67,6 +73,7 @@ namespace WebApp.Controllers
         }
 
         // GET: ApiKeys/Edit/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null || _context.ApiKeys == null)
@@ -87,6 +94,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(string id, [Bind("Key")] ApiKey apiKey)
         {
             if (id != apiKey.Key)
@@ -118,6 +126,7 @@ namespace WebApp.Controllers
         }
 
         // GET: ApiKeys/Delete/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null || _context.ApiKeys == null)
@@ -138,6 +147,7 @@ namespace WebApp.Controllers
         // POST: ApiKeys/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             if (_context.ApiKeys == null)

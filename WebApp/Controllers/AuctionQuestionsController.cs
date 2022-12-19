@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    [Authorize]
     public class AuctionQuestionsController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
@@ -20,6 +22,7 @@ namespace WebApp.Controllers
         }
 
         // GET: AuctionQuestions
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Index()
         {
             var portalAukcyjnyContext = _context.AuctionQuestion.Include(a => a.Auction).Include(a => a.User);
@@ -27,6 +30,7 @@ namespace WebApp.Controllers
         }
 
         // GET: AuctionQuestions/Details/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.AuctionQuestion == null)
@@ -47,6 +51,7 @@ namespace WebApp.Controllers
         }
 
         // GET: AuctionQuestions/Create
+        [Authorize("RequireAdmin")]
         public IActionResult Create()
         {
             ViewData["AuctionId"] = new SelectList(_context.Auctions, "AuctionId", "Title");
@@ -59,6 +64,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Create([Bind("QuestionId,UserId,AuctionId,Question,Answer,PublishedTime,AnsweredTime")] AuctionQuestion auctionQuestion)
         {
             if (ModelState.IsValid)
@@ -73,6 +79,7 @@ namespace WebApp.Controllers
         }
 
         // GET: AuctionQuestions/Edit/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.AuctionQuestion == null)
@@ -95,6 +102,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("QuestionId,UserId,AuctionId,Question,Answer,PublishedTime,AnsweredTime")] AuctionQuestion auctionQuestion)
         {
             if (id != auctionQuestion.QuestionId)
@@ -128,6 +136,7 @@ namespace WebApp.Controllers
         }
 
         // GET: AuctionQuestions/Delete/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.AuctionQuestion == null)
@@ -150,6 +159,7 @@ namespace WebApp.Controllers
         // POST: AuctionQuestions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.AuctionQuestion == null)
@@ -165,7 +175,7 @@ namespace WebApp.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        [AllowAnonymous]
         public async Task<ActionResult> ValidateQuestion(string question, string auctionId)
         {
 
@@ -193,8 +203,7 @@ namespace WebApp.Controllers
 
             return new JsonResult(new { valid = true });
         }
-
-
+        [AllowAnonymous]
         public async Task<ActionResult> ValidateQuestionAnswer(string answer, string questionId)
         {
 
@@ -220,12 +229,12 @@ namespace WebApp.Controllers
             var auction = _context.AuctionQuestion.FirstOrDefault(a => a.QuestionId == qId);
 
 
-            /*
+            
             if(!_context.Auctions.Any(a => a.AuctionId == auction.AuctionId && a.OwnerId == userId))
             {
                 return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.NotOwner });
             }
-            */
+            
             if (answer.Length > 1499)
             {
                 return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.FieldTooLong });
@@ -235,7 +244,7 @@ namespace WebApp.Controllers
 
 
         }
-
+        [Authorize]
         public async Task<ActionResult> CreateQuestion(string question, string auctionId, string returnUrl)
         {
             var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
@@ -253,7 +262,7 @@ namespace WebApp.Controllers
 
             return Redirect(returnUrl);
         }
-
+        [Authorize]
         public async Task<ActionResult> CreateAnswer(string answer, string questionId, string returnUrl)
         {
             var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value);
