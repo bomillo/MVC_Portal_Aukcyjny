@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ using WebApp.Services;
 
 namespace WebApp.Controllers
 {
+    /*[Authorize(Policy = "RequireAdmin")]*/
     public class CategoriesController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
@@ -24,19 +26,22 @@ namespace WebApp.Controllers
         private readonly SetPagerService pagerService;
         private readonly AuctionFilesService fileService;
         private readonly BidsService bidsService;
+        private readonly CategoryTreeService categoryTreeService;
         private string iconPathError;
 
-        public CategoriesController(PortalAukcyjnyContext context, 
+        public CategoriesController(PortalAukcyjnyContext context,
             BreadcrumbService breadcrumbService,
             SetPagerService pagerService,
-            AuctionFilesService fileService, 
-            BidsService bidsService)
+            AuctionFilesService fileService,
+            BidsService bidsService,
+            CategoryTreeService categoryTreeService)
         {
             _context = context;
             this.breadcrumbService = breadcrumbService;
             this.pagerService = pagerService;
             this.fileService = fileService;
             this.bidsService = bidsService;
+            this.categoryTreeService = categoryTreeService;
             iconPathError = fileService.GetErrorIconPath();
         }
 
@@ -176,14 +181,14 @@ namespace WebApp.Controllers
             {
                 _context.Categories.Remove(category);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryExists(int id)
         {
-          return _context.Categories.Any(e => e.CategoryId == id);
+            return _context.Categories.Any(e => e.CategoryId == id);
         }
 
 
@@ -192,11 +197,11 @@ namespace WebApp.Controllers
         [Route("/Category/Auctions/{id}")]
         public async Task<IActionResult> CategoryAuctions(int? id, int page = 1)
         {
-            if(id == null || _context == null)
+            if (id == null || _context == null)
             {
                 return NotFound();
             }
-            
+
 
             var categoriesTask = GetChildCategories(id);
             List<int> products = new List<int>();
@@ -204,7 +209,7 @@ namespace WebApp.Controllers
 
             ViewBag.Breadcrumb = breadcrumbService.CreateCurrentPath(mainCategory);
             var categories = await categoriesTask;
-            if(categories != null)
+            if (categories != null)
             {
                 products = _context.Products.Where(p => categories.Contains(p.CategoryId)).Select(p => p.ProductId).ToList();
             }
@@ -233,16 +238,16 @@ namespace WebApp.Controllers
                 {
                     Auction = auction,
                     iconPath = path,
-                    Bid = Bid 
+                    Bid = Bid
                 });
-                
+
             }
             if (page < 1)
                 page = 1;
 
 
             int rowsCount = displayAuctions.Count();
-            int pageSize = await pagerService.SetPager(userId);;
+            int pageSize = await pagerService.SetPager(userId);
             var pager = new Pager(rowsCount, page, "Categories", pageSize, "CategoryAuctions", mainCategory.CategoryId);
             var rowsSkipped = (page - 1) * pageSize;
 
@@ -251,9 +256,9 @@ namespace WebApp.Controllers
             ViewBag.Pager = pager;
 
             return View(itemsPage);
-            
+
         }
-        
+
         private async Task<List<int>> GetChildCategories(int? categoryId)
         {
             if(categoryId == null)
@@ -275,7 +280,18 @@ namespace WebApp.Controllers
             }
 
             return categoriesId;
-        }
+		}
 
-    }
+		public IActionResult Categories()
+		{
+			return View();
+		}
+
+		public IActionResult CategoriesJ ()
+        {
+            DisplayCategoryTreeDTO categoryTree = categoryTreeService.GetCategories();
+
+            return Json(categoryTree);
+        }
+	}
 }

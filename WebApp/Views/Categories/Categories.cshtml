@@ -1,5 +1,65 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model WebApp.Models.DTO.DisplayCategoryTreeDTO
 @{
+
 }
+
+<style>
+	#category {
+		text-align: center;
+	}
+
+	#subCategory {
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+	}
+</style>
+
+<div style="border: 2px solid black" id="categoryContainer"></div>
+
+<script>
+	var model;
+	
+	function getElems() {
+		$.post("@Url.Action("CategoriesJ","Categories")",
+            function (data) {
+				model = data;	
+				iterate();
+			}
+        );
+	}
+
+	function iterate() {
+		model.childList.forEach(function (child) {
+			display(child, 0);
+		});
+	}
+
+	function display(list, depth) {
+		if (list.length > 0){ 
+
+			var margin = depth * 35 + "px";
+
+			var divBuilder = '<div style="margin:' + margin + '" id="subCategory">';
+			var container = document.createElement('div');
+			container.id = 'category';
+
+			divBuilder += '<a href="/Category/Auctions/' + list[0].parentCategoryId + '" class="btn button button--primary"> ' + list[0].parentCategory.name  + ' </a>';
+
+			list.forEach(function (elem) {
+				divBuilder += '<a href="/Category/Auctions/' + elem.category.categoryId + '" class="btn button button--secondary""> >' + elem.category.name + '</a>' + '<br/>';
+			});
+
+			divBuilder += '</div> <hr/>';
+
+			container.innerHTML = divBuilder;
+
+			document.getElementById("categoryContainer").appendChild(container);
+		}
+		
+		if(list.childList != null)
+			display(list.childList, depth + 1);
+	}
+	getElems();
+
+</script>
