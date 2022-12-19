@@ -1093,6 +1093,9 @@ nav {
   flex: 3;
   margin-right: 2vw;
 }
+.auction--left--panel .main--image {
+  width: 80%;
+}
 .auction--right--panel {
   flex: 2;
   margin-left: 2vw;
