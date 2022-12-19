@@ -1054,6 +1054,8 @@ nav {
         &--left--panel {
             
             margin-right: 2vw;
+            
+            
         }
 
         &--right--panel {
@@ -1248,6 +1250,10 @@ nav {
     &--left--panel {
         flex: 3;
         margin-right: 2vw;
+
+        .main--image {
+            width: 80%;
+        }
     }
 
     &--right--panel {
@@ -1312,7 +1318,7 @@ nav {
             flex: 0 0 100%;
         }
 
-        &--popup{
+        &--popup {
             display: none;
             border: 1px solid;
             border-top: 0px;
@@ -1320,7 +1326,7 @@ nav {
             padding: 2.5vh 1.5vw;
         }
 
-        &s--list{
+        &s--list {
             min-height: 60vh;
             max-height: 60vh;
             overflow-y: scroll;
