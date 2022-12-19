@@ -29,10 +29,10 @@ namespace WebApp.Controllers
     public class AuthenticationController : Controller
     {
         private readonly UsersService usersService;
-        private readonly EmailService emailService;
+        private readonly IEmailSender emailService;
         private readonly IMemoryCache memoryCache;
 
-        public AuthenticationController(UsersService usersService, IMemoryCache memoryCache, EmailService emailService = null)
+        public AuthenticationController(UsersService usersService, IMemoryCache memoryCache, IEmailSender emailService = null)
         {
             this.usersService = usersService;
             this.memoryCache = memoryCache;
@@ -101,7 +101,7 @@ namespace WebApp.Controllers
                             .AppendToBody(Url.Action("ResetPassword", "Authentication", new { guid = guid }, Url.ActionContext.HttpContext.Request.Scheme))
                             .AddToAdress(user.Email)
                             .Build();
-                        new EmailSenderSaveToDisk(emailService).SendMail(message);
+                        emailService.SendMail(message);
                     }
                 }
             }

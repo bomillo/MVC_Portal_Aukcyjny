@@ -198,7 +198,7 @@ namespace WebApp.Controllers
                     {
                         var myAuctions = (from a in _context.Auctions
                                             .Where(au => au.OwnerId == id &&
-                                            au.IsDraft == true)
+                                            au.Status == AuctionStatus.Draft)
                                           select a).ToList();
 
                         ViewBag.MyAuctions = myAuctions;
@@ -209,7 +209,7 @@ namespace WebApp.Controllers
                     {
                         var myAuctions = (from a in _context.Auctions
                                             .Where(au => au.OwnerId == id &&
-                                            au.IsDraft == false &&
+                                            au.Status != AuctionStatus.Draft &&
                                             au.EndTime > DateTime.UtcNow)
                                           select a).ToList();
 
@@ -221,7 +221,7 @@ namespace WebApp.Controllers
                     {
                         var myAuctions = (from a in _context.Auctions
                                             .Where(au => au.OwnerId == id &&
-                                            au.IsDraft == false &&
+                                            au.Status != AuctionStatus.Draft &&
                                             au.EndTime < DateTime.UtcNow)
                                           select a).ToList();
 
@@ -248,7 +248,7 @@ namespace WebApp.Controllers
                 foreach (var myObserved in myObservedAuctions)
                 {
                     var Auction = _context.Auctions.Where(x => x.AuctionId == myObserved.AuctionId &&
-                                                          x.IsDraft == false).FirstOrDefault();
+                                                          x.Status != AuctionStatus.Draft).FirstOrDefault();
 
                     if (Auction == null)
                     { continue; }

@@ -25,12 +25,12 @@ namespace WebApp.BackgroundTasks
             {
                 Logger.LogInformation("NBP WORKER: Starting downloading at " + DateTime.Now.ToShortTimeString());
 
-                new Timer(UpdateCurrencyDatabase, null, TimeSpan.Zero, downloadIdle);
+                UpdateCurrencyDatabase();
                 await Task.Delay(downloadIdle);
             }
         }
 
-        private void UpdateCurrencyDatabase(object? state)
+        private void UpdateCurrencyDatabase()
         {
             PortalAukcyjnyContext context = factory.CreateScope().ServiceProvider.GetRequiredService<PortalAukcyjnyContext>();
 

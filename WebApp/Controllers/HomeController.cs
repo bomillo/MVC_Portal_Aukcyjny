@@ -44,7 +44,7 @@ namespace PortalAukcyjny.Controllers
 
             var recentlyFinished = (from a in _context.Auctions
                                     .Include(p => p.Product)
-                                    .Where(x => x.EndTime <= DateTime.UtcNow && x.IsDraft == false)
+                                    .Where(x => x.EndTime <= DateTime.UtcNow && x.Status != AuctionStatus.Draft)
                                     .OrderByDescending(x => x.EndTime)
                                     .Take(5)
                                     select a).ToList();
@@ -75,7 +75,7 @@ namespace PortalAukcyjny.Controllers
 
             var interestingAuctions = (from a in _context.Auctions
                                        .Include(p => p.Product)
-                                       .Where(au => au.IsDraft == false && 
+                                       .Where(au => au.Status != AuctionStatus.Draft && 
                                               DateTime.UtcNow < au.EndTime  && 
                                               au.EndTime < DateTime.UtcNow.AddDays(7))
                                         .Take(9)

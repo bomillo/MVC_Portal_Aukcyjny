@@ -8,10 +8,14 @@ namespace WebApp.Services.Emails
 
         public override void SendMail(MailMessage message)
         {
-            SmtpClient client = new SmtpClient("smtp");
-            client.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
-            client.PickupDirectoryLocation = @"mails";
-            client.Send(message);
+            try
+            {
+                SmtpClient client = new SmtpClient("smtp");
+                client.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+                client.PickupDirectoryLocation = @"mails";
+                client.Send(message);
+            }
+            catch { }
             base.SendMail(message);
         }
     }

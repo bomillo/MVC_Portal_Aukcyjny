@@ -23,14 +23,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-    builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
+builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
 
 
 // BG task services
 
-    builder.Services.AddHostedService<NBPWorker>();
-    builder.Services.AddSingleton<CurrencyDownloadService>();
+builder.Services.AddHostedService<NBPWorker>();
+builder.Services.AddHostedService<AuctionStatusWorker>();
+builder.Services.AddSingleton<CurrencyDownloadService>();
 
 builder.Services.AddSingleton(new ElasticsearchClient(new ElasticsearchClientSettings(new Uri("http://localhost:9200")).DisableDirectStreaming()));
 
@@ -89,10 +90,11 @@ builder.Services.AddAuthentication("CookieAuthentication")
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<ObservAuctionService>();
 builder.Services.AddTransient<DbSeeder>();
-builder.Services.AddSingleton<EmailService>();
+builder.Services.AddSingleton<IEmailSender>(new EmailSenderSaveToDisk(new EmailSender()));
 builder.Services.AddTransient<BreadcrumbService>();
 builder.Services.AddTransient<DMService>();
 
+builder.Services.AddSingleton<AuctionsStatusService>();
 builder.Services.AddTransient<BidsService>();
 builder.Services.AddTransient<SetPagerService>();
 builder.Services.AddTransient<AuctionFilesService>();
@@ -111,6 +113,8 @@ builder.Services.AddDirectoryBrowser();
 builder.Services.AddTransient<AuctionsService>();
 
 var app = builder.Build();
+
+
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions() { ForwardedHeaders= ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto});
 
@@ -171,5 +175,7 @@ app.UseMiddleware<VisitCounterMiddleware>();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Services.GetService<AuctionsStatusService>();
 
 app.Run();

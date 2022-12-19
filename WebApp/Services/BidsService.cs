@@ -12,14 +12,16 @@ namespace WebApp.Services
 {
     public class BidsService
     {
+        private readonly AuctionsStatusService auctionsStatusService;
         private readonly PortalAukcyjnyContext dbContext;
         private double exchangeRate = 1;
         private string currency = "PLN";
 
 
-        public BidsService(PortalAukcyjnyContext dbContext)
+        public BidsService(PortalAukcyjnyContext dbContext, AuctionsStatusService auctionsStatusService)
         {
             this.dbContext = dbContext;
+            this.auctionsStatusService = auctionsStatusService;
         }
 
         public async Task<List<BidDTO>> GetAuctionBids(int auctionId, int userId)
@@ -109,6 +111,7 @@ namespace WebApp.Services
 
         public void PlaceBid(double bid, int auctionId, int userId)
         {
+            auctionsStatusService.TryRegisterNewUserForNotificationOfAuction(auctionId, userId);
             var newBid = new Bid()
             {
                 AuctionId = auctionId,
@@ -119,6 +122,7 @@ namespace WebApp.Services
             };
             dbContext.Bid.Add(newBid);
             dbContext.SaveChanges();
+            auctionsStatusService.NotifyAboutNewBid(auctionId);
         }
 
         public JsonResult ValidateBid(int auctionId, double bid, int userId)
@@ -134,7 +138,7 @@ namespace WebApp.Services
                 return result;
             }
 
-            if(auction.IsDraft)
+            if(auction.Status == AuctionStatus.Draft)
             {
                 result = new JsonResult(new { valid = false, message = WebApp.Resources.Shared.AuctionIsDraft });
                 result.StatusCode = 404;
