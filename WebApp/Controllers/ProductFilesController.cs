@@ -18,9 +18,11 @@ using WebApp.Services;
 using Newtonsoft.Json;
 using Elastic.Clients.Elasticsearch;
 using static System.Collections.Specialized.BitVector32;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Controllers
 {
+    [Authorize]
     public class ProductFilesController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
@@ -37,12 +39,14 @@ namespace WebApp.Controllers
         }
 
         // GET: ProductFiles
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Index()
         {
               return View(await _context.ProductFiles.ToListAsync());
         }
 
         // GET: ProductFiles/Details/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.ProductFiles == null)
@@ -60,6 +64,7 @@ namespace WebApp.Controllers
             return View(productFile);
         }
 
+        [Authorize("RequireAdmin")]
         // GET: ProductFiles/Create
         public IActionResult Create()
         {
@@ -71,6 +76,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Create([Bind("ProductFileId,ProductId,Path,Name,Extension")] ProductFile productFile)
         {
             if (ModelState.IsValid)
@@ -83,6 +89,7 @@ namespace WebApp.Controllers
         }
 
         // GET: ProductFiles/Edit/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.ProductFiles == null)
@@ -103,6 +110,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> Edit(int id, [Bind("ProductFileId,ProductId,Path,Name,Extension,Description")] ProductFile productFile, IFormFile newFile)
         {
             ModelState["newFile"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
@@ -202,6 +210,7 @@ namespace WebApp.Controllers
         }
 
         // GET: ProductFiles/Delete/5
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.ProductFiles == null)

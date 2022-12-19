@@ -300,4 +300,10 @@
   <data name="TimeSpan" xml:space="preserve">
     <value>Report time span (days) (FR)</value>
   </data>
+  <data name="AccessDenied" xml:space="preserve">
+    <value>Access Denied (FR)</value>
+  </data>
+  <data name="BackToHomePage" xml:space="preserve">
+    <value>Back to home page (FR)</value>
+  </data>
 </root>

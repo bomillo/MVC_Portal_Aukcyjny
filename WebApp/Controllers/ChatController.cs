@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Send(int id, string message)
         {
             var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString().ToString().ToString());
@@ -36,7 +38,7 @@ namespace WebApp.Controllers
 
             return LocalRedirect($"~/chat?id={id}");
         }
-
+        [Authorize]
         public async Task<IActionResult> Index(int? id)
         {
             var userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid")).Value.ToString().ToString().ToString());
@@ -48,16 +50,20 @@ namespace WebApp.Controllers
             portalAukcyjnyContext.AddRange(portalAukcyjnyContext2);
 
             var model = new ChatModel();
+            model.directMessages = new List<DirectMessage>();
+            model.directMessagesHeadlines = new List<DirectMessage>();
+            if(portalAukcyjnyContext.Any())
+            {
 
-            model.directMessagesHeadlines = portalAukcyjnyContext.Select(dms => dms.OrderBy(dm => dm.SentTime).First()).ToList();
-            model.directMessages = portalAukcyjnyContext.First(dms => dms.Any(dm => id == null || dm.ReceiverId == id || dm.SenderId == id)).OrderBy(dm => dm.SentTime).ToList();
-            var firstDm = model.directMessages.First();
+                model.directMessagesHeadlines = portalAukcyjnyContext.Select(dms => dms.OrderBy(dm => dm.SentTime).First()).ToList();
+                model.directMessages = portalAukcyjnyContext.First(dms => dms.Any(dm => id == null || dm.ReceiverId == id || dm.SenderId == id)).OrderBy(dm => dm.SentTime).ToList();
+                var firstDm = model.directMessages.First();
 
-            model.Id = firstDm.SenderId == userId? firstDm.ReceiverId : firstDm.SenderId;
-            foreach (var dm in model.directMessages) {
-                dm.Recieved = true;
+                model.Id = firstDm.SenderId == userId? firstDm.ReceiverId : firstDm.SenderId;
+                foreach (var dm in model.directMessages) {
+                    dm.Recieved = true;
+                }
             }
-
             _context.SaveChanges();
             return View("Index",model);
         }

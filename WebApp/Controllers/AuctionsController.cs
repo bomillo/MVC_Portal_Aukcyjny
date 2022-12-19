@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Elastic.Clients.Elasticsearch;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -56,6 +57,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Auctions
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Index(int page = 1)
         {
             if(page < 1)
@@ -107,6 +109,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Auctions/Details/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Details(int? id, string? result)
         {
             if (id == null || _context.Auctions == null)
@@ -143,6 +146,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Auctions/Create
+        [Authorize]
         public IActionResult Create()
         {
             //var userId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.ValueType == "userid").Value.ToString());
@@ -158,6 +162,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Create([Bind("AuctionId,Description,Title,IsDraft,OwnerId,CreationTime,PublishedTime,EndTime,ProductId")] Auction auction, IFormCollection postedFiles, IFormFile productIcon, IFormFile productImage)
         {
             string[] descriptions = postedFiles["fileDescription"].ToString().Split(',');
@@ -271,6 +276,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Auctions/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Auctions == null)
@@ -300,6 +306,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("AuctionId,Description,Title,IsDraft,OwnerId,CreationTime,PublishedTime,EndTime,ProductId")] Auction auction, IFormCollection postedFiles, IFormFile productIcon, IFormFile productImage)
         {
             string[] descriptions = postedFiles["fileDescription"].ToString().Split(',');
@@ -445,6 +452,8 @@ namespace WebApp.Controllers
         }
 
         // GET: Auctions/Delete/5
+        [Authorize]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Auctions == null)
@@ -467,6 +476,7 @@ namespace WebApp.Controllers
         // POST: Auctions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Auctions == null)
@@ -490,8 +500,13 @@ namespace WebApp.Controllers
 
 
         // POST: Auctions/ObservAuction/5 
+        [AllowAnonymous]
         public async Task<ActionResult> ObservAuction(int? id)
         {
+            if (!HttpContext.User.Claims.Any())
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.NotLoggedIn });
+            }
             string resultMsg = "";
             if(id > 0)
             {
@@ -517,9 +532,13 @@ namespace WebApp.Controllers
             ViewBag.IsObserved = false;
             return new JsonResult(new { message = resultMsg });
         }
-
+        [AllowAnonymous]
         public async Task<ActionResult> UnObservAuction(int? id, bool? ob)
         {
+            if (!HttpContext.User.Claims.Any())
+            {
+                return new JsonResult(new { valid = false, message = WebApp.Resources.Shared.NotLoggedIn });
+            }
             string resultMsg = "";
             int userId;
             int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value, out userId);
@@ -540,7 +559,7 @@ namespace WebApp.Controllers
 
             return new JsonResult(new { message = resultMsg });
         }
-
+        [AllowAnonymous]
         public async Task<ActionResult> Auction(int? id)
         {
             if(id == null)
@@ -618,6 +637,7 @@ namespace WebApp.Controllers
 
 
         /* Downloads the file (fileName) from pointed path (path)*/
+        [AllowAnonymous]
         public ActionResult Download(string path, string fileName)
         {
             /* If file not found throw an exception witch message - No file found*/

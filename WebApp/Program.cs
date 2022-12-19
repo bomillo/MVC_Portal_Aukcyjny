@@ -61,9 +61,9 @@ builder.Services.AddAuthentication("CookieAuthentication")
     config.Cookie.HttpOnly = true;
     config.Cookie.SecurePolicy = CookieSecurePolicy.None;
     config.Cookie.Name = "UserLoginCookie";
-    config.LoginPath = "/Authentication/Login";
+    config.LoginPath = "/Denied/Denied";
     config.LogoutPath = "/Authentication/Logout";
-    config.AccessDeniedPath = "/Denied";
+    config.AccessDeniedPath = "/Denied/Denied";
     config.Cookie.SameSite = SameSiteMode.Lax;
     config.Cookie.IsEssential = true;
 })
