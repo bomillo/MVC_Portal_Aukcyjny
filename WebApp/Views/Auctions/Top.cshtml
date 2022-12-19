@@ -31,7 +31,7 @@
                         @Html.DisplayFor(model => item.Auction.Title)
                     </div>
                     <hr />
-                @if (!item.Auction.IsDraft)
+                @if (item.Auction.Status != AuctionStatus.Draft)
                 {
                             <div class="auction--time text--primary">
                                 <strong>@Localization.PublishDate: </strong>@item.Auction.PublishedTime
