@@ -1,0 +1,44 @@
+﻿@using WebApp.Models
+@using WebApp.Resources.Authentication;
+@model IEnumerable<WebApp.Models.DTO.DisplayAuctionsModel>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+@foreach (var item in Model)
+{
+
+        <a class="list--link" asp-controller="Auctions" asp-action="Auction" asp-route-id="@item.Auction.AuctionId">
+            <div class="auctions--column--container">
+                <div class="auction--icon">
+                    <img class="icon" src="@item.iconPath"/>
+                </div>
+                <div class="auction--middle--column">
+                    <div class="auction--title text--primary">
+                        @Html.DisplayFor(model => item.Auction.Title)
+                    </div>
+                    <hr />
+                @if (!item.Auction.IsDraft)
+                {
+                            <div class="auction--time text--primary">
+                                <strong>@Localization.PublishDate: </strong>@item.Auction.PublishedTime
+                            </div>
+                            <div class="auction--time text--primary">
+                                <strong>@Localization.EndDate: </strong>@item.Auction.EndTime
+                            </div>
+                }
+                    <br />
+                    <div class="auction--owner text--primary">
+                        <strong>@Localization.Owner: </strong>@item.Auction.Owner.Name
+                    </div>
+                </div>
+                <div class="auction--price text--primary">
+                @string.Format(item.Bid)
+                </div>
+            </div>
+        </a>
+        <hr class="auction--bottom--line"/>
+}

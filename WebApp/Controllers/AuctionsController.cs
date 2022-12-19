@@ -19,6 +19,8 @@ using WebApp.Context;
 using WebApp.Models;
 using WebApp.Models.DTO;
 using WebApp.Services;
+using static System.Collections.Specialized.BitVector32;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WebApp.Controllers
 {
@@ -640,5 +642,49 @@ namespace WebApp.Controllers
             }
         }
 
+        public async Task<IActionResult> Top()
+        {
+            var auctions = _context.Auctions;
+
+            var bids = _context.Bid
+                       .Include(x => x.Auction)
+                       .Include(x => x.Auction.Product)
+                       .GroupBy(x => x.AuctionId).Select(g => new
+                                               {
+                                                   AuctionId = g.Key,
+                                                   Occurance = g.Count()
+                                               }).OrderByDescending(a => a.Occurance).ToList().Take(10);
+
+            List<DisplayAuctionsModel> TopAuctions = new List<DisplayAuctionsModel>();
+            
+            int userId = 0;
+            int.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("userid"))?.Value, out userId);
+
+            foreach (var bid in bids)
+            {
+                var auction = auctions.Where(x => x.AuctionId == bid.AuctionId)
+                    .Include(x => x.Owner)    
+                    .First();
+                
+                var auctionBid = bidsService.GetAuctionHighestBid(auction.AuctionId, userId);
+
+                string path = null;
+                var icon = _context.ProductFiles.Where(x => x.ProductId == auction.AuctionId && x.Name.StartsWith("ICON")).FirstOrDefault();
+
+                if (icon != null)
+                    path = icon.Path;
+                else
+                    path = _auctionFilesService.GetErrorIconPath();
+
+                TopAuctions.Add(new DisplayAuctionsModel
+                {
+                    Auction = auction,
+                    Bid = auctionBid,
+                    iconPath = path
+                });
+            }
+
+            return View(TopAuctions);
+        }
     }
 }

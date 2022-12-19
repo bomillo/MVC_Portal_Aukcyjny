@@ -10,15 +10,30 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+
+    <style>
+        .container {
+            margin-left: 15pt;
+            margin-right: 15pt;
+            max-width: none;
+        }
+
+        td {
+            width: 10%;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+    </style>
+
 </head>
 <body>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th >
                 @Html.DisplayNameFor(model => model.Auction)
             </th>
             <th>
@@ -39,24 +54,34 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td style="width: 20%">
                 @Html.DisplayFor(modelItem => item.Auction.Title)
             </td>
-            <td>
+            <td style="width: 10%">
                 @Html.DisplayFor(modelItem => item.User.UserId)
             </td>
-            <td>
+            <td style="width: 10%">
                 @Html.DisplayFor(modelItem => item.Type)
             </td>
-            <td>
+            <td style="width: 10%">
                 @Html.DisplayFor(modelItem => item.ChangedTime)
             </td>
-            <td>
+            <td style=" width: 40%;
+                        max-width: 500px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;">
                 @Html.DisplayFor(modelItem => item.JsonChange)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EntryId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EntryId">Details</a> |
+            <td style=" width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        margin: auto">
+                <a asp-action="Edit" asp-route-id="@item.EntryId">Edit</a> 
+                <br/>
+                <a asp-action="Details" asp-route-id="@item.EntryId">Details</a> 
+                <br/>
                 <a asp-action="Delete" asp-route-id="@item.EntryId">Delete</a>
             </td>
         </tr>

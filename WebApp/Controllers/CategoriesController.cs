@@ -17,7 +17,6 @@ using WebApp.Services;
 
 namespace WebApp.Controllers
 {
-    [Authorize(Policy = "RequireAdmin")]
     public class CategoriesController : Controller
     {
         private readonly PortalAukcyjnyContext _context;
