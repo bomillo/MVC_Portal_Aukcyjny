@@ -1,4 +1,5 @@
-﻿
+﻿@using WebApp.Models
+
 @{
     string auctions = "all";
 
@@ -80,10 +81,12 @@
                         <a asp-action="Auction" asp-controller="Auctions" asp-route-id="@auction.AuctionId">
                             <div class="box--item">
                                 <div class="box--item--title">Tilte: @auction.Title</div>
-                                @if(@auction.IsDraft){
+                                @if (@auction.Status == AuctionStatus.Draft)
+                                {
                                     <div id="aType" class="box--item--price">Draft</div>
                                 }
-                                else if (auction.EndTime < DateTime.UtcNow) {
+                                else if (auction.Status == AuctionStatus.Ended)
+                                {
                                     <div id="aType" class="box--item--price">Ended</div>
                                 }
                                 else {

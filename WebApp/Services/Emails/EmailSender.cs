@@ -8,12 +8,12 @@ namespace WebApp.Services.Emails
         public void SendMail(MailMessage message);
     }
 
-    public class EmailService : IEmailSender
+    public class EmailSender : IEmailSender
     {
         public void SendMail(MailMessage message)
         {
             SmtpClient smtpClient = new SmtpClient();
-            var basicCredential = new NetworkCredential("dominik.postolowicz@gmail.com", "8EKzNt5wIvUASjR9");
+            var basicCredential = new NetworkCredential("***REMOVED***", "***REMOVED***");
             smtpClient.EnableSsl = true;
 
             smtpClient.Host = "smtp-relay.sendinblue.com";

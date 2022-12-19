@@ -26,6 +26,7 @@ namespace WebApp.Models
         
         public string? ExternalGoogleId { get; set; }
         public string? ExternalFacebookId { get; set; }
+        public bool IsFake { get; set; }
     }
 
 

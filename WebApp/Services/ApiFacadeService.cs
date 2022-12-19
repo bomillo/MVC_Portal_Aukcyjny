@@ -93,7 +93,8 @@ namespace WebApp.Services
             {
                 return new BadRequestObjectResult(new JsonResult(new { message = WebApp.Resources.Shared.InvalidRequestData }));
             }
-            else if(auction.IsDraft){
+            else if(auction.Status == AuctionStatus.Draft)
+            {
                 return new BadRequestObjectResult(new JsonResult(new { message = WebApp.Resources.Shared.AuctionIsDraft }));
             }
 

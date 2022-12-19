@@ -150,7 +150,8 @@ namespace WebApp.Context
                     PasswordHashed = rndText(10, 30),
                     UserType = (UserType)random.Next(0, 2),
                     ThemeType = (ThemeType)random.Next(0, 2),
-                    Language = (Language)random.Next(0, 2)
+                    Language = (Language)random.Next(0, 2),
+                    IsFake = true
                 };
 
                 if(user.UserType != UserType.Admin)
@@ -173,7 +174,20 @@ namespace WebApp.Context
                 PasswordHashed = _userService.HashPassword("admin"),
                 UserType = UserType.Admin,
                 ThemeType = ThemeType.Dark,
-                Language = Language.FR
+                Language = Language.FR,
+                IsFake = true
+            });
+
+
+            users.Add(new User()
+            {
+                Name = "dominik",
+                Email = "***REMOVED***",
+                PasswordHashed = _userService.HashPassword("admin"),
+                UserType = UserType.Admin,
+                ThemeType = ThemeType.Dark,
+                Language = Language.FR,
+                IsFake = false
             });
 
             return users;
@@ -262,18 +276,17 @@ namespace WebApp.Context
                 {
                     Description = rndText(100, 1999),
                     Title = auctionTitle(),
-                    IsDraft = Convert.ToBoolean(random.Next(2)),
+                    Status = AuctionStatus.Published,
                     OwnerId = user.UserId,
                     Owner = user,
-                    CreationTime = DateTime.UtcNow.AddDays(random.Next(-200, 200)).AddHours(random.Next(24)).AddMinutes(random.Next(60)),
+                    CreationTime = DateTime.UtcNow.AddDays(random.Next(-200, -10)).AddHours(random.Next(24)).AddMinutes(random.Next(60)),
                     ProductId = product.ProductId,
                     Product = product
                 };
 
-                if (!auction.IsDraft)
+                if (auction.Status != AuctionStatus.Draft)
                 {
-                    
-                    auction.PublishedTime = DateTime.UtcNow.AddDays(random.Next(-200, 0)).AddHours(random.Next(24)).AddMinutes(random.Next(60));
+                    auction.PublishedTime = DateTime.UtcNow.AddDays(random.Next(-10, 0)).AddHours(random.Next(24)).AddMinutes(random.Next(60));
                     auction.EndTime = auction.PublishedTime.Value.AddDays(random.Next(20)).AddHours(random.Next(24)).AddMinutes(random.Next(60));
                 }
 
@@ -324,7 +337,7 @@ namespace WebApp.Context
         private IEnumerable<AuctionQuestion> GetAuctionQuestions()
         {
             Random random = new Random();
-            var auctions = _dbContext.Auctions.Where(x => x.IsDraft == false).ToList();
+            var auctions = _dbContext.Auctions.Where(x => x.Status != AuctionStatus.Draft).ToList();
             var users = _dbContext.Users.ToList();
             var auctionQuestions = new List<AuctionQuestion>();
             int howMany = random.Next(500, 1000);
@@ -497,7 +510,7 @@ namespace WebApp.Context
         {
             Random random = new Random();
             var bids = new List<Bid>();
-            var auctions = _dbContext.Auctions.Where(x => x.IsDraft == false).ToList();
+            var auctions = _dbContext.Auctions.Where(x => x.Status != AuctionStatus.Draft).ToList();
             var users = _dbContext.Users.ToList();
 
             int howMany = random.Next(1000, 2000);
