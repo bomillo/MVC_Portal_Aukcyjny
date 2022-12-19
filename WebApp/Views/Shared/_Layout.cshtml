@@ -20,6 +20,29 @@
                 <partial name="_Searchbox"></partial>
             </div>
             <div class="header--right">
+                <div>
+                    <ul class="navbar-nav flex-grow-1 loginSection">
+                        @if (Context.User.Identity.IsAuthenticated)
+                        {
+                            @if (Context.Items["role"] == "admin")
+                            {
+                                <li>
+                                    <a class="button button--rounded button--secondary a--no--style" asp-action="AdminPanel" asp-controller="Admin" style="margin-right:1.5vw">@WebApp.Resources.Shared.AdminPanel</a>
+                                </li>
+                            }
+
+                            <li>
+                                <partial name="/Views/Authentication/_LogoutButton.cshtml" />
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <partial name="/Views/Authentication/_LoginButton.cshtml" />
+                            </li>
+                        }
+                    </ul>
+                </div>
                 @if(Context.User.Claims.Any()){
 
 
@@ -67,32 +90,7 @@
         <div>
 			&copy; 2022 - PortalAukcyjny
 		</div>
-		<div>
-			<ul class="navbar-nav flex-grow-1 loginSection">
-				@if (Context.User.Identity.IsAuthenticated)
-                {
-                    @if (Context.Items["role"] == "admin")
-                    {
-                        <li>
-                            <a class="button button--rounded button--secondary a--no--style" asp-action="AdminPanel" asp-controller="Admin" style="margin-right:1.5vw">@WebApp.Resources.Shared.AdminPanel</a>
-                        </li>
-                    }
-
-					<li class="currentLogin">
-						@WebApp.Resources.Shared.LoggedInAs @Context.User.Identity.Name
-					</li>
-					<li>
-						<partial name="/Views/Authentication/_LogoutButton.cshtml"/>
-					</li>
-				}
-				else
-				{
-					<li>
-						<partial name="/Views/Authentication/_LoginButton.cshtml"/>
-					</li>
-				}
-			</ul>
-		</div>
+		
 	</footer>
     
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
