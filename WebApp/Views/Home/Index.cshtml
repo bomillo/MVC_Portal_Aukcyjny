@@ -35,7 +35,7 @@
 
     <!-- Main container -->
 
-    <diiv class="main--container">
+    <div class="main--container">
                 <span class="box--text">
                     Recently finished:
                 </span>
@@ -126,9 +126,23 @@
             }
 
         </div>
-    </diiv>
+    </div>
 </div>
 
+
+<form method="post" action="/Home/Question" id="createQuestion" class="add--question">
+    <span id="questionFormMessage" class="text-danger error--span"></span>
+    <div class="form--group" style="width: 60%;">
+        <label class="control--label form--label">E-mail</label>
+        <input name="questionEmail" id="questionEmail" class="control--input form--input" />
+    </div>
+    <textarea style="width: 53%;" class="auction--new--question auction--border background--primary text--primary border--primary" placeholder="@WebApp.Resources.Shared.NewQuestion" name="question" id="question"></textarea>
+    <button class="auction--border add--question--button background--primary text--primary border--primary">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+        </svg>
+    </button>
+</form>
 
 
 <script>
