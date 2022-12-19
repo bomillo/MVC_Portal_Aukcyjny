@@ -17,7 +17,7 @@
 @foreach (var item in Model) {
 
     TimeSpan timeLeft = (TimeSpan) (item.Auction.EndTime - DateTime.UtcNow);
-    <a class="list--link" asp-controller="Auctions" asp-action="Details" asp-route-id="@item.Auction.AuctionId">
+    <a class="list--link" asp-controller="Auctions" asp-action="Auction" asp-route-id="@item.Auction.AuctionId">
     <div class="auction--container">
         <div class="auction--icon">
             <img src="@item.iconPath"/>
