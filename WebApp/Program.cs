@@ -100,6 +100,7 @@ builder.Services.AddTransient<SetPagerService>();
 builder.Services.AddTransient<AuctionFilesService>();
 builder.Services.AddTransient<ApiAuthenticationProxy>();
 builder.Services.AddTransient<AuctionEditHistoryService>();
+builder.Services.AddTransient<CategoryTreeService>();
 
 builder.Services.AddTransient<IApiFacadeService, ApiFacadeService>();
 

@@ -91,6 +91,16 @@
 			&copy; 2022 - PortalAukcyjny
 		</div>
 		
+		<div>
+			<ul class="navbar-nav flex-grow-1 loginSection">
+				@if (Context.User.Identity.IsAuthenticated)
+                {
+                    <li>
+                        <a class="button button--rounded button--secondary a--no--style" asp-action="Top" asp-controller="Auctions" style="margin-right:1.5vw">@WebApp.Resources.Shared.TopAuctions</a>
+                    </li>	
+				}
+			</ul>
+		</div>
 	</footer>
     
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
