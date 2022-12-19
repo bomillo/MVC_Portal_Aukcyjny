@@ -601,6 +601,24 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to List of Top 10 most active auctions.
+        /// </summary>
+        internal static string Top10 {
+            get {
+                return ResourceManager.GetString("Top10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top Auctions.
+        /// </summary>
+        internal static string TopAuctions {
+            get {
+                return ResourceManager.GetString("TopAuctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unsubscribe.
         /// </summary>
         internal static string Unsubscribe {

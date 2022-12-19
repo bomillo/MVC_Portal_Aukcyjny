@@ -77,7 +77,10 @@
                             <a class="button button--rounded button--secondary a--no--style" asp-action="AdminPanel" asp-controller="Admin" style="margin-right:1.5vw">@WebApp.Resources.Shared.AdminPanel</a>
                         </li>
                     }
-
+                    <li>
+                        <a class="button button--rounded button--secondary a--no--style" asp-action="Top" asp-controller="Auctions" style="margin-right:1.5vw">@WebApp.Resources.Shared.TopAuctions</a>
+                    </li>
+                    
 					<li class="currentLogin">
 						@WebApp.Resources.Shared.LoggedInAs @Context.User.Identity.Name
 					</li>

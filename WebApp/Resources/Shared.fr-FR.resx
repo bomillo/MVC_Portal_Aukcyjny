@@ -300,4 +300,10 @@
   <data name="TimeSpan" xml:space="preserve">
     <value>Report time span (days) (FR)</value>
   </data>
+  <data name="TopAuctions" xml:space="preserve">
+    <value>TopAuctions (FR)</value>
+  </data>
+  <data name="Top10" xml:space="preserve">
+    <value>Top10 Auctions (FR)</value>
+  </data>
 </root>
