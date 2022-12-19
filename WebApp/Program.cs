@@ -11,12 +11,9 @@ using WebApp.Middlewares;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
+using WebApp.BackgroundTasks;
 using WebApp.Services.Emails;
 using WebApp.Models;
-
-using BackgroundTasks;
-using BackgroundTasks.Services;
-using BackgroundTasks.Context;
 
 using Elastic.Clients.Elasticsearch;
 using Elastic.Transport;
@@ -26,15 +23,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-    builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
+builder.Services.AddDbContext<PortalAukcyjnyContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")).EnableSensitiveDataLogging());
 
 
 // BG task services
-    builder.Services.AddDbContext<PortalAukcyjnyContext2>(options => 
-                options.UseNpgsql(builder.Configuration.GetConnectionString("PortalAukcyjnyContext")));
-    builder.Services.AddHostedService<NBPWorker>();
-    builder.Services.AddSingleton<CurrencyDownloadService>();
+
+builder.Services.AddHostedService<NBPWorker>();
+builder.Services.AddHostedService<AuctionStatusWorker>();
+builder.Services.AddSingleton<CurrencyDownloadService>();
 
 builder.Services.AddSingleton(new ElasticsearchClient(new ElasticsearchClientSettings(new Uri("http://localhost:9200")).DisableDirectStreaming()));
 
@@ -65,9 +62,9 @@ builder.Services.AddAuthentication("CookieAuthentication")
     config.Cookie.HttpOnly = true;
     config.Cookie.SecurePolicy = CookieSecurePolicy.None;
     config.Cookie.Name = "UserLoginCookie";
-    config.LoginPath = "/Login/Index";
-    config.LogoutPath = "/Login/LogOut";
-    config.AccessDeniedPath = "/Denied";
+    config.LoginPath = "/Denied/Denied";
+    config.LogoutPath = "/Authentication/Logout";
+    config.AccessDeniedPath = "/Denied/Denied";
     config.Cookie.SameSite = SameSiteMode.Lax;
     config.Cookie.IsEssential = true;
 })
@@ -93,10 +90,11 @@ builder.Services.AddAuthentication("CookieAuthentication")
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<ObservAuctionService>();
 builder.Services.AddTransient<DbSeeder>();
-builder.Services.AddSingleton<EmailService>();
+builder.Services.AddSingleton<IEmailSender>(new EmailSenderSaveToDisk(new EmailSender()));
 builder.Services.AddTransient<BreadcrumbService>();
 builder.Services.AddTransient<DMService>();
 
+builder.Services.AddSingleton<AuctionsStatusService>();
 builder.Services.AddTransient<BidsService>();
 builder.Services.AddTransient<SetPagerService>();
 builder.Services.AddTransient<AuctionFilesService>();
@@ -117,6 +115,8 @@ builder.Services.AddTransient<AuctionsService>();
 
 var app = builder.Build();
 
+
+
 app.UseForwardedHeaders(new ForwardedHeadersOptions() { ForwardedHeaders= ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto});
 
 var supportedCultures = new[] { "en-US", "fr-FR", "pl-PL" };
@@ -135,6 +135,7 @@ app.UseHttpsRedirection();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
 
     var context = services.GetRequiredService<PortalAukcyjnyContext>();
     context.Database.EnsureCreated();
@@ -175,5 +176,7 @@ app.UseMiddleware<VisitCounterMiddleware>();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Services.GetService<AuctionsStatusService>();
 
 app.Run();

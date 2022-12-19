@@ -35,7 +35,7 @@ namespace WebApp.Models
             {
                 data.Add(new string[]
                 {
-                    auction.Title, auction.Owner.Name, auction.OwnerId.ToString(), auction.Product.Name, auction.Product.ProductId.ToString(), auction.CreationTime.ToString(), auction.IsDraft.ToString()
+                    auction.Title, auction.Owner.Name, auction.OwnerId.ToString(), auction.Product.Name, auction.Product.ProductId.ToString(), auction.CreationTime.ToString(), auction.Status.ToString()
                 });
             }
 

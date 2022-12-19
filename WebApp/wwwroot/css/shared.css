@@ -89,6 +89,7 @@
   justify-items: center;
   align-items: center;
   flex-direction: row;
+  height: 50px;
 }
 
 .currentLogin {
@@ -400,6 +401,8 @@ input[type=file] {
   margin: 2pt;
   height: 10vh;
   position: relative;
+  margin-left: 1vw;
+  margin-right: 1vw;
 }
 
 .userAccount--container .box .box--content .box--item .box--item--title {
@@ -443,6 +446,12 @@ input[type=file] {
 .box--horizontal .box .box--content {
   border: 2px solid #f1f1f1;
   justify-content: center;
+}
+
+.box--510--w--scroll {
+  height: 510px;
+  overflow-y: scroll;
+  border-radius: 0.4rem;
 }
 
 .box--horizontal .box--center {
@@ -702,6 +711,7 @@ input[type=file] {
   display: flex;
   flex-direction: column;
   width: 52px;
+  z-index: 1000000;
   position: absolute;
   margin-left: 1vw;
 }
@@ -722,6 +732,10 @@ input[type=file] {
   border-radius: 0 0 50% 50%;
   border-top: 0px;
 }
+.fake--dropdown button:focus-visible {
+  outline-offset: unset;
+  outline: unset;
+}
 
 .theme--form {
   margin-right: 2vw;
@@ -735,6 +749,7 @@ input[type=file] {
   width: 50px;
   border-radius: 50%;
   aspect-ratio: 1/1;
+  height: 50px;
   margin-left: 1vw;
 }
 .round--svg--button:hover {
@@ -750,6 +765,7 @@ input[type=file] {
   border-right: 0px;
   text-align: center;
   min-width: 150px;
+  margin-left: 1vw;
 }
 .username--box span {
   display: inline-block;
@@ -778,14 +794,14 @@ input[type=file] {
   flex-wrap: wrap;
 }
 .header--right {
-  flex: 3;
+  flex: 5;
   display: flex;
   align-content: end;
   margin-bottom: 2vh;
 }
 .header--searchbar {
   min-width: 450px;
-  flex: 8;
+  flex: 5;
   align-content: center;
   justify-content: center;
   margin-bottom: 2vh;
@@ -835,7 +851,7 @@ input[type=file] {
 }
 .header--searchbar--group {
   height: 50px;
-  width: 50%;
+  width: 80%;
   min-width: 200px;
   margin-right: 0px;
   position: relative;
@@ -1092,6 +1108,9 @@ nav {
 .auction--left--panel {
   flex: 3;
   margin-right: 2vw;
+}
+.auction--left--panel .main--image {
+  width: 80%;
 }
 .auction--right--panel {
   flex: 2;
@@ -1367,4 +1386,10 @@ nav {
 
 .a--no--style {
   text-decoration: none;
+}
+
+.d--flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

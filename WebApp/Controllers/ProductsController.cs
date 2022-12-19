@@ -17,9 +17,11 @@ using System.Text.RegularExpressions;
 using SkiaSharp;
 using NuGet.Packaging.Signing;
 using WebApp.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly PortalAukcyjnyContext _context; 
@@ -34,6 +36,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Products
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Index(int page = 1)
         {
             var portalAukcyjnyContext = _context.Products.Include(p => p.Category).OrderBy(p => p.ProductId);
@@ -59,6 +62,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Products/Details/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Products == null)
@@ -84,6 +88,7 @@ namespace WebApp.Controllers
 
 
         // GET: Products/Create
+        [Authorize("RequireAdmin")]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
@@ -95,6 +100,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Create([Bind("ProductId,CategoryId,Name,VatRate,IsVatExcluded")] Product product)
         {
 
@@ -118,6 +124,7 @@ namespace WebApp.Controllers
 
 
         // GET: Products/Edit/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Products == null)
@@ -140,6 +147,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("ProductId,CategoryId,Name,VatRate,IsVatExcluded")] Product product)
         {
             ModelState["Category"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
@@ -178,6 +186,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Products/Delete/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Products == null)
@@ -199,6 +208,7 @@ namespace WebApp.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Products == null)

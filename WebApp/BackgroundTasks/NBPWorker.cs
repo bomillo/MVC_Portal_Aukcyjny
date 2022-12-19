@@ -1,34 +1,22 @@
-﻿using BackgroundTasks.Context;
-using BackgroundTasks.Models;
-using BackgroundTasks.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting.Internal;
-using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Elastic.Clients.Elasticsearch.Core.GetScriptContext;
+using WebApp.Context;
+using WebApp.Models;
+using WebApp.Services;
 
-namespace BackgroundTasks
+namespace WebApp.BackgroundTasks
 {
     public class NBPWorker : BackgroundService
     {
         public ILogger<NBPWorker> Logger;
         private readonly CurrencyDownloadService service;
-        private readonly PortalAukcyjnyContext2 context;
+        private readonly IServiceScopeFactory factory;
         private readonly TimeSpan downloadIdle = TimeSpan.FromDays(4);
 
         public NBPWorker(ILogger<NBPWorker> logger, CurrencyDownloadService service, IServiceScopeFactory factory)
         {
             Logger = logger;
             this.service = service;
-            this.context = factory.CreateScope().ServiceProvider.GetRequiredService<PortalAukcyjnyContext2>();
+            this.factory = factory;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -37,14 +25,15 @@ namespace BackgroundTasks
             {
                 Logger.LogInformation("NBP WORKER: Starting downloading at " + DateTime.Now.ToShortTimeString());
 
-                //if(checkLastUpdate())
-                    new Timer(UpdateCurrencyDatabase, null, TimeSpan.Zero, downloadIdle);
+                UpdateCurrencyDatabase();
                 await Task.Delay(downloadIdle);
             }
         }
 
-        private async void UpdateCurrencyDatabase(object? state)
+        private void UpdateCurrencyDatabase()
         {
+            PortalAukcyjnyContext context = factory.CreateScope().ServiceProvider.GetRequiredService<PortalAukcyjnyContext>();
+
             var currList = service.GetAll();
 
             if (currList != null)
@@ -79,15 +68,6 @@ namespace BackgroundTasks
                 context.SaveChanges();
                 Logger.LogInformation("NBP WORKER: Data downloaded - idle: " + downloadIdle + " days");
             }
-        }
-        private bool checkLastUpdate()
-        {
-            var curr = context.CurrencyExchangeRates.First();
-
-            if (curr.LastUpdatedTime - DateTime.UtcNow > TimeSpan.FromDays(4))
-                return true;
-
-            return false;
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApp.Context;
 
 namespace WebApp.Controllers
 {
+    [Authorize("RequireAdmin")]
     public class AdminController : Controller
     {
         private readonly PortalAukcyjnyContext dbContext;
@@ -11,7 +13,6 @@ namespace WebApp.Controllers
         {
             this.dbContext = dbContext;
         }
-
         public ActionResult AdminPanel()
         {
             if (!HttpContext.User.Claims.Any())

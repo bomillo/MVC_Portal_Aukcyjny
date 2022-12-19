@@ -306,4 +306,25 @@
   <data name="Top10" xml:space="preserve">
     <value>List of Top 10 most active auctions</value>
   </data>
+  <data name="AccessDenied" xml:space="preserve">
+    <value>Access Denied</value>
+  </data>
+	<data name="BackToHomePage" xml:space="preserve">
+    <value>Back to home page</value>
+	  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Publish</value>
+  </data>
+  <data name="NewBidMailSubject" xml:space="preserve">
+    <value>New bid has been placed</value>
+  </data>
+  <data name="NewBidMailBody" xml:space="preserve">
+    <value>New bid has been placed on auction {0}. Current highest bid is for {1}.</value>
+  </data>
+  <data name="EndOfAuctionMailSubject" xml:space="preserve">
+    <value>Auction has ended</value>
+  </data>
+  <data name="EndOfAuctionMailBody" xml:space="preserve">
+    <value>Auction {0} has ended!</value>
+  </data>
 </root>

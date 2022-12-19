@@ -195,7 +195,7 @@
   <data name="FieldTooShort" xml:space="preserve">
     <value>Wprowadzone dane są za krótkie</value>
   </data>
-  <data name="GenerateApikey" xml:space="preserve">
+  <data name="GenerateApiKey" xml:space="preserve">
     <value>Generuj klucz api</value>
   </data>
   <data name="HighContrast" xml:space="preserve">
@@ -305,5 +305,11 @@
   </data>
   <data name="Top10" xml:space="preserve">
     <value>Lista 10 najbardziej aktywnych aukcji</value>
+  </data>
+  <data name="AccessDenied" xml:space="preserve">
+    <value>Odmowa dostępu</value>
+  </data>
+  <data name="BackToHomePage" xml:space="preserve">
+    <value>Powrót do strony głównej</value>
   </data>
 </root>

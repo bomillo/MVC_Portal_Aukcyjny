@@ -1,27 +1,36 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PortalAukcyjny.Models;
+using System;
 using System.Diagnostics;
 using WebApp.Context;
 using WebApp.Models;
 using WebApp.Models.DTO;
+using WebApp.Resources.Authentication;
 using WebApp.Services;
+using WebApp.Services.Emails;
 
 namespace PortalAukcyjny.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly PortalAukcyjnyContext _context;
         private readonly AuctionFilesService filesService;
         private readonly BidsService bidsService;
+        private readonly IEmailSender emailSender;
+        private readonly IConfiguration configuration;
         private string iconErrorPath;
         private string imageErrorPath;
 
-        public HomeController(ILogger<HomeController> logger, 
-            PortalAukcyjnyContext context, 
+        public HomeController(ILogger<HomeController> logger,
+            PortalAukcyjnyContext context,
             AuctionFilesService filesService,
-            BidsService bidsService)
+            BidsService bidsService,
+            IEmailSender emailSender,
+            IConfiguration configuration)
         {
             _logger = logger;
             _context = context;
@@ -29,6 +38,8 @@ namespace PortalAukcyjny.Controllers
             this.bidsService = bidsService;
             iconErrorPath = filesService.GetErrorIconPath();
             imageErrorPath = filesService.GetErrorImagePath();
+            this.emailSender = emailSender;
+            this.configuration = configuration;
         }
 
         public async Task<IActionResult> IndexAsync()   
@@ -44,7 +55,7 @@ namespace PortalAukcyjny.Controllers
 
             var recentlyFinished = (from a in _context.Auctions
                                     .Include(p => p.Product)
-                                    .Where(x => x.EndTime <= DateTime.UtcNow && x.IsDraft == false)
+                                    .Where(x => x.EndTime <= DateTime.UtcNow && x.Status != AuctionStatus.Draft)
                                     .OrderByDescending(x => x.EndTime)
                                     .Take(5)
                                     select a).ToList();
@@ -75,7 +86,7 @@ namespace PortalAukcyjny.Controllers
 
             var interestingAuctions = (from a in _context.Auctions
                                        .Include(p => p.Product)
-                                       .Where(au => au.IsDraft == false && 
+                                       .Where(au => au.Status != AuctionStatus.Draft && 
                                               DateTime.UtcNow < au.EndTime  && 
                                               au.EndTime < DateTime.UtcNow.AddDays(7))
                                         .Take(9)
@@ -106,7 +117,21 @@ namespace PortalAukcyjny.Controllers
             ViewBag.InterestingAuctions = displayAuctions;
 
 
-            return View();
+            return View("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Question(string? questionEmail, string? question) {
+            var message = new EmailMessageBuilder()
+                                        .SetSubject("User question")
+                                        .AppendToBody("User asked a question:")
+                                        .AppendToBody(question ?? "")
+                                        .AppendToBody("")
+                                        .AppendToBody($"User's email: {questionEmail}")
+                                        .AddToAdress(configuration.GetValue<string>("AdminEmail"))
+                                        .Build();
+            emailSender.SendMail(message);
+            return await IndexAsync();
         }
 
         public IActionResult Privacy()

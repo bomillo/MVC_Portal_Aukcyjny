@@ -306,4 +306,10 @@
   <data name="Top10" xml:space="preserve">
     <value>Top10 Auctions (FR)</value>
   </data>
+  <data name="AccessDenied" xml:space="preserve">
+    <value>Access Denied (FR)</value>
+  </data>
+  <data name="BackToHomePage" xml:space="preserve">
+    <value>Back to home page (FR)</value>
+  </data>
 </root>
