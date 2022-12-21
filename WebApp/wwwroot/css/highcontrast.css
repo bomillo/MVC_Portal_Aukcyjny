@@ -22,16 +22,16 @@
   color: gold;
 }
 .highcontrast-mode .text--primary {
-  color: orangered;
+  color: black;
 }
 .highcontrast-mode .text--secondary {
-  color: coral;
+  color: white;
 }
 .highcontrast-mode .text--error {
   color: red;
 }
 .highcontrast-mode .background--primary {
-  background-color: salmon;
+  background-color: hotpink;
 }
 .highcontrast-mode .background--secondary {
   background-color: darkviolet;

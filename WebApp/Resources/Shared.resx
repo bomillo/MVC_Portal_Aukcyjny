@@ -238,7 +238,7 @@
     <value>Save it in safe place. Your api key is</value>
   </data>
   <data name="NewQuestion" xml:space="preserve">
-    <value>Ask your question to seller here....</value>
+    <value>Ask your question here....</value>
   </data>
   <data name="NoBidValue" xml:space="preserve">
     <value>No bid value found in request body</value>
@@ -309,9 +309,9 @@
   <data name="AccessDenied" xml:space="preserve">
     <value>Access Denied</value>
   </data>
-	<data name="BackToHomePage" xml:space="preserve">
+  <data name="BackToHomePage" xml:space="preserve">
     <value>Back to home page</value>
-	  </data>
+  </data>
   <data name="Publish" xml:space="preserve">
     <value>Publish</value>
   </data>
@@ -326,5 +326,8 @@
   </data>
   <data name="EndOfAuctionMailBody" xml:space="preserve">
     <value>Auction {0} has ended!</value>
+  </data>
+  <data name="QuestionToAdmin" xml:space="preserve">
+    <value>Ask portal owner</value>
   </data>
 </root>

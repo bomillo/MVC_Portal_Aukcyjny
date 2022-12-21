@@ -475,7 +475,7 @@ namespace WebApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ask your question to seller here.....
+        ///   Looks up a localized string similar to Ask your question here.....
         /// </summary>
         internal static string NewQuestion {
             get {
@@ -588,6 +588,15 @@ namespace WebApp.Resources {
         internal static string Questions {
             get {
                 return ResourceManager.GetString("Questions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ask portal owner.
+        /// </summary>
+        internal static string QuestionToAdmin {
+            get {
+                return ResourceManager.GetString("QuestionToAdmin", resourceCulture);
             }
         }
         

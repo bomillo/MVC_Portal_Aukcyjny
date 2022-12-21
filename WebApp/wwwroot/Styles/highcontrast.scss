@@ -34,11 +34,11 @@
     .text {
 
         &--primary {
-            color: orangered;
+            color: black;
         }
 
         &--secondary {
-            color: coral;
+            color: white;
         }
 
         &--error {
@@ -48,11 +48,11 @@
 
     .background {
         &--primary {
-            background-color: salmon;
+            background-color: hotpink;
         }
 
         &--secondary {
-            background-color: darkviolet
+            background-color: darkviolet;
         }
 
         &--error {

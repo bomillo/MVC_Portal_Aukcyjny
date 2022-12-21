@@ -238,7 +238,7 @@
     <value>Save it in safe place. Your new api key (FR)</value>
   </data>
   <data name="NewQuestion" xml:space="preserve">
-    <value>Ask your question to seller here.... (FR)</value>
+    <value>Ask your question here.... (FR)</value>
   </data>
   <data name="NoBidValue" xml:space="preserve">
     <value>No bid value found in request body (FR)</value>
@@ -311,5 +311,8 @@
   </data>
   <data name="BackToHomePage" xml:space="preserve">
     <value>Back to home page (FR)</value>
+  </data>
+  <data name="QuestionToAdmin" xml:space="preserve">
+    <value>Ask portal owner (FR)</value>
   </data>
 </root>

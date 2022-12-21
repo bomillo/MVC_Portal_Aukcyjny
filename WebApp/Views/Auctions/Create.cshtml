@@ -107,11 +107,7 @@
                     <span asp-validation-for="EndTime" class="text-danger"></span>
                 </div>
 
-                <div class="form--buttons">
-                    <input type="submit" value="Create" class="button button--rounded button--secondary" />
-                    <a asp-action="Index" class="button button--rounded button--secondary">Back to List</a>
-
-                </div>
+                
 
                 <!-- Files input -->
                 <div class="form--bottom--container">
@@ -131,11 +127,14 @@
                             <input type="file" name="productImage" onchange="insertFileName(event)" />
                         </label>
                     </div>
-
-                    <div class="form--buttons">
-                        <button type="button" class="button button--secondary button--rounded" onclick="AddNewFile()">Add additional File</button>
-                        <input type="submit" value="Create" class="button button--rounded button--secondary" />
-                        <a asp-action="Index" class="button button--rounded button--secondary">Back to List</a>
+                    <div class="form--buttons" style="
+                         display: flex;
+                         flex-wrap: wrap;
+                         align-content: space-between;
+                         justify-content: space-between;">
+                        <input type="submit" value="Create" class="button button--rounded button--secondary" style="width: 40%"/>
+                        <a asp-action="Index" class="button button--rounded button--secondary" style="width: 40%">Back to List</a>
+                        <button type="button" class="button button--secondary button--rounded" onclick="AddNewFile()" style="width: 100%; align-self: flex-end">Add additional File</button>
                     </div>
                 </div>
 

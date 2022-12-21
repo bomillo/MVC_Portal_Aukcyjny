@@ -238,7 +238,7 @@
     <value>Zapisz w bezpiecznym miejscu. Twój klucz api to</value>
   </data>
   <data name="NewQuestion" xml:space="preserve">
-    <value>Zadaj pytanie dla sprzedawcy...</value>
+    <value>Zadaj pytanie tutaj...</value>
   </data>
   <data name="NoBidValue" xml:space="preserve">
     <value>Brak wartości oferty w z ciele zapytania</value>
@@ -311,5 +311,8 @@
   </data>
   <data name="BackToHomePage" xml:space="preserve">
     <value>Powrót do strony głównej</value>
+  </data>
+  <data name="QuestionToAdmin" xml:space="preserve">
+    <value>Zapytaj właściciela portalu</value>
   </data>
 </root>
