@@ -2,6 +2,11 @@
 
 Projekt realizowany jako zaliczenie z przedmiotu ASP MVC. Jest to aplikacja działająca jako portal aukcyjny (na wzór Allegro/olx). Umożliwia wystawianie produktów na auckję, branie udziału w aukcji oraz obserwowanie aukcji.
 
+### Portal dostępny jest pod adresem: [portal.postolowicz.pl](portal.postolowicz.pl) 
+
+Dostęp do portalu jest możliwy po zaakceptowaniu certyfikatu.\
+Przykładowa instancja aplikacji wypełniona jest losowo generowaynmi danymi w celach testowych. 
+
 ## Wykorzystane technologie
  - ### .NET 6
  - ### Entity Framework Core 6.0
